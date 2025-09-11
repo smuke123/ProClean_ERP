@@ -10,7 +10,7 @@ const pool = createPool({
   user: process.env.MYSQLDB_USER,
   password: process.env.MYSQLDB_ROOT_PASSWORD,
   port: process.env.MYSQLDB_DOCKER_PORT,
-  database: 'ProCleanDB',
+  database: process.env.MYSQLDB_DATABASE,
 });
 
 app.get("/", (req, res) => {
