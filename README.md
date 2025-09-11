@@ -38,12 +38,12 @@ El proyecto se desarrolla con el siguiente stack tecnológico:
 
 ## 📂 Estructura del Proyecto
 
-── **backend**/ # API con Node.js y Express
-── **src**/ # Código frontend
-── docker-compose.yml
-── Dockerfile
-── .env.example # Variables de entorno de ejemplo
-── README.md
+- **backend**/ # API con Node.js y Express
+- **src**/ # Código frontend
+- docker-compose.yml
+- Dockerfile
+- .env.example # Variables de entorno de ejemplo
+- README.md
 
 ## 🚀 Uso del código
 
