@@ -7,7 +7,9 @@ ProClean S.A.S. es una empresa dedicada a la venta y distribución de productos 
 Para optimizar sus operaciones, ProClean desarrollará un software especializado en la gestión de compras y ventas. Con esta herramienta se busca:
 
 ➡️ Registrar compras a proveedores y mantener actualizado el inventario por sucursal.
+
 ➡️ Gestionar ventas a clientes finales y corporativos en tiempo real.
+
 ➡️ Generar reportes consolidados que apoyen la toma de decisiones y el control administrativo.
 
 # 🛠️ Tecnologías Utilizadas
@@ -36,8 +38,8 @@ El proyecto se desarrolla con el siguiente stack tecnológico:
 
 ## 📂 Estructura del Proyecto
 
-── backend/ # API con Node.js y Express
-── src/ # Código frontend
+── **backend**/ # API con Node.js y Express
+── **src**/ # Código frontend
 ── docker-compose.yml
 ── Dockerfile
 ── .env.example # Variables de entorno de ejemplo
