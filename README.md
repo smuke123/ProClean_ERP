@@ -74,8 +74,8 @@ docker compose up -d --build
 ## 👥 Autores
 
 - [smuke123](https://github.com/smuke123).
--
--
+- [Jadavid22](https://github.com/Jadavid22).
+- [Aljrf06](https://github.com/Aljrf06).
 -
 
 ## 📩 Cómo contribuir
