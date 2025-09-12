@@ -12,20 +12,23 @@ services:
     volumes:
       - db_data:/var/lib/mysql
 
-  app:
-    build: .
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     depends_on:
       - mysqldb
     environment:
       MYSQLDB_HOST: ${MYSQLDB_HOST}
       MYSQLDB_USER: ${MYSQLDB_USER}
-      MYSQLDB_ROOT_PASSWORD: ${MYSQLDB_ROOT_PASSWORD}
+      MYSQLDB_PASSWORD: ${MYSQLDB_PASSWORD}
+      MYSQLDB_DATABASE: ${MYSQLDB_DATABASE}
       MYSQLDB_DOCKER_PORT: ${MYSQLDB_DOCKER_PORT}
     ports: 
       - "${NODE_LOCAL_PORT}:${NODE_DOCKER_PORT}"
     volumes:
-      - .:/myapp
-      - /myapp/node_modules
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
 
 volumes:
   db_data:

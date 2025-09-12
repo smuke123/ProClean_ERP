@@ -8,7 +8,7 @@ const app = express();
 const pool = createPool({
   host: process.env.MYSQLDB_HOST,
   user: process.env.MYSQLDB_USER,
-  password: process.env.MYSQLDB_ROOT_PASSWORD,
+  password: process.env.MYSQLDB_PASSWORD,
   port: process.env.MYSQLDB_DOCKER_PORT,
   database: process.env.MYSQLDB_DATABASE,
 });
@@ -28,5 +28,8 @@ app.get("/ping", async (req, res) => {
 });
 
 
-app.listen(process.env.NODE_DOCKER_PORT);
-console.log(`Server is running on http://localhost:${process.env.NODE_LOCAL_PORT}`);
+const PORT = process.env.NODE_DOCKER_PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`✅ Server is running on http://localhost:${PORT}`);
+});
