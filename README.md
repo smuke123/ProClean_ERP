@@ -39,9 +39,8 @@ El proyecto se desarrolla con el siguiente stack tecnológico:
 ## 📂 Estructura del Proyecto
 
 - **backend**/ # API con Node.js y Express
-- **src**/ # Código frontend
+- **frontend**/ # Código GUI con React
 - docker-compose.yml
-- Dockerfile
 - .env.example # Variables de entorno de ejemplo
 - README.md
 
@@ -62,13 +61,13 @@ Accede a la carpeta del proyecto:
 Entra al archivo .env.example y copia tus credenciales de .env:
 
 ```bash
-cp .env.example .env
+  cp .env.example .env
 ```
 
 Levantar los servicios:
 
 ```bash
-docker compose up -d --build
+  docker compose up -d --build
 ```
 
 ## 👥 Autores
