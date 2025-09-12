@@ -2,11 +2,11 @@
   "name": "proclean-erp-backend",
   "version": "1.0.0",
   "description": "Backend API for ProClean ERP",
-  "main": "src/index.js",
+  "main": "",
   "type": "module",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
   },
   "keywords": [],
   "author": "Smuke123",
