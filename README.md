@@ -2,7 +2,7 @@
 
 ProClean S.A.S. es una empresa dedicada a la venta y distribución de productos de aseo y limpieza, tanto para hogares como para organizaciones. Su misión es ofrecer soluciones de limpieza eficientes, seguras y accesibles, garantizando la calidad y disponibilidad de los productos en todas sus sucursales.
 
-# 📌 Descripción del Proyecto
+## 📌 Descripción del Proyecto
 
 Para optimizar sus operaciones, ProClean desarrollará un software especializado en la gestión de compras y ventas. Con esta herramienta se busca:
 
@@ -12,7 +12,7 @@ Para optimizar sus operaciones, ProClean desarrollará un software especializado
 
 ➡️ Generar reportes consolidados que apoyen la toma de decisiones y el control administrativo.
 
-# 🛠️ Tecnologías Utilizadas
+## 🛠️ Tecnologías Utilizadas
 
 El proyecto se desarrolla con el siguiente stack tecnológico:
 
@@ -76,7 +76,7 @@ docker compose up -d --build
 - [smuke123](https://github.com/smuke123).
 - [Jadavid22](https://github.com/Jadavid22).
 - [Aljrf06](https://github.com/Aljrf06).
--
+- [CarlosBarrera21](https://github.com/CarlosBarrera21).
 
 ## 📩 Cómo contribuir
 
