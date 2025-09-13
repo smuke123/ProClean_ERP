@@ -1,49 +1,58 @@
+-- Sucursales 
+CREATE TABLE Sucursales (
+    id_sucursal INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    direccion VARCHAR(255) NOT NULL,
+    telefono VARCHAR(20),
+    codigo_sucursal VARCHAR(20) UNIQUE NOT NULL
+);
+
 -- Clientes
 CREATE TABLE Clientes (
     id_cliente INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
-    tipo ENUM('final', 'corporativo') NOT NULL,
+    tipo ENUM('final','corporativo') NOT NULL,
     documento VARCHAR(50),
     telefono VARCHAR(20),
     direccion VARCHAR(255)
 );
--- Usuarios del sistema
+
+-- Usuarios 
 CREATE TABLE Usuarios (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    rol ENUM('admin', 'comprador') NOT NULL,
+    rol ENUM('admin','comprador') NOT NULL,
     cliente_id INT NULL,
-    FOREIGN KEY (cliente_id) REFERENCES Clientes(id_cliente) ON DELETE
-    SET NULL
+    id_sucursal INT NULL,
+    FOREIGN KEY (cliente_id) REFERENCES Clientes(id_cliente) ON DELETE SET NULL,
+    FOREIGN KEY (id_sucursal) REFERENCES Sucursales(id_sucursal)
 );
--- Proveedores
+
+-- Proveedores (igual)
 CREATE TABLE Proveedores (
     id_proveedor INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     contacto VARCHAR(100),
     telefono VARCHAR(20),
     direccion VARCHAR(255),
-    estado ENUM('activo', 'inactivo') DEFAULT 'activo'
+    estado ENUM('activo','inactivo') DEFAULT 'activo'
 );
--- Sucursales
-CREATE TABLE Sucursales (
-    id_sucursal INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    direccion VARCHAR(255) NOT NULL,
-    telefono VARCHAR(20)
-);
--- Productos
+
+-- Productos (alineado con tus INSERTs)
 CREATE TABLE Productos (
     id_producto INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     marca VARCHAR(50),
-    presentacion VARCHAR(50),
-    precio DECIMAL(10, 2) NOT NULL,
-    activo BOOLEAN DEFAULT TRUE
+    categoria ENUM('detergentes','limpieza','desinfectantes','personal') NOT NULL,
+    tamano ENUM('pequeno','grande') NOT NULL,
+    precio DECIMAL(10,2) NOT NULL,
+    activo BOOLEAN DEFAULT TRUE,
+    UNIQUE (nombre, tamano)
 );
--- Inventario
+
+-- Inventario (referencia a Sucursales y Productos)
 CREATE TABLE Inventario (
     id_inventario INT AUTO_INCREMENT PRIMARY KEY,
     id_sucursal INT NOT NULL,
@@ -54,6 +63,7 @@ CREATE TABLE Inventario (
     FOREIGN KEY (id_producto) REFERENCES Productos(id_producto),
     UNIQUE (id_sucursal, id_producto)
 );
+
 -- Compras
 CREATE TABLE Compras (
     id_compra INT AUTO_INCREMENT PRIMARY KEY,
@@ -136,9 +146,9 @@ INSERT INTO Usuarios (nombre, email, password, rol, id_sucursal) VALUES
 ('Admin Sur', 'admin@sur.proclean.com', '$2b$10$hashedpassword', 'admin', 2);
 
 -- Productos básicos
-INSERT INTO Productos (nombre, marca, categoria, tamaño, precio) VALUES
-('Detergente Ariel', 'Ariel', 'detergentes', 'pequeño', 8500),
+INSERT INTO Productos (nombre, marca, categoria, tamano, precio) VALUES
+('Detergente Ariel', 'Ariel', 'detergentes', 'pequeno', 8500),
 ('Detergente Ariel', 'Ariel', 'detergentes', 'grande', 15000),
-('Desinfectante Lysol', 'Lysol', 'desinfectantes', 'pequeño', 6500),
+('Desinfectante Lysol', 'Lysol', 'desinfectantes', 'pequeno', 6500),
 ('Desinfectante Lysol', 'Lysol', 'desinfectantes', 'grande', 12000),
-('Jabón Protex', 'Protex', 'personal', 'pequeño', 3500);
+('Jabon Protex', 'Protex', 'personal', 'pequeno', 3500);
