@@ -1,0 +1,25 @@
+# Etapa 1: Build
+FROM node:18 AS build
+
+WORKDIR /usr/src/app
+
+# Copiar dependencias primero para aprovechar la caché de Docker
+COPY package*.json ./
+RUN npm install
+
+# Copiar todo el código
+COPY . .
+
+# Compilar la app
+RUN npm run build
+
+# Etapa 2: Servir archivos estáticos con Nginx
+FROM nginx:alpine
+
+# Copiar la build generada en la etapa anterior
+COPY --from=build /usr/src/app/dist /usr/share/nginx/html
+
+# Exponer el puerto 80 (Nginx)
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]

@@ -120,21 +120,25 @@ CREATE TABLE Detalle_Pedidos (
     FOREIGN KEY (id_pedido) REFERENCES Pedidos(id_pedido),
     FOREIGN KEY (id_producto) REFERENCES Productos(id_producto)
 );
--- Historial Clientes
-CREATE TABLE Historial_Clientes (
-    id_historial INT AUTO_INCREMENT PRIMARY KEY,
-    id_cliente INT NOT NULL,
-    accion VARCHAR(255) NOT NULL,
-    fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_cliente) REFERENCES Clientes(id_cliente)
-);
--- Reportes
-CREATE TABLE Reportes (
-    id_reporte INT AUTO_INCREMENT PRIMARY KEY,
-    tipo VARCHAR(100) NOT NULL,
-    fecha_generacion DATETIME DEFAULT CURRENT_TIMESTAMP,
-    generado_por INT,
-    url_export VARCHAR(255),
-    visible_cliente BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (generado_por) REFERENCES Usuarios(id_usuario)
-);
+
+-- =============================================
+-- DATOS INICIALES
+-- =============================================
+
+-- Sucursales
+INSERT INTO Sucursales (nombre, direccion, telefono, codigo_sucursal) VALUES
+('ProClean Norte', 'Calle 123 #45-67', '+57 300 123 4567', 'PC-NORTE'),
+('ProClean Sur', 'Carrera 45 #123-89', '+57 300 765 4321', 'PC-SUR');
+ 
+-- Usuarios admin por sucursal (password: admin123 - debe hashearse)
+INSERT INTO Usuarios (nombre, email, password, rol, id_sucursal) VALUES
+('Admin Norte', 'admin@norte.proclean.com', '$2b$10$hashedpassword', 'admin', 1),
+('Admin Sur', 'admin@sur.proclean.com', '$2b$10$hashedpassword', 'admin', 2);
+
+-- Productos básicos
+INSERT INTO Productos (nombre, marca, categoria, tamaño, precio) VALUES
+('Detergente Ariel', 'Ariel', 'detergentes', 'pequeño', 8500),
+('Detergente Ariel', 'Ariel', 'detergentes', 'grande', 15000),
+('Desinfectante Lysol', 'Lysol', 'desinfectantes', 'pequeño', 6500),
+('Desinfectante Lysol', 'Lysol', 'desinfectantes', 'grande', 12000),
+('Jabón Protex', 'Protex', 'personal', 'pequeño', 3500);
