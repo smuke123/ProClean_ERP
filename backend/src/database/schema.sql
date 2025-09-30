@@ -7,26 +7,17 @@ CREATE TABLE Sucursales (
     codigo_sucursal VARCHAR(20) UNIQUE NOT NULL
 );
 
--- Clientes
-CREATE TABLE Clientes (
-    id_cliente INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    tipo ENUM('final','corporativo') NOT NULL,
-    documento VARCHAR(50),
-    telefono VARCHAR(20),
-    direccion VARCHAR(255)
-);
-
--- Usuarios 
+-- Usuarios (unificada, sin tabla Clientes)
 CREATE TABLE Usuarios (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    rol ENUM('admin','comprador') NOT NULL,
-    cliente_id INT NULL,
+    rol ENUM('admin','cliente') NOT NULL,
+    documento VARCHAR(50),
+    telefono VARCHAR(20),
+    direccion VARCHAR(255),
     id_sucursal INT NULL,
-    FOREIGN KEY (cliente_id) REFERENCES Clientes(id_cliente) ON DELETE SET NULL,
     FOREIGN KEY (id_sucursal) REFERENCES Sucursales(id_sucursal)
 );
 
@@ -86,37 +77,17 @@ CREATE TABLE Detalle_Compras (
     FOREIGN KEY (id_compra) REFERENCES Compras(id_compra),
     FOREIGN KEY (id_producto) REFERENCES Productos(id_producto)
 );
--- Ventas
-CREATE TABLE Ventas (
-    id_venta INT AUTO_INCREMENT PRIMARY KEY,
-    id_cliente INT NOT NULL,
-    id_sucursal INT NOT NULL,
-    fecha DATE NOT NULL,
-    total DECIMAL(12, 2),
-    estado ENUM('pendiente', 'pagada', 'cancelada') DEFAULT 'pendiente',
-    FOREIGN KEY (id_cliente) REFERENCES Clientes(id_cliente),
-    FOREIGN KEY (id_sucursal) REFERENCES Sucursales(id_sucursal)
-);
--- Detalle Ventas
-CREATE TABLE Detalle_Ventas (
-    id_detalle_venta INT AUTO_INCREMENT PRIMARY KEY,
-    id_venta INT NOT NULL,
-    id_producto INT NOT NULL,
-    cantidad INT NOT NULL,
-    precio_unitario DECIMAL(10, 2) NOT NULL,
-    subtotal DECIMAL(12, 2) NOT NULL,
-    FOREIGN KEY (id_venta) REFERENCES Ventas(id_venta),
-    FOREIGN KEY (id_producto) REFERENCES Productos(id_producto)
-);
--- Pedidos
+-- Pedidos (unificada: carrito → pago → entrega)
 CREATE TABLE Pedidos (
     id_pedido INT AUTO_INCREMENT PRIMARY KEY,
-    id_cliente INT NOT NULL,
+    id_usuario INT NOT NULL,
     id_sucursal INT NOT NULL,
     fecha DATE NOT NULL,
     total DECIMAL(12, 2),
-    estado ENUM('pendiente', 'procesado', 'cancelado') DEFAULT 'pendiente',
-    FOREIGN KEY (id_cliente) REFERENCES Clientes(id_cliente),
+    estado ENUM('pendiente','procesado','completado','cancelado') DEFAULT 'pendiente',
+    fecha_pago DATE NULL,
+    fecha_entrega DATE NULL,
+    FOREIGN KEY (id_usuario) REFERENCES Usuarios(id_usuario),
     FOREIGN KEY (id_sucursal) REFERENCES Sucursales(id_sucursal)
 );
 -- Detalle Pedidos
