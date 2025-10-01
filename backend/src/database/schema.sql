@@ -6,21 +6,19 @@ CREATE TABLE Sucursales (
     telefono VARCHAR(20),
     codigo_sucursal VARCHAR(20) UNIQUE NOT NULL
 );
-
 -- Usuarios (unificada, sin tabla Clientes)
 CREATE TABLE Usuarios (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    rol ENUM('admin','cliente') NOT NULL,
+    rol ENUM('admin', 'cliente') NOT NULL,
     documento VARCHAR(50),
     telefono VARCHAR(20),
     direccion VARCHAR(255),
     id_sucursal INT NULL,
     FOREIGN KEY (id_sucursal) REFERENCES Sucursales(id_sucursal)
 );
-
 -- Proveedores (igual)
 CREATE TABLE Proveedores (
     id_proveedor INT AUTO_INCREMENT PRIMARY KEY,
@@ -28,21 +26,24 @@ CREATE TABLE Proveedores (
     contacto VARCHAR(100),
     telefono VARCHAR(20),
     direccion VARCHAR(255),
-    estado ENUM('activo','inactivo') DEFAULT 'activo'
+    estado ENUM('activo', 'inactivo') DEFAULT 'activo'
 );
-
 -- Productos (alineado con tus INSERTs)
 CREATE TABLE Productos (
     id_producto INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     marca VARCHAR(50),
-    categoria ENUM('detergentes','limpieza','desinfectantes','personal') NOT NULL,
-    tamano ENUM('pequeno','grande') NOT NULL,
-    precio DECIMAL(10,2) NOT NULL,
+    categoria ENUM(
+        'detergentes',
+        'limpieza',
+        'desinfectantes',
+        'personal'
+    ) NOT NULL,
+    tamano ENUM('pequeno', 'grande') NOT NULL,
+    precio DECIMAL(10, 2) NOT NULL,
     activo BOOLEAN DEFAULT TRUE,
     UNIQUE (nombre, tamano)
 );
-
 -- Inventario (referencia a Sucursales y Productos)
 CREATE TABLE Inventario (
     id_inventario INT AUTO_INCREMENT PRIMARY KEY,
@@ -54,7 +55,6 @@ CREATE TABLE Inventario (
     FOREIGN KEY (id_producto) REFERENCES Productos(id_producto),
     UNIQUE (id_sucursal, id_producto)
 );
-
 -- Compras
 CREATE TABLE Compras (
     id_compra INT AUTO_INCREMENT PRIMARY KEY,
@@ -84,7 +84,7 @@ CREATE TABLE Pedidos (
     id_sucursal INT NOT NULL,
     fecha DATE NOT NULL,
     total DECIMAL(12, 2),
-    estado ENUM('pendiente','procesado','completado','cancelado') DEFAULT 'pendiente',
+    estado ENUM('pendiente', 'procesado', 'completado', 'cancelado') DEFAULT 'pendiente',
     fecha_pago DATE NULL,
     fecha_entrega DATE NULL,
     FOREIGN KEY (id_usuario) REFERENCES Usuarios(id_usuario),
@@ -101,25 +101,73 @@ CREATE TABLE Detalle_Pedidos (
     FOREIGN KEY (id_pedido) REFERENCES Pedidos(id_pedido),
     FOREIGN KEY (id_producto) REFERENCES Productos(id_producto)
 );
-
 -- =============================================
 -- DATOS INICIALES
 -- =============================================
-
 -- Sucursales
-INSERT INTO Sucursales (nombre, direccion, telefono, codigo_sucursal) VALUES
-('ProClean Norte', 'Calle 123 #45-67', '+57 300 123 4567', 'PC-NORTE'),
-('ProClean Sur', 'Carrera 45 #123-89', '+57 300 765 4321', 'PC-SUR');
- 
+INSERT INTO Sucursales (nombre, direccion, telefono, codigo_sucursal)
+VALUES (
+        'ProClean Norte',
+        'Calle 123 #45-67',
+        '+57 300 123 4567',
+        'PC-NORTE'
+    ),
+    (
+        'ProClean Sur',
+        'Carrera 45 #12-89',
+        '+57 300 765 4321',
+        'PC-SUR'
+    );
 -- Usuarios admin por sucursal (password: admin123 - debe hashearse)
-INSERT INTO Usuarios (nombre, email, password, rol, id_sucursal) VALUES
-('Admin Norte', 'admin@norte.proclean.com', '$2b$10$hashedpassword', 'admin', 1),
-('Admin Sur', 'admin@sur.proclean.com', '$2b$10$hashedpassword', 'admin', 2);
-
+INSERT INTO Usuarios (nombre, email, password, rol, id_sucursal)
+VALUES (
+        'Admin Norte',
+        'admin@norte.proclean.com',
+        '$2b$10$hashedpassword',
+        'admin',
+        1
+    ),
+    (
+        'Admin Sur',
+        'admin@sur.proclean.com',
+        '$2b$10$hashedpassword',
+        'admin',
+        2
+    );
 -- Productos básicos
-INSERT INTO Productos (nombre, marca, categoria, tamano, precio) VALUES
-('Detergente Ariel', 'Ariel', 'detergentes', 'pequeno', 8500),
-('Detergente Ariel', 'Ariel', 'detergentes', 'grande', 15000),
-('Desinfectante Lysol', 'Lysol', 'desinfectantes', 'pequeno', 6500),
-('Desinfectante Lysol', 'Lysol', 'desinfectantes', 'grande', 12000),
-('Jabon Protex', 'Protex', 'personal', 'pequeno', 3500);
+INSERT INTO Productos (nombre, marca, categoria, tamano, precio)
+VALUES (
+        'Detergente Ariel',
+        'Ariel',
+        'detergentes',
+        'pequeno',
+        8500
+    ),
+    (
+        'Detergente Ariel',
+        'Ariel',
+        'detergentes',
+        'grande',
+        15000
+    ),
+    (
+        'Desinfectante Lysol',
+        'Lysol',
+        'desinfectantes',
+        'pequeno',
+        6500
+    ),
+    (
+        'Desinfectante Lysol',
+        'Lysol',
+        'desinfectantes',
+        'grande',
+        12000
+    ),
+    (
+        'Jabon Protex',
+        'Protex',
+        'personal',
+        'pequeno',
+        3500
+    );
