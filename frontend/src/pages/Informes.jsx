@@ -6,8 +6,7 @@ export default function Informes() {
   const [tipoTransaccion, setTipoTransaccion] = useState("ventas"); 
   const [sucursal, setSucursal] = useState("");
   const [rows, setRows] = useState([]);
-  const [detalle, setDetalle] = useState(null); 
-  const [modalOpen, setModalOpen] = useState(false);
+  const [detalle, setDetalle] = useState(null); // { tipo, cabecera, items }
 
   useEffect(() => {
     const load = async () => {
@@ -28,14 +27,12 @@ export default function Informes() {
         const data = await getCompra(row.id_compra);
         setDetalle({ tipo: "compra", cabecera: data.compra, items: data.items });
       }
-      setModalOpen(true);
     } catch (e) {
       alert("Error al cargar detalles");
       console.error(e);
     }
   };
-
-  const cerrarModal = () => { setModalOpen(false); setDetalle(null); };
+  const cerrarDetalle = () => { setDetalle(null); };
 
   return (
     <div className="grid gap-4">
@@ -111,47 +108,47 @@ export default function Informes() {
         )}
       </div>
 
-      {modalOpen && detalle && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4">
-          <div className="bg-white p-4 rounded-lg min-w-[320px] max-w-[800px] w-[90%]">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="m-0 text-xl font-semibold">
+      {detalle && (
+        <div className="mt-4">
+          <div className="bg-white border rounded-lg shadow">
+            <div className="flex items-center justify-between px-4 py-3 border-b">
+              <h3 className="m-0 text-lg font-semibold">
                 {detalle.tipo === "pedido" ? `Detalle Pedido #${detalle.cabecera.id_pedido}` : `Detalle Compra #${detalle.cabecera.id_compra}`}
               </h3>
-              <button className="px-2 py-1 border rounded" onClick={cerrarModal}>Cerrar</button>
+              <button className="px-2 py-1 border rounded hover:bg-gray-50" onClick={cerrarDetalle}>Cerrar</button>
             </div>
-
-            <div className="mb-3 space-y-1 text-sm">
+            <div className="px-4 py-3 grid gap-1 text-sm">
               <div><b>Fecha:</b> {detalle.cabecera.fecha}</div>
-              <div><b>Sucursal:</b> {detalle.cabecera.id_sucursal}</div>
+              <div><b>Sucursal:</b> {detalle.cabecera.sucursal || detalle.cabecera.id_sucursal}</div>
               {detalle.tipo === "pedido" ? (
-                <div><b>Cliente:</b> {detalle.cabecera.id_usuario}</div>
+                <div><b>Cliente:</b> {detalle.cabecera.cliente || detalle.cabecera.id_usuario}</div>
               ) : (
-                <div><b>Proveedor:</b> {detalle.cabecera.id_proveedor}</div>
+                <div><b>Proveedor:</b> {detalle.cabecera.proveedor || detalle.cabecera.id_proveedor}</div>
               )}
               <div><b>Total:</b> ${detalle.cabecera.total?.toLocaleString()}</div>
             </div>
-
-            <table className="w-full border-collapse text-sm">
-              <thead className="bg-gray-100">
-                <tr>
-                  <th className="border p-2 text-left">Producto</th>
-                  <th className="border p-2 text-left">Cantidad</th>
-                  <th className="border p-2 text-left">Precio Unitario</th>
-                  <th className="border p-2 text-left">Subtotal</th>
-                </tr>
-              </thead>
-              <tbody>
-                {detalle.items.map((it, idx) => (
-                  <tr key={idx}>
-                    <td className="border p-2">{it.nombre}</td>
-                    <td className="border p-2">{it.cantidad}</td>
-                    <td className="border p-2">${Number(it.precio_unitario).toLocaleString()}</td>
-                    <td className="border p-2">${Number(it.subtotal).toLocaleString()}</td>
+            <div className="px-4 pb-4">
+              <table className="w-full border text-sm rounded overflow-hidden">
+                <thead className="bg-gray-100">
+                  <tr>
+                    <th className="border-b p-2 text-left">Producto</th>
+                    <th className="border-b p-2 text-left">Cantidad</th>
+                    <th className="border-b p-2 text-left">Precio Unitario</th>
+                    <th className="border-b p-2 text-left">Subtotal</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y">
+                  {detalle.items.map((it, idx) => (
+                    <tr key={idx}>
+                      <td className="p-2">{it.nombre}</td>
+                      <td className="p-2">{it.cantidad}</td>
+                      <td className="p-2">${Number(it.precio_unitario).toLocaleString()}</td>
+                      <td className="p-2">${Number(it.subtotal).toLocaleString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}
