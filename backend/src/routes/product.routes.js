@@ -26,11 +26,11 @@ router.get("/:id", async (req, res) => {
 
 // Crear producto
 router.post("/", async (req, res) => {
-  const { nombre, marca, categoria, tamano, precio, activo = true } = req.body;
+  const { nombre, precio, activo = true } = req.body;
   try {
     const [result] = await pool.query(
-      "INSERT INTO Productos (nombre, marca, categoria, tamano, precio, activo) VALUES (?,?,?,?,?,?)",
-      [nombre, marca, categoria, tamano, precio, activo]
+      "INSERT INTO Productos (nombre, precio, activo) VALUES (?,?,?)",
+      [nombre, precio, activo]
     );
     res.status(201).json({ id_producto: result.insertId });
   } catch (e) {
@@ -40,11 +40,11 @@ router.post("/", async (req, res) => {
 
 // Actualizar producto
 router.put("/:id", async (req, res) => {
-  const { nombre, marca, categoria, tamano, precio, activo } = req.body;
+  const { nombre, precio, activo } = req.body;
   try {
     const [result] = await pool.query(
-      "UPDATE Productos SET nombre=?, marca=?, categoria=?, tamano=?, precio=?, activo=? WHERE id_producto=?",
-      [nombre, marca, categoria, tamano, precio, activo, req.params.id]
+      "UPDATE Productos SET nombre=?, precio=?, activo=? WHERE id_producto=?",
+      [nombre, precio, activo, req.params.id]
     );
     if (!result.affectedRows) return res.status(404).json({ error: "Producto no encontrado" });
     res.json({ ok: true });

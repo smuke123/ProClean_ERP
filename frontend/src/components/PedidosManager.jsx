@@ -53,7 +53,7 @@ export default function PedidosManager({ idSucursal, onStockChanged }) {
           <div key={i} style={{ display: "flex", gap: 8 }}>
             <select value={r.id_producto} onChange={(e) => setRow(i, { id_producto: Number(e.target.value) })}>
               <option value="">-- producto --</option>
-              {prods.map((p) => <option key={p.id_producto} value={p.id_producto}>{p.nombre} ({p.tamano})</option>)}
+              {prods.map((p) => <option key={p.id_producto} value={p.id_producto}>{p.nombre}</option>)}
             </select>
             <input type="number" min="1" value={r.cantidad} onChange={(e) => setRow(i, { cantidad: Number(e.target.value) })} />
             <input type="number" min="0" value={r.precio_unitario} onChange={(e) => setRow(i, { precio_unitario: Number(e.target.value) })} />

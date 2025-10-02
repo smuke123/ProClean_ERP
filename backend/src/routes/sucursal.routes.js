@@ -18,7 +18,7 @@ router.get("/:id/inventario", async (req, res) => {
   try {
     const [rows] = await pool.query(
       `SELECT i.id_inventario, i.id_sucursal, i.id_producto, i.cantidad, i.stock_minimo,
-              p.nombre, p.marca, p.categoria, p.tamano, p.precio
+              p.nombre, p.precio
        FROM Inventario i
        JOIN Productos p ON p.id_producto = i.id_producto
        WHERE i.id_sucursal = ?

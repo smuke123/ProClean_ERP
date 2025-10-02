@@ -5,7 +5,7 @@ const router = Router();
 
 // Crear compra: incrementa inventario
 router.post("/", async (req, res) => {
-  const { id_proveedor, id_sucursal, items = [] } = req.body;
+  const { id_proveedor, id_sucursal, fecha, items = [] } = req.body;
   if (!id_proveedor || !id_sucursal || !items.length)
     return res.status(400).json({ error: "id_proveedor, id_sucursal e items son requeridos" });
 
@@ -15,8 +15,8 @@ router.post("/", async (req, res) => {
 
     const total = items.reduce((acc, it) => acc + Number(it.cantidad) * Number(it.precio_unitario), 0);
     const [compra] = await conn.query(
-      "INSERT INTO Compras (id_proveedor, id_sucursal, fecha, total, estado) VALUES (?, ?, CURDATE(), ?, 'pagada')",
-      [id_proveedor, id_sucursal, total]
+      "INSERT INTO Compras (id_proveedor, id_sucursal, fecha, total, estado) VALUES (?, ?, ?, ?, 'pagada')",
+      [id_proveedor, id_sucursal, fecha || new Date().toISOString().slice(0,10), total]
     );
     const id_compra = compra.insertId;
 
@@ -45,9 +45,9 @@ router.post("/", async (req, res) => {
 });
 
 // Listado/Informe de compras con filtros y agregaciones
-// Query params: id_sucursal, estado, desde, hasta, agrupar(dia|producto)
+// Query params: id_sucursal, estado, desde, hasta, id_producto, agrupar(dia|producto)
 router.get("/", async (req, res) => {
-  const { id_sucursal, estado, desde, hasta, agrupar } = req.query;
+  const { id_sucursal, estado, desde, hasta, id_producto, agrupar } = req.query;
 
   const where = [];
   const params = [];
@@ -55,6 +55,7 @@ router.get("/", async (req, res) => {
   if (estado) { where.push("c.estado = ?"); params.push(estado); }
   if (desde) { where.push("c.fecha >= ?"); params.push(desde); }
   if (hasta) { where.push("c.fecha <= ?"); params.push(hasta); }
+  if (id_producto) { where.push("EXISTS (SELECT 1 FROM Detalle_Compras dc WHERE dc.id_compra=c.id_compra AND dc.id_producto=?)"); params.push(id_producto); }
   const whereSql = where.length ? `WHERE ${where.join(" AND ")}` : "";
 
   try {
@@ -114,7 +115,7 @@ router.get("/:id", async (req, res) => {
     if (!compra) return res.status(404).json({ error: "Compra no encontrada" });
 
     const [items] = await pool.query(
-      `SELECT dc.*, p.nombre, p.marca, p.tamano
+      `SELECT dc.*, p.nombre
        FROM Detalle_Compras dc
        JOIN Productos p ON p.id_producto = dc.id_producto
        WHERE dc.id_compra = ?`,

@@ -1,38 +1,55 @@
 import { useEffect, useState } from "react";
-import { getProductos, postCompra } from "../api";
+import { getProductos, postPedido, setEstadoPedido } from "../api";
 
-export default function ComprasForm({ idSucursal, onDone }) {
+export default function PedidosForm({ idSucursal, onDone }) {
   const [prods, setProds] = useState([]);
-  const [id_proveedor, setProveedor] = useState(1); // demo
+  const [id_usuario, setUser] = useState(1); // demo
   const [fecha, setFecha] = useState(new Date().toISOString().slice(0, 10));
   const [items, setItems] = useState([{ id_producto: "", cantidad: 1, precio_unitario: 0 }]);
 
   useEffect(() => { getProductos().then(setProds).catch(console.error); }, []);
 
-  const addRow = () => setItems([...items, { id_producto: "", cantidad: 1, precio_unitario: 0 }]);
   const setRow = (i, patch) => {
     const copy = items.slice();
     copy[i] = { ...copy[i], ...patch };
     setItems(copy);
   };
+
+  const addRow = () => setItems([...items, { id_producto: "", cantidad: 1, precio_unitario: 0 }]);
   const delRow = (i) => setItems(items.filter((_, idx) => idx !== i));
 
   const submit = async (e) => {
     e.preventDefault();
     const valid = items.filter((r) => r.id_producto && r.cantidad > 0);
-    await postCompra({ id_proveedor, id_sucursal: idSucursal, fecha, items: valid });
-    setItems([{ id_producto: "", cantidad: 1, precio_unitario: 0 }]);
-    onDone?.();
+    if (!valid.length) return;
+    
+    try {
+      // Crear pedido
+      const { id_pedido } = await postPedido({ 
+        id_usuario, 
+        id_sucursal: idSucursal, 
+        fecha, 
+        items: valid 
+      });
+      
+      // Procesar automáticamente (descuenta stock)
+      await setEstadoPedido(id_pedido, "procesado");
+      
+      setItems([{ id_producto: "", cantidad: 1, precio_unitario: 0 }]);
+      onDone?.();
+    } catch (e) {
+      alert("Error: " + e.message);
+    }
   };
 
   return (
     <div style={{ display: "grid", gap: 8 }}>
-      <h3>Registrar compra (entrada de stock)</h3>
+      <h3>Registrar venta (salida de stock)</h3>
       <form onSubmit={submit} style={{ display: "grid", gap: 8 }}>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
           <label>
-            Proveedor ID (demo):
-            <input type="number" value={id_proveedor} onChange={(e) => setProveedor(Number(e.target.value))} />
+            Usuario ID (demo):
+            <input type="number" value={id_usuario} onChange={(e) => setUser(Number(e.target.value))} />
           </label>
           <label>
             Fecha:
@@ -52,7 +69,7 @@ export default function ComprasForm({ idSucursal, onDone }) {
         ))}
         <div style={{ display: "flex", gap: 8 }}>
           <button type="button" onClick={addRow}>Agregar ítem</button>
-          <button type="submit" disabled={!idSucursal}>Guardar compra</button>
+          <button type="submit" disabled={!idSucursal}>Registrar venta</button>
         </div>
       </form>
     </div>

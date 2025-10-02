@@ -38,7 +38,7 @@ export default function Inventario({ idSucursal }) {
         <select value={nuevo.id_producto} onChange={(e) => setNuevo({ ...nuevo, id_producto: e.target.value })}>
           <option value="">-- producto --</option>
           {productos.map((p) => (
-            <option key={p.id_producto} value={p.id_producto}>{p.nombre} ({p.tamano})</option>
+            <option key={p.id_producto} value={p.id_producto}>{p.nombre}</option>
           ))}
         </select>
         <input type="number" min="0" placeholder="Cantidad" value={nuevo.cantidad} onChange={(e) => setNuevo({ ...nuevo, cantidad: e.target.value })} />
@@ -55,7 +55,7 @@ export default function Inventario({ idSucursal }) {
         <tbody>
           {items.map((it) => (
             <tr key={it.id_inventario}>
-              <td>{it.nombre} ({it.tamano})</td>
+              <td>{it.nombre}</td>
               <td>
                 <input type="number" defaultValue={it.cantidad}
                   onBlur={(e) => setQty(it.id_producto, Number(e.target.value), it.stock_minimo)} />

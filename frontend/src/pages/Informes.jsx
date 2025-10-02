@@ -3,78 +3,68 @@ import SelectSucursal from "../components/SelectSucursal.jsx";
 import { getPedidos, getCompras } from "../api";
 
 export default function Informes() {
-  const [tab, setTab] = useState("ventas"); // ventas | compras
+  const [tipoTransaccion, setTipoTransaccion] = useState("ventas"); // ventas | compras
   const [sucursal, setSucursal] = useState("");
-  const [estado, setEstado] = useState("");
-  const [desde, setDesde] = useState("");
-  const [hasta, setHasta] = useState("");
-  const [agrupar, setAgrupar] = useState(""); // dia | producto | estado
   const [rows, setRows] = useState([]);
 
-  const load = async () => {
-    const params = {};
-    if (sucursal) params.id_sucursal = sucursal;
-    if (estado) params.estado = estado;
-    if (desde) params.desde = desde;
-    if (hasta) params.hasta = hasta;
-    if (agrupar) params.agrupar = agrupar;
-    const data = tab === "ventas" ? await getPedidos(params) : await getCompras(params);
-    setRows(data);
-  };
-
-  useEffect(() => { load().catch(console.error); }, [tab]); // carga inicial por tab
+  useEffect(() => {
+    const load = async () => {
+      const params = {};
+      if (sucursal) params.id_sucursal = sucursal;
+      const data = tipoTransaccion === "ventas" ? await getPedidos(params) : await getCompras(params);
+      setRows(data);
+    };
+    load().catch(console.error);
+  }, [tipoTransaccion, sucursal]);
 
   return (
     <div style={{ display: "grid", gap: 16 }}>
       <h2>Informes</h2>
 
-      <div style={{ display: "flex", gap: 8 }}>
-        <button onClick={() => setTab("ventas")} disabled={tab === "ventas"}>Ventas (Pedidos)</button>
-        <button onClick={() => setTab("compras")} disabled={tab === "compras"}>Compras</button>
-      </div>
-
-      <div style={{ display: "grid", gap: 8, gridTemplateColumns: "repeat(5, 1fr)" }}>
-        <div style={{ gridColumn: "span 2" }}>
+      <div style={{ display: "grid", gap: 8, gridTemplateColumns: "1fr 1fr", maxWidth: "400px" }}>
+        <div>
+          <label>Tipo de Transacción</label>
+          <select value={tipoTransaccion} onChange={(e) => setTipoTransaccion(e.target.value)}>
+            <option value="ventas">Ventas</option>
+            <option value="compras">Compras</option>
+          </select>
+        </div>
+        <div>
           <label>Sucursal</label>
           <SelectSucursal value={sucursal} onChange={setSucursal} />
-        </div>
-        <div>
-          <label>Estado</label>
-          <select value={estado} onChange={(e) => setEstado(e.target.value)}>
-            <option value="">(todos)</option>
-            <option value="pendiente">pendiente</option>
-            <option value="procesado">procesado</option>
-            <option value="completado">completado</option>
-            <option value="cancelado">cancelado</option>
-          </select>
-        </div>
-        <div>
-          <label>Desde</label>
-          <input type="date" value={desde} onChange={(e) => setDesde(e.target.value)} />
-        </div>
-        <div>
-          <label>Hasta</label>
-          <input type="date" value={hasta} onChange={(e) => setHasta(e.target.value)} />
-        </div>
-        <div>
-          <label>Agrupar</label>
-          <select value={agrupar} onChange={(e) => setAgrupar(e.target.value)}>
-            <option value="">(ninguno)</option>
-            <option value="dia">día</option>
-            <option value="producto">producto</option>
-            <option value="estado">estado</option>
-          </select>
-        </div>
-        <div style={{ gridColumn: "span 5" }}>
-          <button onClick={load}>Aplicar filtros</button>
         </div>
       </div>
 
       <div>
         <h4>Resultados ({rows.length})</h4>
-        <pre style={{ whiteSpace: "pre-wrap", background: "#f6f6f6", padding: 12 }}>
-{JSON.stringify(rows, null, 2)}
-        </pre>
+        {rows.length > 0 ? (
+          <table border="1" cellPadding="8" style={{ width: "100%", borderCollapse: "collapse" }}>
+            <thead style={{ backgroundColor: "#f5f5f5" }}>
+              <tr>
+                <th>ID</th>
+                <th>Fecha</th>
+                <th>Pedido/Compra</th>
+                <th>Productos</th>
+                <th>Total</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row) => (
+                <tr key={tipoTransaccion === "ventas" ? row.id_pedido : row.id_compra}>
+                  <td>{tipoTransaccion === "ventas" ? row.id_pedido : row.id_compra}</td>
+                  <td>{row.fecha}</td>
+                  <td>{tipoTransaccion === "ventas" ? `Pedido #${row.id_pedido}` : `Compra #${row.id_compra}`}</td>
+                  <td>{row.productos || "Ver detalles"}</td>
+                  <td>${row.total?.toLocaleString()}</td>
+                  <td>{row.estado}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p>No hay registros para los filtros seleccionados</p>
+        )}
       </div>
     </div>
   );
