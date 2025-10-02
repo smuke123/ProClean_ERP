@@ -12,13 +12,19 @@ services:
     volumes:
       - ./backend/src/database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
       - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   backend:
     build:
       context: ./backend
       dockerfile: dockerfile
     depends_on:
-      - mysqldb
+      mysqldb:
+        condition: service_healthy
     environment:
       MYSQLDB_HOST: ${MYSQLDB_HOST}
       MYSQLDB_USER: ${MYSQLDB_USER}

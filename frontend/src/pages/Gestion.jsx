@@ -150,8 +150,9 @@ export default function Gestion() {
   };
 
   return (
-    <div className="grid gap-5">
-      <h2 className="text-2xl font-semibold">Gestión Administrador</h2>
+    <div className="min-h-[calc(100vh-2rem)] p-4 md:p-6">
+      <div className="mx-auto max-w-5xl bg-white rounded-xl shadow p-5 md:p-8 grid gap-5">
+        <h2 className="text-2xl font-semibold">Gestión Administrador</h2>
       
       <div className="flex items-center gap-3">
         <b>Tipo de Transacción:</b>
@@ -270,6 +271,7 @@ export default function Gestion() {
           <button type="submit" className="px-4 py-2 rounded bg-green-600 text-white">Registrar Venta</button>
         </form>
       )}
+      </div>
     </div>
   );
 }

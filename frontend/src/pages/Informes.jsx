@@ -41,16 +41,25 @@ export default function Informes() {
     <div className="grid gap-4">
       <h2 className="text-2xl font-semibold">Informes</h2>
 
-      <div className="grid gap-2 grid-cols-2 max-w-md">
-        <div className="flex flex-col gap-1">
-          <label className="text-sm text-gray-600">Tipo de Transacción</label>
-          <select className="border rounded px-2 py-1" value={tipoTransaccion} onChange={(e) => setTipoTransaccion(e.target.value)}>
-            <option value="ventas">Ventas</option>
-            <option value="compras">Compras</option>
-          </select>
+      <div className="flex flex-col md:flex-row md:items-end gap-3 max-w-2xl">
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            className={`px-3 py-2 rounded border ${tipoTransaccion === 'ventas' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-800 border-gray-300 hover:bg-gray-50'}`}
+            onClick={() => setTipoTransaccion('ventas')}
+          >
+            Ventas
+          </button>
+          <button
+            type="button"
+            className={`px-3 py-2 rounded border ${tipoTransaccion === 'compras' ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-white text-gray-800 border-gray-300 hover:bg-gray-50'}`}
+            onClick={() => setTipoTransaccion('compras')}
+          >
+            Compras
+          </button>
         </div>
-        <div className="flex flex-col gap-1">
-          <label className="text-sm text-gray-600">Sucursal</label>
+        <div className="flex-1">
+          <label className="block text-sm text-gray-600 mb-1">Sucursal</label>
           <SelectSucursal value={sucursal} onChange={setSucursal} />
         </div>
       </div>
@@ -58,37 +67,41 @@ export default function Informes() {
       <div>
         <h4 className="text-lg font-medium">Resultados ({rows.length})</h4>
         {rows.length > 0 ? (
-          <table className="w-full border-collapse text-sm">
+          <table className="w-full border text-sm rounded-md overflow-hidden">
             <thead className="bg-gray-100">
               <tr>
-                <th className="border p-2 text-left">ID</th>
-                <th className="border p-2 text-left">Fecha</th>
-                <th className="border p-2 text-left">Pedido/Compra</th>
-                <th className="border p-2 text-left">Productos</th>
-                <th className="border p-2 text-left">Total</th>
-                <th className="border p-2 text-left">Estado</th>
+                <th className="border-b p-2 text-left">ID</th>
+                <th className="border-b p-2 text-left">Fecha</th>
+                <th className="border-b p-2 text-left">Pedido/Compra</th>
+                <th className="border-b p-2 text-left">Productos</th>
+                <th className="border-b p-2 text-left">Total</th>
+                <th className="border-b p-2 text-left">Estado</th>
               </tr>
             </thead>
-            <tbody>
-              {rows.map((row) => (
-                <tr key={tipoTransaccion === "ventas" ? row.id_pedido : row.id_compra}>
-                  <td className="border p-2">{tipoTransaccion === "ventas" ? row.id_pedido : row.id_compra}</td>
-                  <td className="border p-2">{row.fecha}</td>
-                  <td className="border p-2">{tipoTransaccion === "ventas" ? `Pedido #${row.id_pedido}` : `Compra #${row.id_compra}`}</td>
-                  <td className="border p-2">
+            <tbody className="divide-y">
+              {rows.map((row, idx) => (
+                <tr key={tipoTransaccion === "ventas" ? row.id_pedido : row.id_compra} className={idx % 2 ? 'bg-white' : 'bg-gray-50'}>
+                  <td className="p-2">{tipoTransaccion === "ventas" ? row.id_pedido : row.id_compra}</td>
+                  <td className="p-2">{row.fecha}</td>
+                  <td className="p-2">{tipoTransaccion === "ventas" ? `Pedido #${row.id_pedido}` : `Compra #${row.id_compra}`}</td>
+                  <td className="p-2">
                     {row.productos ? (
                       <span>{row.productos}</span>
                     ) : null}
                     <button
                       type="button"
                       onClick={() => abrirDetalle(row)}
-                      className="ml-2 px-2 py-1 rounded border border-gray-300 hover:bg-gray-50"
+                      className="ml-2 px-2 py-1 rounded border border-blue-600 text-blue-700 hover:bg-blue-50"
                     >
                       Ver detalles
                     </button>
                   </td>
-                  <td className="border p-2">${row.total?.toLocaleString()}</td>
-                  <td className="border p-2">{row.estado}</td>
+                  <td className="p-2">${row.total?.toLocaleString()}</td>
+                  <td className="p-2">
+                    <span className={`px-2 py-0.5 rounded text-xs ${row.estado === 'completado' || row.estado === 'pagada' ? 'bg-green-100 text-green-700' : row.estado === 'pendiente' ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-700'}`}>
+                      {row.estado}
+                    </span>
+                  </td>
                 </tr>
               ))}
             </tbody>

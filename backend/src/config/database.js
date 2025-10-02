@@ -8,6 +8,10 @@ const pool = createPool({
   password: process.env.MYSQLDB_PASSWORD,
   port: process.env.MYSQLDB_DOCKER_PORT,
   database: process.env.MYSQLDB_DATABASE,
+  charset: 'utf8mb4',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
 });
 
 export default pool;
