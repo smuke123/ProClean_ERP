@@ -85,13 +85,17 @@ router.get("/", async (req, res) => {
       return res.json(rows);
     }
 
-    // Listado plano
+    // Listado plano con información de productos
     const [rows] = await pool.query(
-      `SELECT c.*, s.nombre AS sucursal, pr.nombre AS proveedor
+      `SELECT c.*, s.nombre AS sucursal, pr.nombre AS proveedor,
+              GROUP_CONCAT(CONCAT(p.nombre, ' (', dc.cantidad, ')') SEPARATOR ', ') AS productos
        FROM Compras c
        JOIN Sucursales s ON s.id_sucursal = c.id_sucursal
        JOIN Proveedores pr ON pr.id_proveedor = c.id_proveedor
+       LEFT JOIN Detalle_Compras dc ON dc.id_compra = c.id_compra
+       LEFT JOIN Productos p ON p.id_producto = dc.id_producto
        ${whereSql}
+       GROUP BY c.id_compra
        ORDER BY c.fecha DESC, c.id_compra DESC`,
       params
     );

@@ -104,11 +104,15 @@ router.get("/", async (req, res) => {
   const whereSql = where.length ? `WHERE ${where.join(' AND ')}` : '';
   try {
     const [rows] = await pool.query(
-      `SELECT p.*, s.nombre AS sucursal, u.nombre AS cliente
+      `SELECT p.*, s.nombre AS sucursal, u.nombre AS cliente,
+              GROUP_CONCAT(CONCAT(pr.nombre, ' (', dp.cantidad, ')') SEPARATOR ', ') AS productos
        FROM Pedidos p
        JOIN Sucursales s ON s.id_sucursal = p.id_sucursal
        JOIN Usuarios u ON u.id_usuario = p.id_usuario
+       LEFT JOIN Detalle_Pedidos dp ON dp.id_pedido = p.id_pedido
+       LEFT JOIN Productos pr ON pr.id_producto = dp.id_producto
        ${whereSql}
+       GROUP BY p.id_pedido
        ORDER BY p.fecha DESC, p.id_pedido DESC`,
       params
     );
