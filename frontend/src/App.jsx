@@ -18,7 +18,7 @@ export default function App() {
         <Route path="/informes" element={<Informes />} />
       </Routes>
       <footer style={{ marginTop: 24 }}>
-        <small>Sin login (modo admin) — Demo</small>
+        <small>@Copyright Smuke</small>
       </footer>
     </div>
   );

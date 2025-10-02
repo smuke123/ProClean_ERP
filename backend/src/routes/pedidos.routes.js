@@ -122,4 +122,30 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Detalle de pedido por id
+router.get("/:id", async (req, res) => {
+  try {
+    const [[pedido]] = await pool.query(
+      `SELECT p.*, s.nombre AS sucursal, u.nombre AS cliente
+       FROM Pedidos p
+       JOIN Sucursales s ON s.id_sucursal = p.id_sucursal
+       JOIN Usuarios u ON u.id_usuario = p.id_usuario
+       WHERE p.id_pedido = ?`,
+      [req.params.id]
+    );
+    if (!pedido) return res.status(404).json({ error: "Pedido no encontrado" });
+
+    const [items] = await pool.query(
+      `SELECT dp.*, pr.nombre
+       FROM Detalle_Pedidos dp
+       JOIN Productos pr ON pr.id_producto = dp.id_producto
+       WHERE dp.id_pedido = ?`,
+      [req.params.id]
+    );
+    res.json({ pedido, items });
+  } catch (e) {
+    res.status(500).json({ error: "Error al obtener pedido", detail: e?.message });
+  }
+});
+
 export default router;

@@ -150,33 +150,34 @@ export default function Gestion() {
   };
 
   return (
-    <div style={{ display: "grid", gap: 20 }}>
-      <h2>Gestión Administrador</h2>
+    <div className="grid gap-5">
+      <h2 className="text-2xl font-semibold">Gestión Administrador</h2>
       
-      <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+      <div className="flex items-center gap-3">
         <b>Tipo de Transacción:</b>
-        <select value={tipoFormulario} onChange={(e) => setTipoFormulario(e.target.value)}>
+        <select className="border rounded px-2 py-1" value={tipoFormulario} onChange={(e) => setTipoFormulario(e.target.value)}>
           <option value="compras">Compras</option>
           <option value="ventas">Ventas</option>
         </select>
       </div>
 
       {tipoFormulario === "compras" ? (
-        <form onSubmit={handleComprar} style={{ display: "grid", gap: 12, maxWidth: "600px", padding: "20px", border: "1px solid #ccc", borderRadius: "8px" }}>
-          <h3>Formulario de Compras</h3>
+        <form onSubmit={handleComprar} className="grid gap-3 max-w-[600px] p-5 border rounded-lg">
+          <h3 className="text-xl font-semibold">Formulario de Compras</h3>
           
-          <div>
-            <label>Sucursal:</label>
+          <div className="flex flex-col gap-1">
+            <label className="text-sm text-gray-600">Sucursal:</label>
             <SelectSucursal value={sucursal} onChange={setSucursal} />
           </div>
           
           <div>
-            <h4>Productos a Comprar</h4>
+            <h4 className="font-medium mb-2">Productos a Comprar</h4>
             {itemsCompra.map((item, index) => (
-              <div key={index} style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr auto", gap: "8px", alignItems: "center", marginBottom: "8px" }}>
+              <div key={index} className="grid grid-cols-[2fr_1fr_1fr_auto] gap-2 items-center mb-2">
                 <select 
                   value={item.id_producto} 
                   onChange={(e) => updateItemCompra(index, "id_producto", e.target.value)}
+                  className="border rounded px-2 py-1"
                 >
                   <option value="">Seleccionar producto</option>
                   {productos.map((p) => (
@@ -192,53 +193,45 @@ export default function Gestion() {
                   onChange={(e) => updateItemCompra(index, "cantidad", parseInt(e.target.value) || 0)}
                   min="1"
                   placeholder="Cantidad"
+                  className="border rounded px-2 py-1"
                 />
                 
-                <span>${item.precio_unitario}</span>
+                <span className="text-sm">${item.precio_unitario}</span>
                 
                 <button 
                   type="button" 
                   onClick={() => removeItemCompra(index)}
-                  style={{ padding: "4px 8px", backgroundColor: "#dc3545", color: "white", border: "none", borderRadius: "4px" }}
+                  className="px-2 py-1 rounded bg-red-600 text-white"
                 >
                   Eliminar
                 </button>
               </div>
             ))}
             
-            <button 
-              type="button" 
-              onClick={addItemCompra}
-              style={{ padding: "8px", backgroundColor: "#6c757d", color: "white", border: "none", borderRadius: "4px", width: "fit-content" }}
-            >
-              + Añadir Producto
-            </button>
+            <button type="button" onClick={addItemCompra} className="px-3 py-2 rounded bg-gray-600 text-white w-fit">+ Añadir Producto</button>
           </div>
           
-          <div style={{ fontWeight: "bold", fontSize: "16px" }}>
-            Total: ${itemsCompra.reduce((sum, item) => sum + (item.cantidad * item.precio_unitario), 0).toLocaleString()}
-          </div>
+          <div className="font-bold text-base">Total: ${itemsCompra.reduce((sum, item) => sum + (item.cantidad * item.precio_unitario), 0).toLocaleString()}</div>
           
-          <button type="submit" style={{ padding: "10px", backgroundColor: "#007bff", color: "white", border: "none", borderRadius: "4px" }}>
-            Registrar Compra
-          </button>
+          <button type="submit" className="px-4 py-2 rounded bg-blue-600 text-white">Registrar Compra</button>
         </form>
       ) : (
-        <form onSubmit={handleVender} style={{ display: "grid", gap: 12, maxWidth: "600px", padding: "20px", border: "1px solid #ccc", borderRadius: "8px" }}>
-          <h3>Formulario de Ventas</h3>
+        <form onSubmit={handleVender} className="grid gap-3 max-w-[600px] p-5 border rounded-lg">
+          <h3 className="text-xl font-semibold">Formulario de Ventas</h3>
           
-          <div>
-            <label>Sucursal:</label>
+          <div className="flex flex-col gap-1">
+            <label className="text-sm text-gray-600">Sucursal:</label>
             <SelectSucursal value={sucursal} onChange={setSucursal} />
           </div>
           
           <div>
-            <h4>Productos a Vender</h4>
+            <h4 className="font-medium mb-2">Productos a Vender</h4>
             {itemsVenta.map((item, index) => (
-              <div key={index} style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr auto", gap: "8px", alignItems: "center", marginBottom: "8px" }}>
+              <div key={index} className="grid grid-cols-[2fr_1fr_1fr_auto] gap-2 items-center mb-2">
                 <select 
                   value={item.id_producto} 
                   onChange={(e) => updateItemVenta(index, "id_producto", e.target.value)}
+                  className="border rounded px-2 py-1"
                 >
                   <option value="">Seleccionar producto</option>
                   {productos.map((p) => (
@@ -254,36 +247,27 @@ export default function Gestion() {
                   onChange={(e) => updateItemVenta(index, "cantidad", parseInt(e.target.value) || 0)}
                   min="1"
                   placeholder="Cantidad"
+                  className="border rounded px-2 py-1"
                 />
                 
-                <span>${item.precio_unitario}</span>
+                <span className="text-sm">${item.precio_unitario}</span>
                 
                 <button 
                   type="button" 
                   onClick={() => removeItemVenta(index)}
-                  style={{ padding: "4px 8px", backgroundColor: "#dc3545", color: "white", border: "none", borderRadius: "4px" }}
+                  className="px-2 py-1 rounded bg-red-600 text-white"
                 >
                   Eliminar
                 </button>
               </div>
             ))}
             
-            <button 
-              type="button" 
-              onClick={addItemVenta}
-              style={{ padding: "8px", backgroundColor: "#6c757d", color: "white", border: "none", borderRadius: "4px", width: "fit-content" }}
-            >
-              + Añadir Producto
-            </button>
+            <button type="button" onClick={addItemVenta} className="px-3 py-2 rounded bg-gray-600 text-white w-fit">+ Añadir Producto</button>
           </div>
           
-          <div style={{ fontWeight: "bold", fontSize: "16px" }}>
-            Total: ${itemsVenta.reduce((sum, item) => sum + (item.cantidad * item.precio_unitario), 0).toLocaleString()}
-          </div>
+          <div className="font-bold text-base">Total: ${itemsVenta.reduce((sum, item) => sum + (item.cantidad * item.precio_unitario), 0).toLocaleString()}</div>
           
-          <button type="submit" style={{ padding: "10px", backgroundColor: "#28a745", color: "white", border: "none", borderRadius: "4px" }}>
-            Registrar Venta
-          </button>
+          <button type="submit" className="px-4 py-2 rounded bg-green-600 text-white">Registrar Venta</button>
         </form>
       )}
     </div>

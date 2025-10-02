@@ -19,7 +19,7 @@ CREATE TABLE Usuarios (
     id_sucursal INT NULL,
     FOREIGN KEY (id_sucursal) REFERENCES Sucursales(id_sucursal)
 );
--- Proveedores (igual)
+-- Proveedores
 CREATE TABLE Proveedores (
     id_proveedor INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE Productos (
     activo BOOLEAN DEFAULT TRUE,
     UNIQUE (nombre)
 );
--- Inventario (referencia a Sucursales y Productos)
+-- Inventario 
 CREATE TABLE Inventario (
     id_inventario INT AUTO_INCREMENT PRIMARY KEY,
     id_sucursal INT NOT NULL,
@@ -69,14 +69,19 @@ CREATE TABLE Detalle_Compras (
     FOREIGN KEY (id_compra) REFERENCES Compras(id_compra),
     FOREIGN KEY (id_producto) REFERENCES Productos(id_producto)
 );
--- Pedidos (unificada: carrito → pago → entrega)
+-- Pedidos 
 CREATE TABLE Pedidos (
     id_pedido INT AUTO_INCREMENT PRIMARY KEY,
     id_usuario INT NOT NULL,
     id_sucursal INT NOT NULL,
     fecha DATE NOT NULL,
     total DECIMAL(12, 2),
-    estado ENUM('pendiente', 'procesado', 'completado', 'cancelado') DEFAULT 'pendiente',
+    estado ENUM(
+        'pendiente',
+        'procesado',
+        'completado',
+        'cancelado'
+    ) DEFAULT 'pendiente',
     fecha_pago DATE NULL,
     fecha_entrega DATE NULL,
     FOREIGN KEY (id_usuario) REFERENCES Usuarios(id_usuario),
@@ -128,8 +133,7 @@ VALUES (
     );
 -- Productos básicos (10 fijos)
 INSERT INTO Productos (nombre, precio)
-VALUES
-    ('Detergente Multiusos 5L', 5000),
+VALUES ('Detergente Multiusos 5L', 5000),
     ('Lavaloza Líquido 2L', 10000),
     ('Limpiador de Pisos Aromatizado 5L', 35000),
     ('Jabón Líquido para Ropa 5L', 15000),
@@ -139,36 +143,65 @@ VALUES
     ('Alcohol Antiséptico 70% 1L', 10000),
     ('Desinfectante Multiusos 4L', 15000),
     ('Gel Antibacterial 1L', 5000);
-
 -- Proveedores
 INSERT INTO Proveedores (nombre, contacto, telefono, direccion)
-VALUES
-    ('Distribuidora Limpia S.A.S', 'Carlos Mendoza', '+57 300 111 2222', 'Calle 80 #10-15'),
-    ('Productos Químicos del Norte', 'María González', '+57 300 333 4444', 'Carrera 50 #25-30'),
-    ('Suministros Industriales Ltda', 'Roberto Silva', '+57 300 555 6666', 'Avenida 68 #40-20');
-
+VALUES (
+        'Distribuidora Limpia S.A.S',
+        'Carlos Mendoza',
+        '+57 300 111 2222',
+        'Calle 80 #10-15'
+    ),
+    (
+        'Productos Químicos del Norte',
+        'María González',
+        '+57 300 333 4444',
+        'Carrera 50 #25-30'
+    ),
+    (
+        'Suministros Industriales Ltda',
+        'Roberto Silva',
+        '+57 300 555 6666',
+        'Avenida 68 #40-20'
+    );
 -- Inventario inicial para ambas sucursales
 INSERT INTO Inventario (id_sucursal, id_producto, cantidad, stock_minimo)
-VALUES
-    -- Sucursal Norte
-    (1, 1, 50, 10), (1, 2, 30, 5), (1, 3, 25, 5), (1, 4, 40, 8), (1, 5, 35, 7),
-    (1, 6, 60, 12), (1, 7, 45, 9), (1, 8, 20, 4), (1, 9, 30, 6), (1, 10, 25, 5),
+VALUES -- Sucursal Norte
+    (1, 1, 50, 10),
+    (1, 2, 30, 5),
+    (1, 3, 25, 5),
+    (1, 4, 40, 8),
+    (1, 5, 35, 7),
+    (1, 6, 60, 12),
+    (1, 7, 45, 9),
+    (1, 8, 20, 4),
+    (1, 9, 30, 6),
+    (1, 10, 25, 5),
     -- Sucursal Sur
-    (2, 1, 40, 10), (2, 2, 25, 5), (2, 3, 20, 5), (2, 4, 35, 8), (2, 5, 30, 7),
-    (2, 6, 50, 12), (2, 7, 40, 9), (2, 8, 15, 4), (2, 9, 25, 6), (2, 10, 20, 5);
-
+    (2, 1, 40, 10),
+    (2, 2, 25, 5),
+    (2, 3, 20, 5),
+    (2, 4, 35, 8),
+    (2, 5, 30, 7),
+    (2, 6, 50, 12),
+    (2, 7, 40, 9),
+    (2, 8, 15, 4),
+    (2, 9, 25, 6),
+    (2, 10, 20, 5);
 -- Compras de ejemplo
 INSERT INTO Compras (id_proveedor, id_sucursal, fecha, total, estado)
-VALUES
-    (1, 1, '2024-01-15', 150000, 'pagada'),
+VALUES (1, 1, '2024-01-15', 150000, 'pagada'),
     (2, 1, '2024-01-20', 200000, 'pagada'),
     (3, 2, '2024-01-18', 175000, 'pagada'),
     (1, 2, '2024-01-25', 120000, 'pagada');
-
 -- Detalle de compras
-INSERT INTO Detalle_Compras (id_compra, id_producto, cantidad, precio_unitario, subtotal)
-VALUES
-    -- Compra 1 - Sucursal Norte
+INSERT INTO Detalle_Compras (
+        id_compra,
+        id_producto,
+        cantidad,
+        precio_unitario,
+        subtotal
+    )
+VALUES -- Compra 1 - Sucursal Norte
     (1, 1, 20, 4500, 90000),
     (1, 2, 10, 9000, 90000),
     (1, 3, 5, 32000, 160000),
@@ -183,19 +216,61 @@ VALUES
     -- Compra 4 - Sucursal Sur
     (4, 10, 15, 4500, 67500),
     (4, 1, 10, 4500, 45000);
-
--- Ventas de ejemplo (usando tabla Pedidos)
-INSERT INTO Pedidos (id_usuario, id_sucursal, fecha, total, estado, fecha_pago, fecha_entrega)
-VALUES
-    (1, 1, '2024-01-16', 75000, 'completado', '2024-01-16', '2024-01-16'),
-    (1, 1, '2024-01-22', 120000, 'completado', '2024-01-22', '2024-01-22'),
-    (2, 2, '2024-01-19', 95000, 'completado', '2024-01-19', '2024-01-19'),
-    (2, 2, '2024-01-26', 60000, 'completado', '2024-01-26', '2024-01-26');
-
+-- Ventas de ejemplo 
+INSERT INTO Pedidos (
+        id_usuario,
+        id_sucursal,
+        fecha,
+        total,
+        estado,
+        fecha_pago,
+        fecha_entrega
+    )
+VALUES (
+        1,
+        1,
+        '2024-01-16',
+        75000,
+        'completado',
+        '2024-01-16',
+        '2024-01-16'
+    ),
+    (
+        1,
+        1,
+        '2024-01-22',
+        120000,
+        'completado',
+        '2024-01-22',
+        '2024-01-22'
+    ),
+    (
+        2,
+        2,
+        '2024-01-19',
+        95000,
+        'completado',
+        '2024-01-19',
+        '2024-01-19'
+    ),
+    (
+        2,
+        2,
+        '2024-01-26',
+        60000,
+        'completado',
+        '2024-01-26',
+        '2024-01-26'
+    );
 -- Detalle de ventas
-INSERT INTO Detalle_Pedidos (id_pedido, id_producto, cantidad, precio_unitario, subtotal)
-VALUES
-    -- Venta 1 - Sucursal Norte
+INSERT INTO Detalle_Pedidos (
+        id_pedido,
+        id_producto,
+        cantidad,
+        precio_unitario,
+        subtotal
+    )
+VALUES -- Venta 1 - Sucursal Norte
     (1, 1, 5, 5000, 25000),
     (1, 2, 3, 10000, 30000),
     (1, 3, 1, 35000, 35000),

@@ -33,6 +33,7 @@ export const getCompras = (params = {}) => {
   const qs = new URLSearchParams(params).toString();
   return req(`/api/compras${qs ? `?${qs}` : ""}`);
 };
+export const getCompra = (id) => req(`/api/compras/${id}`);
 
 // Pedidos (ventas)
 export const postPedido = (data) =>
@@ -46,3 +47,4 @@ export const getPedidos = (params = {}) => {
   const qs = new URLSearchParams(params).toString();
   return req(`/api/pedidos${qs ? `?${qs}` : ""}`);
 };
+export const getPedido = (id) => req(`/api/pedidos/${id}`);

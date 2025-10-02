@@ -3,7 +3,7 @@ import pool from "../config/database.js";
 
 const router = Router();
 
-// Crear compra: incrementa inventario
+// Crear compra: incrementar inventario
 router.post("/", async (req, res) => {
   const { id_proveedor, id_sucursal, fecha, items = [] } = req.body;
   if (!id_proveedor || !id_sucursal || !items.length)
