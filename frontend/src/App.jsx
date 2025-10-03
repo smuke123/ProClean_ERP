@@ -13,7 +13,7 @@ export default function App() {
         alignItems: "center", 
         justifyContent: "space-between",
         padding: "16px 0",
-        borderBottom: "1px solid #e5e5e5"<
+        borderBottom: "1px solid #e5e5e5"
       }}>
         {/* Izquierda: Home, Categories, Contact */}
         <nav style={{ display: "flex", gap: "32px" }}>
