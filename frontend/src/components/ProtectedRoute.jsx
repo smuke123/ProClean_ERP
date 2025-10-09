@@ -1,8 +1,9 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext.jsx';
 
 const ProtectedRoute = ({ children, requireAdmin = false }) => {
   const { isAuthenticated, isAdmin, loading } = useAuth();
+  const navigate = useNavigate();
 
   if (loading) {
     return (
@@ -31,27 +32,54 @@ const ProtectedRoute = ({ children, requireAdmin = false }) => {
         justifyContent: 'center',
         alignItems: 'center',
         height: '50vh',
-        textAlign: 'center'
+        textAlign: 'center',
+        padding: '40px'
       }}>
-        <h2 style={{ color: '#c33', marginBottom: '20px' }}>
+        <div style={{
+          fontSize: '60px',
+          marginBottom: '20px'
+        }}>
+          🔒
+        </div>
+        <h2 style={{ color: '#c33', marginBottom: '20px', fontSize: '24px' }}>
           Acceso Denegado
         </h2>
-        <p style={{ color: '#666', marginBottom: '20px' }}>
-          No tienes permisos para acceder a esta sección.
+        <p style={{ color: '#666', marginBottom: '30px', fontSize: '16px', maxWidth: '500px' }}>
+          Esta sección está reservada solo para administradores. 
+          Por favor, contacta a un administrador si necesitas acceso.
         </p>
-        <button
-          onClick={() => window.history.back()}
-          style={{
-            padding: '10px 20px',
-            backgroundColor: '#000',
-            color: 'white',
-            border: 'none',
-            borderRadius: '6px',
-            cursor: 'pointer'
-          }}
-        >
-          Volver
-        </button>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <button
+            onClick={() => navigate('/')}
+            style={{
+              padding: '12px 24px',
+              backgroundColor: '#000',
+              color: 'white',
+              border: 'none',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontSize: '14px',
+              fontWeight: '600'
+            }}
+          >
+            Ir al Inicio
+          </button>
+          <button
+            onClick={() => window.history.back()}
+            style={{
+              padding: '12px 24px',
+              backgroundColor: '#fff',
+              color: '#000',
+              border: '1px solid #ddd',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontSize: '14px',
+              fontWeight: '600'
+            }}
+          >
+            Volver
+          </button>
+        </div>
       </div>
     );
   }

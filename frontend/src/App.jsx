@@ -1,4 +1,4 @@
-import { Link, Route, Routes, NavLink, useNavigate } from "react-router-dom";
+import { Link, Route, Routes, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { AuthProvider, useAuth } from "./contexts/AuthContext.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
@@ -314,21 +314,44 @@ const Header = () => {
 
 // Componente principal de la aplicación
 const AppContent = () => {
+  const location = useLocation();
+  const isLoginPage = location.pathname === '/login';
+
   return (
-    <div style={{ fontFamily: "sans-serif", padding: 16 }}>
-      <Header />
-      <hr />
+    <div style={{ fontFamily: "sans-serif", padding: isLoginPage ? 0 : 16 }}>
+      {!isLoginPage && (
+        <>
+          <Header />
+          <hr />
+        </>
+      )}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/categories" element={<Categories />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/informes" element={<Informes />} />
-        <Route path="/gestion" element={<Gestion />} />
+        <Route 
+          path="/informes" 
+          element={
+            <ProtectedRoute requireAdmin={true}>
+              <Informes />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/gestion" 
+          element={
+            <ProtectedRoute requireAdmin={true}>
+              <Gestion />
+            </ProtectedRoute>
+          } 
+        />
       </Routes>
-      <footer style={{ marginTop: 24 }}>
-        <small>@Copyright Smuke</small>
-      </footer>
+      {!isLoginPage && (
+        <footer style={{ marginTop: 24 }}>
+          <small>@Copyright Smuke</small>
+        </footer>
+      )}
     </div>
   );
 };

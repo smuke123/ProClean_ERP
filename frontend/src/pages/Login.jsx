@@ -404,8 +404,8 @@ const Login = () => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          width: '200px',
-          height: '200px'
+          width: '300px',
+          height: '300px'
         }}>
           <img 
             src="/IconoProClean.svg" 
@@ -413,8 +413,7 @@ const Login = () => {
             style={{ 
               width: '100%', 
               height: '100%',
-              objectFit: 'contain',
-              filter: 'brightness(0) invert(1)'
+              objectFit: 'contain'
             }} 
           />
         </div>
