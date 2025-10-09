@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { db } from '../config/database.js';
+import pool from '../config/database.js';
 
 const router = Router();
 
@@ -33,7 +33,7 @@ router.post('/login', async (req, res) => {
     }
 
     // Buscar usuario por email
-    const [users] = await db.execute(
+    const [users] = await pool.execute(
       'SELECT * FROM Usuarios WHERE email = ?',
       [email]
     );
@@ -66,7 +66,7 @@ router.post('/login', async (req, res) => {
     // Obtener información de la sucursal si existe
     let sucursal = null;
     if (user.id_sucursal) {
-      const [sucursales] = await db.execute(
+      const [sucursales] = await pool.execute(
         'SELECT * FROM Sucursales WHERE id_sucursal = ?',
         [user.id_sucursal]
       );
@@ -103,7 +103,7 @@ router.post('/register', async (req, res) => {
     }
 
     // Verificar si el email ya existe
-    const [existingUsers] = await db.execute(
+    const [existingUsers] = await pool.execute(
       'SELECT id_usuario FROM Usuarios WHERE email = ?',
       [email]
     );
@@ -117,7 +117,7 @@ router.post('/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     // Insertar nuevo usuario
-    const [result] = await db.execute(
+    const [result] = await pool.execute(
       'INSERT INTO Usuarios (nombre, email, password, rol, documento, telefono, direccion, id_sucursal) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
       [nombre, email, hashedPassword, rol, documento || null, telefono || null, direccion || null, id_sucursal || null]
     );
@@ -125,7 +125,7 @@ router.post('/register', async (req, res) => {
     // Obtener información de la sucursal si existe
     let sucursal = null;
     if (id_sucursal) {
-      const [sucursales] = await db.execute(
+      const [sucursales] = await pool.execute(
         'SELECT * FROM Sucursales WHERE id_sucursal = ?',
         [id_sucursal]
       );
@@ -155,7 +155,7 @@ router.post('/register', async (req, res) => {
 // Obtener perfil del usuario autenticado
 router.get('/profile', authenticateToken, async (req, res) => {
   try {
-    const [users] = await db.execute(
+    const [users] = await pool.execute(
       'SELECT * FROM Usuarios WHERE id_usuario = ?',
       [req.user.id]
     );
@@ -169,7 +169,7 @@ router.get('/profile', authenticateToken, async (req, res) => {
     // Obtener información de la sucursal si existe
     let sucursal = null;
     if (user.id_sucursal) {
-      const [sucursales] = await db.execute(
+      const [sucursales] = await pool.execute(
         'SELECT * FROM Sucursales WHERE id_sucursal = ?',
         [user.id_sucursal]
       );
@@ -202,7 +202,7 @@ router.get('/users', authenticateToken, async (req, res) => {
       return res.status(403).json({ error: 'Acceso denegado' });
     }
 
-    const [users] = await db.execute(
+    const [users] = await pool.execute(
       'SELECT id_usuario, nombre, email, rol, documento, telefono, direccion, id_sucursal FROM Usuarios'
     );
 
