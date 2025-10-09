@@ -115,19 +115,19 @@ VALUES (
         '+57 300 765 4321',
         'PC-SUR'
     );
--- Usuarios admin por sucursal (password: admin123 - debe hashearse)
+-- Usuarios admin por sucursal (password: admin123)
 INSERT INTO Usuarios (nombre, email, password, rol, id_sucursal)
 VALUES (
         'Admin Norte',
         'admin@norte.proclean.com',
-        '$2b$10$hashedpassword',
+        '$2b$10$1nHImFF8GZsaeP2ba/4.cuMHBvRq3ti8Ngxk8VhJ6pe2U38.icsIq',
         'admin',
         1
     ),
     (
         'Admin Sur',
         'admin@sur.proclean.com',
-        '$2b$10$hashedpassword',
+        '$2b$10$1nHImFF8GZsaeP2ba/4.cuMHBvRq3ti8Ngxk8VhJ6pe2U38.icsIq',
         'admin',
         2
     );

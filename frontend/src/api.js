@@ -1,11 +1,27 @@
 const BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
 
+// Función para obtener el token del localStorage
+const getToken = () => localStorage.getItem('token');
+
+// Función para hacer requests con autenticación
 async function req(path, options = {}) {
+  const token = getToken();
+  const headers = { "Content-Type": "application/json" };
+  
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
   const res = await fetch(`${BASE}${path}`, {
-    headers: { "Content-Type": "application/json" },
+    headers,
     ...options,
   });
-  if (!res.ok) throw new Error((await res.json()).error || "Error API");
+  
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({ error: "Error API" }));
+    throw new Error(errorData.error || "Error API");
+  }
+  
   return res.json();
 }
 
@@ -48,3 +64,25 @@ export const getPedidos = (params = {}) => {
   return req(`/api/pedidos${qs ? `?${qs}` : ""}`);
 };
 export const getPedido = (id) => req(`/api/pedidos/${id}`);
+
+// Autenticación
+export const login = (email, password) =>
+  req("/api/auth/login", { 
+    method: "POST", 
+    body: JSON.stringify({ email, password }) 
+  });
+
+export const register = (userData) =>
+  req("/api/auth/register", { 
+    method: "POST", 
+    body: JSON.stringify(userData) 
+  });
+
+export const getProfile = () => req("/api/auth/profile");
+
+export const getUsers = () => req("/api/auth/users");
+
+// Funciones de utilidad para el manejo del token
+export const setToken = (token) => localStorage.setItem('token', token);
+export const removeToken = () => localStorage.removeItem('token');
+export const getStoredToken = () => getToken();

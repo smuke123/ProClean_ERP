@@ -8,6 +8,7 @@ import inventarioRoutes from "./routes/inventario.routes.js";
 import comprasRoutes from "./routes/compras.routes.js";
 import pedidosRoutes from "./routes/pedidos.routes.js";
 import proveedoresRoutes from "./routes/proveedores.routes.js";
+import userRoutes from "./routes/user.routes.js";
 
 const app = express();
 app.use(cors()); // habilita CORS
@@ -28,9 +29,8 @@ app.get("/ping", async (req, res) => {
   }
 });
 
-// app.use('/api', userRoutes); // Descomentar cuando funcione
-
 // API
+app.use("/api/auth", userRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/sucursales", sucursalRoutes);
 app.use("/api/inventario", inventarioRoutes);
