@@ -1,4 +1,4 @@
-import { Link, Route, Routes, NavLink } from "react-router-dom";
+import { Link, Route, Routes, NavLink, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { AuthProvider, useAuth } from "./contexts/AuthContext.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
@@ -10,7 +10,7 @@ import Informes from "./pages/Informes.jsx";
 import Login from "./pages/Login.jsx";
 
 // Componente del dropdown de usuario
-const UserDropdown = ({ isOpen, onClose }) => {
+const UserDropdown = ({ isOpen, onClose, onNavigateToLogin }) => {
   const { user, logout, isAuthenticated } = useAuth();
 
   if (!isOpen) return null;
@@ -82,7 +82,7 @@ const UserDropdown = ({ isOpen, onClose }) => {
           </p>
           <button
             onClick={() => {
-              window.location.href = '/login';
+              onNavigateToLogin();
               onClose();
             }}
             style={{
@@ -110,9 +110,14 @@ const Header = () => {
   const { user, isAuthenticated } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const navigate = useNavigate();
 
   const handleUserClick = () => {
     setDropdownOpen(!dropdownOpen);
+  };
+
+  const handleNavigateToLogin = () => {
+    navigate('/login');
   };
 
   // Cerrar dropdown cuando se hace clic fuera
@@ -297,7 +302,8 @@ const Header = () => {
             {/* Dropdown */}
             <UserDropdown 
               isOpen={dropdownOpen} 
-              onClose={() => setDropdownOpen(false)} 
+              onClose={() => setDropdownOpen(false)}
+              onNavigateToLogin={handleNavigateToLogin}
             />
           </div>
         </div>
