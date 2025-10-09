@@ -107,7 +107,7 @@ const UserDropdown = ({ isOpen, onClose, onNavigateToLogin }) => {
 
 // Componente del header que usa el contexto de autenticación
 const Header = () => {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, isAdmin } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
@@ -189,30 +189,32 @@ const Header = () => {
 
       {/* Derecha: Informes, Gestión + Iconos */}
       <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-        <nav style={{ display: "flex", gap: "20px" }}>
-          <NavLink 
-            to="/informes"
-            style={({ isActive }) => ({
-              color: isActive ? "#111111" : "#111111",
-              textDecoration: "none",
-              fontWeight: isActive ? "600" : "400",
-              fontSize: "24px"
-            })}
-          >
-            Informes
-          </NavLink>
-          <NavLink 
-            to="/gestion"
-            style={({ isActive }) => ({
-              color: isActive ? "#111111" : "#111111",
-              textDecoration: "none",
-              fontWeight: isActive ? "600" : "400",
-              fontSize: "24px"
-            })}
-          >
-            Gestión
-          </NavLink>
-        </nav>
+        {isAdmin && (
+          <nav style={{ display: "flex", gap: "20px" }}>
+            <NavLink 
+              to="/informes"
+              style={({ isActive }) => ({
+                color: isActive ? "#111111" : "#111111",
+                textDecoration: "none",
+                fontWeight: isActive ? "600" : "400",
+                fontSize: "24px"
+              })}
+            >
+              Informes
+            </NavLink>
+            <NavLink 
+              to="/gestion"
+              style={({ isActive }) => ({
+                color: isActive ? "#111111" : "#111111",
+                textDecoration: "none",
+                fontWeight: isActive ? "600" : "400",
+                fontSize: "24px"
+              })}
+            >
+              Gestión
+            </NavLink>
+          </nav>
+        )}
         
         {/* Iconos */}
         <div style={{ display: "flex", alignItems: "center", gap: "32px" }}>

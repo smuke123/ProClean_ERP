@@ -131,6 +131,17 @@ VALUES (
         'admin',
         2
     );
+-- Usuario cliente de prueba (password: cliente123)
+INSERT INTO Usuarios (nombre, email, password, rol, documento, telefono, direccion)
+VALUES (
+        'Juan Pérez',
+        'cliente@proclean.com',
+        '$2b$10$7tXmNEUR3FkmJ9JjIcxp1uJsZCb2LUGvS2ONRlqqBIcIGPFQtohzy',
+        'cliente',
+        '12345678',
+        '+57 300 999 8888',
+        'Calle 10 #20-30'
+    );
 -- Productos básicos (10 fijos)
 INSERT INTO Productos (nombre, precio)
 VALUES ('Detergente Multiusos 5L', 5000),
