@@ -2,13 +2,13 @@ import express from "express";
 import pool from "./config/database.js";
 import cors from "cors";
 
+import authRoutes from "./routes/auth.routes.js";
 import productRoutes from "./routes/product.routes.js";
 import sucursalRoutes from "./routes/sucursal.routes.js";
 import inventarioRoutes from "./routes/inventario.routes.js";
 import comprasRoutes from "./routes/compras.routes.js";
 import pedidosRoutes from "./routes/pedidos.routes.js";
 import proveedoresRoutes from "./routes/proveedores.routes.js";
-import userRoutes from "./routes/user.routes.js";
 
 const app = express();
 app.use(cors()); // habilita CORS
@@ -29,8 +29,8 @@ app.get("/ping", async (req, res) => {
   }
 });
 
-// API
-app.use("/api/auth", userRoutes);
+// API Routes
+app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/sucursales", sucursalRoutes);
 app.use("/api/inventario", inventarioRoutes);
