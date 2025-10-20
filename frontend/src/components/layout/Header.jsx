@@ -7,18 +7,18 @@ const Header = () => {
   const { isAdmin } = useAuth();
 
   return (
-    <header className="bg-white shadow-sm">
-      <div className="w-full px-16 py-4">
-        <div className="flex items-center justify-between relative max-w-[1600px] mx-auto">
-          {/* Izquierda: Links de navegación */}
-          <nav className="flex items-center gap-12">
+    <header className="bg-white border-b border-gray-200">
+      <div className="w-full px-20 py-3.5">
+        <div className="flex items-center relative max-w-[1800px] mx-auto">
+          {/* Izquierda: Links de navegación - con flex-1 para empujar hacia los lados */}
+          <nav className="flex items-center gap-16 flex-1">
             <NavLink 
               to="/" 
               end
               className={({ isActive }) => 
-                `text-sm font-bold tracking-wider uppercase transition-all duration-200 ${
+                `text-sm font-bold tracking-wide transition-colors ${
                   isActive 
-                    ? 'text-black border-b-2 border-black pb-1' 
+                    ? 'text-black' 
                     : 'text-gray-600 hover:text-gray-900'
                 }`
               }
@@ -28,9 +28,9 @@ const Header = () => {
             <NavLink 
               to="/categories"
               className={({ isActive }) => 
-                `text-sm font-bold tracking-wider uppercase transition-all duration-200 ${
+                `text-sm font-bold tracking-wide transition-colors ${
                   isActive 
-                    ? 'text-black border-b-2 border-black pb-1' 
+                    ? 'text-black' 
                     : 'text-gray-600 hover:text-gray-900'
                 }`
               }
@@ -40,9 +40,9 @@ const Header = () => {
             <NavLink 
               to="/contact"
               className={({ isActive }) => 
-                `text-sm font-bold tracking-wider uppercase transition-all duration-200 ${
+                `text-sm font-bold tracking-wide transition-colors ${
                   isActive 
-                    ? 'text-black border-b-2 border-black pb-1' 
+                    ? 'text-black' 
                     : 'text-gray-600 hover:text-gray-900'
                 }`
               }
@@ -51,22 +51,22 @@ const Header = () => {
             </NavLink>
           </nav>
 
-          {/* Centro: Logo */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center">
-            <img src="/IconoProClean.svg" alt="ProClean" className="h-12 w-auto" />
+          {/* Centro: Logo - posición absoluta centrada */}
+          <div className="absolute left-1/2 transform -translate-x-1/2">
+            <img src="/IconoProClean.svg" alt="ProClean" className="h-10 w-auto" />
           </div>
 
-          {/* Derecha: Links Admin (solo si es admin) + Iconos */}
-          <div className="flex items-center gap-10">
+          {/* Derecha: Links Admin (solo si es admin) + Iconos - con flex-1 y justify-end */}
+          <div className="flex items-center gap-16 flex-1 justify-end">
             {/* Links Admin - Solo visible si es admin */}
             {isAdmin && (
-              <nav className="flex items-center gap-10">
+              <nav className="flex items-center gap-16">
                 <NavLink 
                   to="/informes"
                   className={({ isActive }) => 
-                    `text-sm font-bold tracking-wider uppercase transition-all duration-200 ${
+                    `text-sm font-bold tracking-wide transition-colors ${
                       isActive 
-                        ? 'text-black border-b-2 border-black pb-1' 
+                        ? 'text-black' 
                         : 'text-gray-600 hover:text-gray-900'
                     }`
                   }
@@ -76,9 +76,9 @@ const Header = () => {
                 <NavLink 
                   to="/gestion"
                   className={({ isActive }) => 
-                    `text-sm font-bold tracking-wider uppercase transition-all duration-200 ${
+                    `text-sm font-bold tracking-wide transition-colors ${
                       isActive 
-                        ? 'text-black border-b-2 border-black pb-1' 
+                        ? 'text-black' 
                         : 'text-gray-600 hover:text-gray-900'
                     }`
                   }

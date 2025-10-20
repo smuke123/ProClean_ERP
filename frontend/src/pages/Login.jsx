@@ -71,77 +71,162 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row font-sans">
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      fontFamily: 'sans-serif'
+    }}>
       {/* Sección Izquierda - Formulario */}
-      <div className="flex-1 bg-gray-100 flex items-center justify-center p-6 md:p-10 relative">
+      <div style={{
+        flex: 1,
+        backgroundColor: '#f5f5f5',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '40px',
+        position: 'relative'
+      }}>
         {/* Cuadro blanco del formulario */}
-        <div className="bg-white p-8 md:p-10 rounded-lg shadow-xl w-full max-w-md relative">
+        <div style={{
+          backgroundColor: 'white',
+          padding: '40px',
+          borderRadius: '8px',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+          width: '100%',
+          maxWidth: '400px',
+          position: 'relative'
+        }}>
           {/* Punto rojo en esquina superior derecha */}
           {error && (
-            <div className="absolute top-4 right-4 w-2 h-2 bg-red-500 rounded-full"></div>
+            <div style={{
+              position: 'absolute',
+              top: '15px',
+              right: '15px',
+              width: '8px',
+              height: '8px',
+              backgroundColor: '#ff4444',
+              borderRadius: '50%'
+            }}></div>
           )}
 
           {/* Título */}
-          <h1 className="text-3xl font-bold text-gray-800 text-center mb-8">
+          <h1 style={{
+            fontSize: '28px',
+            fontWeight: 'bold',
+            color: '#333',
+            textAlign: 'center',
+            marginBottom: '30px',
+            marginTop: '0'
+          }}>
             {isLogin ? 'Login' : 'Sign Up'}
           </h1>
 
           {/* Error message */}
           {error && (
-            <div className="bg-red-50 text-red-700 p-3 rounded-md mb-5 text-sm text-center">
+            <div style={{
+              backgroundColor: '#fee',
+              color: '#c33',
+              padding: '12px',
+              borderRadius: '6px',
+              marginBottom: '20px',
+              fontSize: '14px',
+              textAlign: 'center'
+            }}>
               {error}
             </div>
           )}
 
           {isLogin ? (
-            <form onSubmit={handleLogin} className="space-y-5">
+            <form onSubmit={handleLogin}>
               {/* Email */}
-              <div>
+              <div style={{ marginBottom: '20px' }}>
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-4 border border-gray-300 rounded-md text-base bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all"
+                  style={{
+                    width: '100%',
+                    padding: '15px',
+                    border: '1px solid #ddd',
+                    borderRadius: '6px',
+                    fontSize: '16px',
+                    boxSizing: 'border-box',
+                    backgroundColor: '#fafafa'
+                  }}
                   placeholder="Email Address"
                 />
               </div>
 
               {/* Password */}
-              <div className="relative">
+              <div style={{ marginBottom: '20px', position: 'relative' }}>
                 <input
                   type={showPassword ? 'text' : 'password'}
                   name="password"
                   value={formData.password}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-4 pr-12 border border-gray-300 rounded-md text-base bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all"
+                  style={{
+                    width: '100%',
+                    padding: '15px',
+                    paddingRight: '50px',
+                    border: '1px solid #ddd',
+                    borderRadius: '6px',
+                    fontSize: '16px',
+                    boxSizing: 'border-box',
+                    backgroundColor: '#fafafa'
+                  }}
                   placeholder="Password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer text-lg text-gray-600 hover:text-gray-800"
+                  style={{
+                    position: 'absolute',
+                    right: '15px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontSize: '18px',
+                    color: '#666'
+                  }}
                 >
                   {showPassword ? '👁️' : '👁️‍🗨️'}
                 </button>
               </div>
 
               {/* Remember Me y Forgot Password */}
-              <div className="flex justify-between items-center">
-                <label className="flex items-center cursor-pointer text-sm text-gray-600">
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '30px'
+              }}>
+                <label style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  color: '#666'
+                }}>
                   <input
                     type="checkbox"
                     checked={rememberMe}
                     onChange={(e) => setRememberMe(e.target.checked)}
-                    className="mr-2"
+                    style={{ marginRight: '8px' }}
                   />
                   Remember Me
                 </label>
                 <Link
                   to="/forgot-password"
-                  className="text-gray-600 no-underline text-sm hover:text-gray-800"
+                  style={{
+                    color: '#666',
+                    textDecoration: 'none',
+                    fontSize: '14px'
+                  }}
                 >
                   Forgot Password
                 </Link>
@@ -151,61 +236,105 @@ const Login = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full px-4 py-4 bg-black text-white border-none rounded-md text-base font-semibold cursor-pointer disabled:cursor-not-allowed disabled:opacity-70 hover:bg-gray-800 transition-colors"
+                style={{
+                  width: '100%',
+                  padding: '15px',
+                  backgroundColor: '#000',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '6px',
+                  fontSize: '16px',
+                  fontWeight: '600',
+                  cursor: loading ? 'not-allowed' : 'pointer',
+                  opacity: loading ? 0.7 : 1,
+                  marginBottom: '20px'
+                }}
               >
                 {loading ? 'Entering...' : 'Enter'}
               </button>
-            </form>
+              </form>
           ) : (
-            <form onSubmit={handleRegister} className="space-y-4">
+            <form onSubmit={handleRegister}>
               {/* Nombre */}
-              <div>
+              <div style={{ marginBottom: '15px' }}>
                 <input
                   type="text"
                   name="nombre"
                   value={registerData.nombre}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-4 border border-gray-300 rounded-md text-base bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all"
+                  style={{
+                    width: '100%',
+                    padding: '15px',
+                    border: '1px solid #ddd',
+                    borderRadius: '6px',
+                    fontSize: '16px',
+                    boxSizing: 'border-box',
+                    backgroundColor: '#fafafa'
+                  }}
                   placeholder="Full Name"
                 />
               </div>
 
               {/* Email */}
-              <div>
+              <div style={{ marginBottom: '15px' }}>
                 <input
                   type="email"
                   name="email"
                   value={registerData.email}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-4 border border-gray-300 rounded-md text-base bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all"
+                  style={{
+                    width: '100%',
+                    padding: '15px',
+                    border: '1px solid #ddd',
+                    borderRadius: '6px',
+                    fontSize: '16px',
+                    boxSizing: 'border-box',
+                    backgroundColor: '#fafafa'
+                  }}
                   placeholder="Email Address"
                 />
               </div>
 
               {/* Password */}
-              <div>
+              <div style={{ marginBottom: '15px' }}>
                 <input
                   type="password"
                   name="password"
                   value={registerData.password}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-4 border border-gray-300 rounded-md text-base bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all"
+                  style={{
+                    width: '100%',
+                    padding: '15px',
+                    border: '1px solid #ddd',
+                    borderRadius: '6px',
+                    fontSize: '16px',
+                    boxSizing: 'border-box',
+                    backgroundColor: '#fafafa'
+                  }}
                   placeholder="Password"
                 />
               </div>
 
               {/* Confirm Password */}
-              <div>
+              <div style={{ marginBottom: '30px' }}>
                 <input
                   type="password"
                   name="confirmPassword"
                   value={registerData.confirmPassword}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-4 border border-gray-300 rounded-md text-base bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all"
+                  style={{
+                    width: '100%',
+                    padding: '15px',
+                    border: '1px solid #ddd',
+                    borderRadius: '6px',
+                    fontSize: '16px',
+                    boxSizing: 'border-box',
+                    backgroundColor: '#fafafa'
+                  }}
                   placeholder="Confirm Password"
                 />
               </div>
@@ -214,7 +343,19 @@ const Login = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full px-4 py-4 bg-black text-white border-none rounded-md text-base font-semibold cursor-pointer disabled:cursor-not-allowed disabled:opacity-70 hover:bg-gray-800 transition-colors mt-6"
+                style={{
+                  width: '100%',
+                  padding: '15px',
+                  backgroundColor: '#000',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '6px',
+                  fontSize: '16px',
+                  fontWeight: '600',
+                  cursor: loading ? 'not-allowed' : 'pointer',
+                  opacity: loading ? 0.7 : 1,
+                  marginBottom: '20px'
+                }}
               >
                 {loading ? 'Creating Account...' : 'Create Account'}
               </button>
@@ -222,8 +363,8 @@ const Login = () => {
           )}
 
           {/* Don't Have Account / Sign Up */}
-          <div className="text-center mt-5">
-            <p className="text-gray-600 text-sm m-0">
+          <div style={{ textAlign: 'center' }}>
+            <p style={{ color: '#666', fontSize: '14px', margin: '0' }}>
               {isLogin ? "Don't Have An Account?" : 'Already Have An Account?'}
               <button
                 type="button"
@@ -231,7 +372,16 @@ const Login = () => {
                   setIsLogin(!isLogin);
                   clearError();
                 }}
-                className="bg-transparent border-none text-yellow-600 underline cursor-pointer ml-1 text-sm font-medium hover:text-yellow-700"
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#D4AF37',
+                  textDecoration: 'underline',
+                  cursor: 'pointer',
+                  marginLeft: '5px',
+                  fontSize: '14px',
+                  fontWeight: '500'
+                }}
               >
                 {isLogin ? 'Sign Up' : 'Sign In'}
               </button>
@@ -241,13 +391,30 @@ const Login = () => {
       </div>
 
       {/* Sección Derecha - Branding */}
-      <div className="hidden md:flex flex-1 bg-gray-800 items-center justify-center p-10">
+      <div style={{
+        flex: 1,
+        backgroundColor: '#2c2c2c',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '40px'
+      }}>
         {/* Logo centrado */}
-        <div className="flex items-center justify-center w-72 h-72">
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '300px',
+          height: '300px'
+        }}>
           <img 
             src="/IconoProClean.svg" 
             alt="ProClean" 
-            className="w-full h-full object-contain"
+            style={{ 
+              width: '100%', 
+              height: '100%',
+              objectFit: 'contain'
+            }} 
           />
         </div>
       </div>
