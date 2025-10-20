@@ -56,7 +56,7 @@ VALUES
     'ProClean',
     'Potente detergente para todo tipo de superficies',
     'Detergente multiusos de alta concentración, ideal para limpieza profunda de superficies, pisos, paredes y más. Fórmula biodegradable que no daña el medio ambiente. Rendimiento excepcional con solo pequeñas cantidades.',
-    '/images/Detergente.svg',
+    '/images/Detergente.webp',
     TRUE
 ),
 (
@@ -66,7 +66,7 @@ VALUES
     'ProClean',
     'Elimina grasa y residuos de alimentos fácilmente',
     'Lavaloza líquido concentrado con poder desengrasante superior. Suave con las manos, elimina bacterias y deja tus platos impecables. Aroma fresco y duradero. Rinde hasta 200 lavadas.',
-    '/images/Detergente.svg',
+    '/images/LavalozaLiquido.png',
     TRUE
 ),
 (
@@ -76,7 +76,7 @@ VALUES
     'ProClean Premium',
     'Deja tus pisos brillantes y con aroma fresco',
     'Limpiador especializado para todo tipo de pisos: cerámica, porcelanato, madera, mármol. No necesita enjuague. Fórmula antideslizante y con protección UV. Disponible en varios aromas.',
-    '/images/Detergente.svg',
+    '/images/LimpiadorDePisos.avif',
     TRUE
 ),
 (
@@ -86,7 +86,7 @@ VALUES
     'ProClean',
     'Cuida tus prendas y elimina manchas difíciles',
     'Jabón líquido para ropa de alta eficiencia. Funciona en agua fría y caliente. Protege los colores y las fibras. Ideal para lavadoras automáticas y lavado a mano. Hipoalergénico.',
-    '/images/Detergente.svg',
+    '/images/JabonLiquidoParaRopa.png',
     TRUE
 ),
 (
@@ -96,7 +96,7 @@ VALUES
     'ProClean Soft',
     'Suavidad y frescura prolongada para tu ropa',
     'Suavizante concentrado que deja tus prendas suaves al tacto y con aroma duradero hasta por 30 días. Reduce la estática y facilita el planchado. Tecnología de micro-encapsulado.',
-    '/images/Detergente.svg',
+    '/images/SuavizanteTelas.png',
     TRUE
 ),
 (
@@ -106,7 +106,7 @@ VALUES
     'ProClean',
     'Poder de limpieza tradicional para toda tu ropa',
     'Detergente en polvo de máxima eficiencia. Blanqueador incorporado que mantiene tus prendas blancas impecables. Elimina manchas difíciles y olores. Alto rendimiento: hasta 40 lavadas.',
-    '/images/Detergente.svg',
+    '/images/DetergenteEnPolvo.webp',
     TRUE
 ),
 (
@@ -116,7 +116,7 @@ VALUES
     'ProClean Sanitize',
     'Desinfección profunda y blanqueamiento efectivo',
     'Hipoclorito de sodio al 5.25%. Elimina 99.9% de gérmenes, virus y bacterias. Ideal para desinfección de baños, cocinas, superficies de alto tráfico. Efecto blanqueador para telas blancas.',
-    '/images/Detergente.svg',
+    '/images/Cloro.avif',
     TRUE
 ),
 (
@@ -126,7 +126,7 @@ VALUES
     'ProClean Medical',
     'Antiséptico de grado médico para higiene personal',
     'Alcohol etílico al 70% de grado farmacéutico. Elimina bacterias y virus al contacto. Ideal para desinfección de manos, superficies y equipos médicos. Secado rápido sin residuos.',
-    '/images/Detergente.svg',
+    '/images/AlcoholAntiseptico.webp',
     TRUE
 ),
 (
@@ -136,7 +136,7 @@ VALUES
     'ProClean Protect',
     'Protección total contra gérmenes y bacterias',
     'Desinfectante de amplio espectro. Efectivo contra virus, hongos y bacterias. Aroma agradable y duradero. No mancha ni daña superficies. Certificado por entidades de salud. Uso profesional e industrial.',
-    '/images/Detergente.svg',
+    '/images/DesinfectanteMultitusos.webp',
     TRUE
 ),
 (
@@ -146,7 +146,7 @@ VALUES
     'ProClean Care',
     'Protección antibacterial para tus manos en todo momento',
     'Gel antibacterial con 70% de alcohol. Fórmula enriquecida con aloe vera y vitamina E para proteger tu piel. Elimina 99.9% de gérmenes sin necesidad de agua. Absorción rápida sin dejar residuos pegajosos.',
-    '/images/Detergente.svg',
+    '/images/GelAntibacterial.webp',
     TRUE
 );
 

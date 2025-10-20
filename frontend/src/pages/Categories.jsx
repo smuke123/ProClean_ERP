@@ -207,7 +207,7 @@ export default function Categories() {
                         <img
                           src={product.imagen || '/images/Detergente.svg'}
                           alt={product.nombre}
-                          className="rounded-3xl w-full h-64 object-contain transition-transform group-hover:scale-105"
+                          className="rounded-3xl w-full h-48 object-cover transition-transform group-hover:scale-105"
                         />
                       </div>
 
