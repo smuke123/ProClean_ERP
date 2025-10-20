@@ -10,7 +10,8 @@ services:
     ports:
       - "${MYSQLDB_LOCAL_PORT}:${MYSQLDB_DOCKER_PORT}"
     volumes:
-      - ./backend/src/database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      - ./backend/src/database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./backend/src/database/data.sql:/docker-entrypoint-initdb.d/02-data.sql
       - db_data:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]

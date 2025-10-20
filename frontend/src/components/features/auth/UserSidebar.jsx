@@ -1,14 +1,16 @@
 import { useAuth } from '../../../contexts/AuthContext.jsx';
+import { useUserSidebar } from '../../../contexts/UserSidebarContext.jsx';
 import Sidebar from '../../ui/Sidebar.jsx';
 import Button from '../../ui/Button.jsx';
 import Card from '../../ui/Card.jsx';
 import Badge from '../../ui/Badge.jsx';
 
-const UserSidebar = ({ isOpen, onClose }) => {
+const UserSidebar = () => {
   const { user, logout, isAuthenticated } = useAuth();
+  const { isUserSidebarOpen, closeUserSidebar } = useUserSidebar();
 
   return (
-    <Sidebar isOpen={isOpen} onClose={onClose} title={isAuthenticated ? 'Mi Cuenta' : 'Iniciar Sesión'} width="w-80">
+    <Sidebar isOpen={isUserSidebarOpen} onClose={closeUserSidebar} title={isAuthenticated ? 'Mi Cuenta' : 'Iniciar Sesión'} width="w-80">
       {isAuthenticated ? (
         <div className="flex flex-col h-full">
           {/* Información del usuario */}

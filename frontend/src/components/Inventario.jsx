@@ -46,7 +46,7 @@ export default function Inventario({ idSucursal }) {
         <button type="submit">Guardar</button>
       </form>
 
-      <table border="1" cellPadding="6">
+      <table cellPadding="6" className="w-full">
         <thead>
           <tr>
             <th>Producto</th><th>Cantidad</th><th>Stock mín.</th><th>Actualizar</th>

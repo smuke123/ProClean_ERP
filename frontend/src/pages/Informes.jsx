@@ -61,10 +61,10 @@ export default function Informes() {
         </div>
       </div>
 
-      <div>
-        <h4 className="text-lg font-medium">Resultados ({rows.length})</h4>
+      <div className="overflow-x-auto">
+        <h4 className="text-lg font-medium mb-3">Resultados ({rows.length})</h4>
         {rows.length > 0 ? (
-          <table className="w-full border text-sm rounded-md overflow-hidden">
+          <table className="w-full text-sm rounded-md overflow-hidden min-w-[600px]">
             <thead className="bg-gray-100">
               <tr>
                 <th className="border-b p-2 text-left">ID</th>
@@ -79,23 +79,23 @@ export default function Informes() {
               {rows.map((row, idx) => (
                 <tr key={tipoTransaccion === "ventas" ? row.id_pedido : row.id_compra} className={idx % 2 ? 'bg-white' : 'bg-gray-50'}>
                   <td className="p-2">{tipoTransaccion === "ventas" ? row.id_pedido : row.id_compra}</td>
-                  <td className="p-2">{row.fecha}</td>
+                  <td className="p-2 whitespace-nowrap">{row.fecha}</td>
                   <td className="p-2">{tipoTransaccion === "ventas" ? `Pedido #${row.id_pedido}` : `Compra #${row.id_compra}`}</td>
                   <td className="p-2">
                     {row.productos ? (
-                      <span>{row.productos}</span>
+                      <span className="text-sm">{row.productos}</span>
                     ) : null}
                     <button
                       type="button"
                       onClick={() => abrirDetalle(row)}
-                      className="ml-2 px-2 py-1 rounded border border-blue-600 text-blue-700 hover:bg-blue-50"
+                      className="ml-2 px-2 py-1 rounded border border-blue-600 text-blue-700 hover:bg-blue-50 text-xs whitespace-nowrap"
                     >
                       Ver detalles
                     </button>
                   </td>
-                  <td className="p-2">${row.total?.toLocaleString()}</td>
+                  <td className="p-2 font-medium whitespace-nowrap">${row.total?.toLocaleString()}</td>
                   <td className="p-2">
-                    <span className={`px-2 py-0.5 rounded text-xs ${row.estado === 'completado' || row.estado === 'pagada' ? 'bg-green-100 text-green-700' : row.estado === 'pendiente' ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-700'}`}>
+                    <span className={`px-2 py-0.5 rounded text-xs whitespace-nowrap ${row.estado === 'completado' || row.estado === 'pagada' ? 'bg-green-100 text-green-700' : row.estado === 'pendiente' ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-700'}`}>
                       {row.estado}
                     </span>
                   </td>
@@ -128,7 +128,7 @@ export default function Informes() {
               <div><b>Total:</b> ${detalle.cabecera.total?.toLocaleString()}</div>
             </div>
             <div className="px-4 pb-4">
-              <table className="w-full border text-sm rounded overflow-hidden">
+              <table className="w-full text-sm rounded overflow-hidden">
                 <thead className="bg-gray-100">
                   <tr>
                     <th className="border-b p-2 text-left">Producto</th>

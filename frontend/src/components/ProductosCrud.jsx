@@ -64,7 +64,7 @@ export default function ProductosCrud() {
         </button>
       </form>
 
-      <table border="1" cellPadding="6">
+      <table cellPadding="6" className="w-full">
         <thead>
           <tr>
             <th>ID</th><th>Nombre</th><th>Precio</th><th>Activo</th><th>Acciones</th>

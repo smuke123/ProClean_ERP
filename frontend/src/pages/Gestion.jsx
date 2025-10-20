@@ -163,7 +163,7 @@ export default function Gestion() {
       </div>
 
       {tipoFormulario === "compras" ? (
-        <form onSubmit={handleComprar} className="grid gap-3 max-w-[600px] p-5 border rounded-lg">
+        <form onSubmit={handleComprar} className="grid gap-3 max-w-[600px] p-5 rounded-lg bg-gray-50">
           <h3 className="text-xl font-semibold">Formulario de Compras</h3>
           
           <div className="flex flex-col gap-1">
@@ -174,11 +174,11 @@ export default function Gestion() {
           <div>
             <h4 className="font-medium mb-2">Productos a Comprar</h4>
             {itemsCompra.map((item, index) => (
-              <div key={index} className="grid grid-cols-[2fr_1fr_1fr_auto] gap-2 items-center mb-2">
+              <div key={index} className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_auto] gap-2 items-center mb-3 p-3 bg-white rounded">
                 <select 
                   value={item.id_producto} 
                   onChange={(e) => updateItemCompra(index, "id_producto", e.target.value)}
-                  className="border rounded px-2 py-1"
+                  className="border rounded px-2 py-1 w-full"
                 >
                   <option value="">Seleccionar producto</option>
                   {productos.map((p) => (
@@ -194,15 +194,15 @@ export default function Gestion() {
                   onChange={(e) => updateItemCompra(index, "cantidad", parseInt(e.target.value) || 0)}
                   min="1"
                   placeholder="Cantidad"
-                  className="border rounded px-2 py-1"
+                  className="border rounded px-2 py-1 w-full"
                 />
                 
-                <span className="text-sm">${item.precio_unitario}</span>
+                <span className="text-sm font-medium">${item.precio_unitario}</span>
                 
                 <button 
                   type="button" 
                   onClick={() => removeItemCompra(index)}
-                  className="px-2 py-1 rounded bg-red-600 text-white"
+                  className="px-3 py-2 rounded bg-red-600 text-white hover:bg-red-700 transition-colors w-full md:w-auto"
                 >
                   Eliminar
                 </button>
@@ -217,7 +217,7 @@ export default function Gestion() {
           <button type="submit" className="px-4 py-2 rounded bg-blue-600 text-white">Registrar Compra</button>
         </form>
       ) : (
-        <form onSubmit={handleVender} className="grid gap-3 max-w-[600px] p-5 border rounded-lg">
+        <form onSubmit={handleVender} className="grid gap-3 max-w-[600px] p-5 rounded-lg bg-gray-50">
           <h3 className="text-xl font-semibold">Formulario de Ventas</h3>
           
           <div className="flex flex-col gap-1">
@@ -228,11 +228,11 @@ export default function Gestion() {
           <div>
             <h4 className="font-medium mb-2">Productos a Vender</h4>
             {itemsVenta.map((item, index) => (
-              <div key={index} className="grid grid-cols-[2fr_1fr_1fr_auto] gap-2 items-center mb-2">
+              <div key={index} className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_auto] gap-2 items-center mb-3 p-3 bg-white rounded">
                 <select 
                   value={item.id_producto} 
                   onChange={(e) => updateItemVenta(index, "id_producto", e.target.value)}
-                  className="border rounded px-2 py-1"
+                  className="border rounded px-2 py-1 w-full"
                 >
                   <option value="">Seleccionar producto</option>
                   {productos.map((p) => (
@@ -248,15 +248,15 @@ export default function Gestion() {
                   onChange={(e) => updateItemVenta(index, "cantidad", parseInt(e.target.value) || 0)}
                   min="1"
                   placeholder="Cantidad"
-                  className="border rounded px-2 py-1"
+                  className="border rounded px-2 py-1 w-full"
                 />
                 
-                <span className="text-sm">${item.precio_unitario}</span>
+                <span className="text-sm font-medium">${item.precio_unitario}</span>
                 
                 <button 
                   type="button" 
                   onClick={() => removeItemVenta(index)}
-                  className="px-2 py-1 rounded bg-red-600 text-white"
+                  className="px-3 py-2 rounded bg-red-600 text-white hover:bg-red-700 transition-colors w-full md:w-auto"
                 >
                   Eliminar
                 </button>

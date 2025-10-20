@@ -1,7 +1,7 @@
 import { Route, Routes, useLocation } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext.jsx";
 import { CartProvider } from "./contexts/CartContext.jsx";
-import { FavoritesProvider } from "./contexts/FavoritesContext.jsx";
+import { UserSidebarProvider } from "./contexts/UserSidebarContext.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 // Layout Components
@@ -11,7 +11,6 @@ import Footer from "./components/layout/Footer.jsx";
 // Feature Components
 import UserSidebar from "./components/features/auth/UserSidebar.jsx";
 import CartSidebar from "./components/features/cart/CartSidebar.jsx";
-import FavoritesSidebar from "./components/features/favorites/FavoritesSidebar.jsx";
 
 // Pages
 import Home from "./pages/Home.jsx";
@@ -31,7 +30,7 @@ const AppContent = () => {
       {!isLoginPage && (
         <>
           <Header />
-          <hr className="border-gray-200" />
+          <hr className="border-gray-100" />
         </>
       )}
       
@@ -60,6 +59,10 @@ const AppContent = () => {
         </Routes>
       </main>
 
+      {/* Sidebars globales */}
+      <UserSidebar />
+      <CartSidebar />
+
       {!isLoginPage && <Footer />}
     </div>
   );
@@ -69,11 +72,11 @@ const AppContent = () => {
 export default function App() {
   return (
     <AuthProvider>
-      <CartProvider>
-        <FavoritesProvider>
+      <UserSidebarProvider>
+        <CartProvider>
           <AppContent />
-        </FavoritesProvider>
-      </CartProvider>
+        </CartProvider>
+      </UserSidebarProvider>
     </AuthProvider>
   );
 }

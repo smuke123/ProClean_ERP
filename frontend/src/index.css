@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -17,10 +19,70 @@ html, body, #root {
 
 body {
   margin: 0;
+  font-family: 'Merriweather', serif;
   background-image:
     linear-gradient(0deg, var(--bg-a) 0%, var(--bg-b) 100%),
     radial-gradient( circle at 20% 20%, var(--bg-e) 0%, transparent 50%),
     radial-gradient( circle at 80% 30%, var(--bg-d) 0%, transparent 50%),
     radial-gradient( circle at 50% 80%, var(--bg-c) 0%, transparent 50%);
   background-blend-mode: multiply, normal, normal, normal;
+}
+
+/* Estilos personalizados para el navbar */
+.navbar-link {
+  font-family: 'Merriweather', serif;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  color: #2d3748;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.navbar-link:hover {
+  color: #4a5568;
+}
+
+.navbar-link.active {
+  color: #1a202c;
+  font-weight: 900;
+}
+
+.navbar-icon-button {
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: #000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.navbar-icon-button:hover {
+  background-color: #2d3748;
+  transform: scale(1.05);
+}
+
+.cart-button {
+  background-color: #000;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Merriweather', serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cart-button:hover {
+  background-color: #2d3748;
+  transform: scale(1.02);
 }

@@ -66,7 +66,7 @@ export default function PedidosManager({ idSucursal, onStockChanged }) {
         </div>
       </form>
 
-      <table border="1" cellPadding="6">
+      <table cellPadding="6" className="w-full">
         <thead>
           <tr><th>ID</th><th>Fecha</th><th>Cliente</th><th>Total</th><th>Estado</th><th>Acciones</th></tr>
         </thead>
