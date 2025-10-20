@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getProductos, postPedido, setEstadoPedido, getPedidos } from "../api";
+import { getProductos, postPedido, setEstadoPedido, getPedidos } from "../utils/api.js";
 
 export default function PedidosManager({ idSucursal, onStockChanged }) {
   const [prods, setProds] = useState([]);

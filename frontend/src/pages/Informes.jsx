@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import SelectSucursal from "../components/SelectSucursal.jsx";
-import { getPedidos, getCompras, getCompra, getPedido } from "../api";
+import { getPedidos, getCompras, getCompra, getPedido } from "../utils/api.js";
 
 export default function Informes() {
   const [tipoTransaccion, setTipoTransaccion] = useState("ventas"); 

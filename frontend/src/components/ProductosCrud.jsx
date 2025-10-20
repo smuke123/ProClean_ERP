@@ -4,7 +4,7 @@ import {
   createProducto,
   updateProducto,
   deleteProducto,
-} from "../api";
+} from "../utils/api.js";
 
 const initialForm = {
   nombre: "",

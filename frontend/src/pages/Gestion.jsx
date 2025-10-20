@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import SelectSucursal from "../components/SelectSucursal.jsx";
-import { getProductos } from "../api";
+import { getProductos } from "../utils/api.js";
 
 export default function Gestion() {
   const [sucursal, setSucursal] = useState("");

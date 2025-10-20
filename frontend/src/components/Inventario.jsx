@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getInventarioBySucursal, setInventario, getProductos } from "../api";
+import { getInventarioBySucursal, setInventario, getProductos } from "../utils/api.js";
 
 export default function Inventario({ idSucursal }) {
   const [items, setItems] = useState([]);

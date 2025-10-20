@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getSucursales } from "../api";
+import { getSucursales } from "../utils/api.js";
 
 export default function SelectSucursal({ value, onChange }) {
   const [sucursales, setSucursales] = useState([]);

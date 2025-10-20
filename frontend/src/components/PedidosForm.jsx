@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getProductos, postPedido, setEstadoPedido } from "../api";
+import { getProductos, postPedido, setEstadoPedido } from "../utils/api.js";
 
 export default function PedidosForm({ idSucursal, onDone }) {
   const [prods, setProds] = useState([]);
