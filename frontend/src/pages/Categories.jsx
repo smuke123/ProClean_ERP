@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getProductos } from '../utils/api.js';
 import { useCart } from '../contexts/CartContext.jsx';
-import { IoMdHeartEmpty, IoMdSearch } from 'react-icons/io';
+import { IoMdSearch } from 'react-icons/io';
 import { BiCart } from 'react-icons/bi';
 import Card from '../components/ui/Card.jsx';
 
@@ -213,14 +213,9 @@ export default function Categories() {
 
                       {/* Iconos de acción (aparecen al hover) */}
                       <div className="opacity-0 group-hover:opacity-100 absolute top-4 right-4 transition-opacity duration-300">
-                        <div className="flex flex-col gap-2">
-                          <button className="bg-white p-3 rounded-full shadow-lg hover:bg-gray-100 transition-colors">
-                            <IoMdHeartEmpty className="text-xl" />
-                          </button>
-                          <button className="bg-white p-3 rounded-full shadow-lg hover:bg-gray-100 transition-colors">
-                            <IoMdSearch className="text-xl" />
-                          </button>
-                        </div>
+                        <button className="bg-white p-3 rounded-full shadow-lg hover:bg-gray-100 transition-colors">
+                          <IoMdSearch className="text-xl" />
+                        </button>
                       </div>
 
                       {/* Botón de agregar al carrito */}
