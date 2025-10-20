@@ -40,6 +40,11 @@ CREATE TABLE Productos (
     id_producto INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(150) NOT NULL,
     precio DECIMAL(10, 2) NOT NULL,
+    categoria VARCHAR(100),
+    marca VARCHAR(100),
+    descripcion_corta TEXT,
+    descripcion TEXT,
+    imagen VARCHAR(255),
     activo BOOLEAN DEFAULT TRUE,
     UNIQUE (nombre)
 );

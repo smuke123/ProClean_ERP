@@ -46,18 +46,109 @@ VALUES (
         'Calle 10 #20-30'
     );
 
--- Productos básicos (10 fijos)
-INSERT INTO Productos (nombre, precio)
-VALUES ('Detergente Multiusos 5L', 5000),
-    ('Lavaloza Líquido 2L', 10000),
-    ('Limpiador de Pisos Aromatizado 5L', 35000),
-    ('Jabón Líquido para Ropa 5L', 15000),
-    ('Suavizante de Telas 5L', 25000),
-    ('Detergente en Polvo 2Kg', 10000),
-    ('Cloro 5L', 15000),
-    ('Alcohol Antiséptico 70% 1L', 10000),
-    ('Desinfectante Multiusos 4L', 15000),
-    ('Gel Antibacterial 1L', 5000);
+-- Productos completos con toda la información (10 fijos)
+INSERT INTO Productos (nombre, precio, categoria, marca, descripcion_corta, descripcion, imagen, activo)
+VALUES 
+(
+    'Detergente Multiusos 5L',
+    45000,
+    'Limpieza General',
+    'ProClean',
+    'Potente detergente para todo tipo de superficies',
+    'Detergente multiusos de alta concentración, ideal para limpieza profunda de superficies, pisos, paredes y más. Fórmula biodegradable que no daña el medio ambiente. Rendimiento excepcional con solo pequeñas cantidades.',
+    '/images/Detergente.svg',
+    TRUE
+),
+(
+    'Lavaloza Líquido 2L',
+    18000,
+    'Cocina',
+    'ProClean',
+    'Elimina grasa y residuos de alimentos fácilmente',
+    'Lavaloza líquido concentrado con poder desengrasante superior. Suave con las manos, elimina bacterias y deja tus platos impecables. Aroma fresco y duradero. Rinde hasta 200 lavadas.',
+    '/images/Detergente.svg',
+    TRUE
+),
+(
+    'Limpiador de Pisos Aromatizado 5L',
+    35000,
+    'Pisos',
+    'ProClean Premium',
+    'Deja tus pisos brillantes y con aroma fresco',
+    'Limpiador especializado para todo tipo de pisos: cerámica, porcelanato, madera, mármol. No necesita enjuague. Fórmula antideslizante y con protección UV. Disponible en varios aromas.',
+    '/images/Detergente.svg',
+    TRUE
+),
+(
+    'Jabón Líquido para Ropa 5L',
+    52000,
+    'Lavandería',
+    'ProClean',
+    'Cuida tus prendas y elimina manchas difíciles',
+    'Jabón líquido para ropa de alta eficiencia. Funciona en agua fría y caliente. Protege los colores y las fibras. Ideal para lavadoras automáticas y lavado a mano. Hipoalergénico.',
+    '/images/Detergente.svg',
+    TRUE
+),
+(
+    'Suavizante de Telas 5L',
+    48000,
+    'Lavandería',
+    'ProClean Soft',
+    'Suavidad y frescura prolongada para tu ropa',
+    'Suavizante concentrado que deja tus prendas suaves al tacto y con aroma duradero hasta por 30 días. Reduce la estática y facilita el planchado. Tecnología de micro-encapsulado.',
+    '/images/Detergente.svg',
+    TRUE
+),
+(
+    'Detergente en Polvo 2Kg',
+    28000,
+    'Lavandería',
+    'ProClean',
+    'Poder de limpieza tradicional para toda tu ropa',
+    'Detergente en polvo de máxima eficiencia. Blanqueador incorporado que mantiene tus prendas blancas impecables. Elimina manchas difíciles y olores. Alto rendimiento: hasta 40 lavadas.',
+    '/images/Detergente.svg',
+    TRUE
+),
+(
+    'Cloro 5L',
+    22000,
+    'Desinfección',
+    'ProClean Sanitize',
+    'Desinfección profunda y blanqueamiento efectivo',
+    'Hipoclorito de sodio al 5.25%. Elimina 99.9% de gérmenes, virus y bacterias. Ideal para desinfección de baños, cocinas, superficies de alto tráfico. Efecto blanqueador para telas blancas.',
+    '/images/Detergente.svg',
+    TRUE
+),
+(
+    'Alcohol Antiséptico 70% 1L',
+    15000,
+    'Desinfección',
+    'ProClean Medical',
+    'Antiséptico de grado médico para higiene personal',
+    'Alcohol etílico al 70% de grado farmacéutico. Elimina bacterias y virus al contacto. Ideal para desinfección de manos, superficies y equipos médicos. Secado rápido sin residuos.',
+    '/images/Detergente.svg',
+    TRUE
+),
+(
+    'Desinfectante Multiusos 4L',
+    38000,
+    'Desinfección',
+    'ProClean Protect',
+    'Protección total contra gérmenes y bacterias',
+    'Desinfectante de amplio espectro. Efectivo contra virus, hongos y bacterias. Aroma agradable y duradero. No mancha ni daña superficies. Certificado por entidades de salud. Uso profesional e industrial.',
+    '/images/Detergente.svg',
+    TRUE
+),
+(
+    'Gel Antibacterial 1L',
+    25000,
+    'Higiene Personal',
+    'ProClean Care',
+    'Protección antibacterial para tus manos en todo momento',
+    'Gel antibacterial con 70% de alcohol. Fórmula enriquecida con aloe vera y vitamina E para proteger tu piel. Elimina 99.9% de gérmenes sin necesidad de agua. Absorción rápida sin dejar residuos pegajosos.',
+    '/images/Detergente.svg',
+    TRUE
+);
 
 -- Proveedores
 INSERT INTO Proveedores (nombre, contacto, telefono, direccion)
