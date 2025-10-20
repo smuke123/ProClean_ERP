@@ -59,21 +59,21 @@ const CartDropdown = () => {
         {/* Parte izquierda: Texto "Cart" */}
         <button 
           onClick={handleButtonClick}
-          className="bg-black text-white px-4 py-2 rounded-l-full hover:bg-gray-800 transition-colors font-merriweather font-bold text-sm"
+          className="bg-black text-white px-5 py-2.5 rounded-l-full hover:bg-gray-800 transition-all duration-200 font-bold text-xs tracking-widest uppercase"
           title="Ver carrito"
         >
-          Cart
+          CART
         </button>
         
         {/* Parte derecha: Icono de shopping con badge */}
         <button 
           onClick={handleButtonClick}
-          className="w-10 h-10 relative bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors -ml-1"
+          className="w-11 h-11 relative bg-white border-[3px] border-black rounded-full flex items-center justify-center hover:bg-gray-50 transition-all duration-200 -ml-1 hover:scale-105"
           title={`Carrito (${getTotalItems()} productos)`}
         >
-          <img src="/icons/cartRight.svg" alt="Carrito" className="w-4 h-4" />
+          <img src="/icons/cartRight.svg" alt="Carrito" className="w-5 h-5" />
           {getTotalItems() > 0 && (
-            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full min-w-[18px] h-[18px] flex items-center justify-center font-bold px-1 leading-none">
+            <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full min-w-[20px] h-[20px] flex items-center justify-center font-bold px-1.5 leading-none shadow-lg">
               {getTotalItems()}
             </span>
           )}

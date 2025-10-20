@@ -7,16 +7,20 @@ const Header = () => {
   const { isAdmin } = useAuth();
 
   return (
-    <header className="bg-white border-b border-gray-100">
-      <div className="w-full px-12 py-3">
-        <div className="flex items-center justify-between relative max-w-screen-2xl mx-auto">
+    <header className="bg-white shadow-sm">
+      <div className="w-full px-16 py-4">
+        <div className="flex items-center justify-between relative max-w-[1600px] mx-auto">
           {/* Izquierda: Links de navegación */}
-          <nav className="flex items-center gap-10">
+          <nav className="flex items-center gap-12">
             <NavLink 
               to="/" 
               end
               className={({ isActive }) => 
-                `navbar-link ${isActive ? 'active' : ''}`
+                `text-sm font-bold tracking-wider uppercase transition-all duration-200 ${
+                  isActive 
+                    ? 'text-black border-b-2 border-black pb-1' 
+                    : 'text-gray-600 hover:text-gray-900'
+                }`
               }
             >
               Home
@@ -24,7 +28,11 @@ const Header = () => {
             <NavLink 
               to="/categories"
               className={({ isActive }) => 
-                `navbar-link ${isActive ? 'active' : ''}`
+                `text-sm font-bold tracking-wider uppercase transition-all duration-200 ${
+                  isActive 
+                    ? 'text-black border-b-2 border-black pb-1' 
+                    : 'text-gray-600 hover:text-gray-900'
+                }`
               }
             >
               Categories
@@ -32,7 +40,11 @@ const Header = () => {
             <NavLink 
               to="/contact"
               className={({ isActive }) => 
-                `navbar-link ${isActive ? 'active' : ''}`
+                `text-sm font-bold tracking-wider uppercase transition-all duration-200 ${
+                  isActive 
+                    ? 'text-black border-b-2 border-black pb-1' 
+                    : 'text-gray-600 hover:text-gray-900'
+                }`
               }
             >
               Contact
@@ -41,18 +53,22 @@ const Header = () => {
 
           {/* Centro: Logo */}
           <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center">
-            <img src="/IconoProClean.svg" alt="ProClean" className="h-10 w-auto" />
+            <img src="/IconoProClean.svg" alt="ProClean" className="h-12 w-auto" />
           </div>
 
           {/* Derecha: Links Admin (solo si es admin) + Iconos */}
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-10">
             {/* Links Admin - Solo visible si es admin */}
             {isAdmin && (
-              <nav className="flex items-center gap-8">
+              <nav className="flex items-center gap-10">
                 <NavLink 
                   to="/informes"
                   className={({ isActive }) => 
-                    `navbar-link ${isActive ? 'active' : ''}`
+                    `text-sm font-bold tracking-wider uppercase transition-all duration-200 ${
+                      isActive 
+                        ? 'text-black border-b-2 border-black pb-1' 
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`
                   }
                 >
                   Informes
@@ -60,7 +76,11 @@ const Header = () => {
                 <NavLink 
                   to="/gestion"
                   className={({ isActive }) => 
-                    `navbar-link ${isActive ? 'active' : ''}`
+                    `text-sm font-bold tracking-wider uppercase transition-all duration-200 ${
+                      isActive 
+                        ? 'text-black border-b-2 border-black pb-1' 
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`
                   }
                 >
                   Gestión
@@ -69,7 +89,7 @@ const Header = () => {
             )}
             
             {/* Iconos */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-5">
               {/* Carrito Dropdown */}
               <CartDropdown />
 

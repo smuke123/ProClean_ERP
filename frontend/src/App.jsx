@@ -1,14 +1,11 @@
 import { Route, Routes, useLocation } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext.jsx";
 import { CartProvider } from "./contexts/CartContext.jsx";
-import { UserSidebarProvider } from "./contexts/UserSidebarContext.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 // Layout Components
 import Header from "./components/layout/Header.jsx";
 import Footer from "./components/layout/Footer.jsx";
-
-// Ya no necesitamos los Sidebars porque ahora usamos Dropdowns
 
 // Pages
 import Home from "./pages/Home.jsx";
@@ -66,11 +63,9 @@ const AppContent = () => {
 export default function App() {
   return (
     <AuthProvider>
-      <UserSidebarProvider>
-        <CartProvider>
-          <AppContent />
-        </CartProvider>
-      </UserSidebarProvider>
+      <CartProvider>
+        <AppContent />
+      </CartProvider>
     </AuthProvider>
   );
 }

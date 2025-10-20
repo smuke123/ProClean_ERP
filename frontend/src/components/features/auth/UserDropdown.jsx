@@ -58,12 +58,12 @@ const UserDropdown = () => {
       <button 
         ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
-        className="w-10 h-10 relative bg-black rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors"
+        className="w-11 h-11 relative bg-black rounded-full flex items-center justify-center hover:bg-gray-800 transition-all duration-200 hover:scale-105 shadow-md"
         title={isAuthenticated ? `Hola, ${user?.nombre}` : "Iniciar sesión"}
       >
-        <img src="/icons/user.svg" alt="Usuario" className="w-4 h-4" />
+        <img src="/icons/user.svg" alt="Usuario" className="w-5 h-5" />
         {isAuthenticated && (
-          <span className="absolute -top-0.5 -right-0.5 bg-green-500 w-2.5 h-2.5 rounded-full border-2 border-white"></span>
+          <span className="absolute -top-1 -right-1 bg-green-500 w-3.5 h-3.5 rounded-full border-[3px] border-white shadow-sm"></span>
         )}
       </button>
 

@@ -1,7 +1,25 @@
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext.jsx';
 import Card from '../components/ui/Card.jsx';
 import Button from '../components/ui/Button.jsx';
 
 export default function Home() {
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+
+  const handleExploreProducts = () => {
+    navigate('/categories');
+  };
+
+  const handleViewCatalog = () => {
+    if (!isAuthenticated) {
+      alert('Por favor, inicia sesión para ver el catálogo completo');
+      navigate('/login');
+    } else {
+      navigate('/categories');
+    }
+  };
+
   return (
     <div className="max-w-6xl mx-auto space-y-8">
       {/* Hero Section */}
@@ -13,10 +31,10 @@ export default function Home() {
           Sistema integral de gestión empresarial para empresas de limpieza
         </p>
         <div className="flex gap-4 justify-center">
-          <Button variant="primary" size="lg">
+          <Button variant="primary" size="lg" onClick={handleExploreProducts}>
             Explorar Productos
           </Button>
-          <Button variant="secondary" size="lg">
+          <Button variant="secondary" size="lg" onClick={handleViewCatalog}>
             Ver Catálogo
           </Button>
         </div>
