@@ -7,8 +7,8 @@ const Header = () => {
   const { isAdmin } = useAuth();
 
   return (
-    <header className="header py-4 sticky top-0 z-50 bg-white shadow-md">
-      <div className="flex items-center w-10/12 m-auto relative">
+    <header className="header sticky top-0 z-50 bg-white shadow-md" style={{ height: '64px' }}>
+      <div className="flex items-center w-10/12 m-auto relative flex-nowrap overflow-hidden" style={{ height: '64px' }}>
         {/* Izquierda: Home, Categories, Contact */}
         <nav className="flex items-center text-base">
           <div className="mr-5">
@@ -45,12 +45,12 @@ const Header = () => {
         </nav>
 
         {/* Centro: Logo - Posición absoluta centrada */}
-        <div className="absolute left-1/2 transform -translate-x-1/2">
-          <img src="/IconoProClean.svg" alt="ProClean" className="h-10 w-auto" />
+        <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <img src="/IconoProClean.svg" alt="ProClean" className="w-auto" style={{ maxHeight: '40px', objectFit: 'contain' }} />
         </div>
 
         {/* Derecha: Links Admin (si es admin) + Iconos */}
-        <div className="flex items-center ml-auto">
+        <div className="flex items-center ml-auto flex-nowrap">
           {/* Links Admin - Solo visible si es admin */}
           {isAdmin && (
             <nav className="flex items-center text-base">
