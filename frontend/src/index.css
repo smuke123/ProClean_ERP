@@ -37,23 +37,29 @@ body {
 }
 
 /* Estilos personalizados para el navbar */
-.navbar-link {
-  font-family: 'Merriweather', serif;
-  font-weight: 700;
-  font-size: 1rem;
-  letter-spacing: 0.5px;
-  color: #2d3748;
+.link-hover {
+  position: relative;
   text-decoration: none;
-  transition: color 0.2s ease;
+  padding-bottom: 2px;
 }
 
-.navbar-link:hover {
-  color: #4a5568;
+.link-hover::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #000;
+  transition: width 0.3s ease;
 }
 
-.navbar-link.active {
-  color: #1a202c;
-  font-weight: 900;
+.link-hover:hover::after {
+  width: 100%;
+}
+
+.link-hover.active::after {
+  width: 100%;
 }
 
 .navbar-icon-button {

@@ -7,95 +7,81 @@ const Header = () => {
   const { isAdmin } = useAuth();
 
   return (
-    <header className="bg-white border-b border-gray-200">
-      <div className="w-full px-20 py-3.5">
-        <div className="flex items-center relative max-w-[1800px] mx-auto">
-          {/* Izquierda: Links de navegación - con flex-1 para empujar hacia los lados */}
-          <nav className="flex items-center gap-16 flex-1">
-            <NavLink 
-              to="/" 
+    <header className="header py-4 sticky top-0 z-50 bg-white shadow-md">
+      <div className="flex flex-wrap justify-between items-center w-10/12 m-auto">
+        {/* Izquierda: Logo */}
+        <div>
+          <img src="/IconoProClean.svg" alt="ProClean" className="h-10 w-auto" />
+        </div>
+
+        {/* Centro: Links de navegación */}
+        <nav className="md:flex flex-wrap text-base py-3">
+          <div className="mr-5">
+            <NavLink
+              to="/"
               end
-              className={({ isActive }) => 
-                `text-sm font-bold tracking-wide transition-colors ${
-                  isActive 
-                    ? 'text-black' 
-                    : 'text-gray-600 hover:text-gray-900'
-                }`
+              className={({ isActive }) =>
+                `link-hover transition-all ${isActive ? 'active font-bold text-black' : 'text-gray-700'}`
               }
             >
               Home
             </NavLink>
-            <NavLink 
+          </div>
+          <div className="mr-5">
+            <NavLink
               to="/categories"
-              className={({ isActive }) => 
-                `text-sm font-bold tracking-wide transition-colors ${
-                  isActive 
-                    ? 'text-black' 
-                    : 'text-gray-600 hover:text-gray-900'
-                }`
+              className={({ isActive }) =>
+                `link-hover transition-all ${isActive ? 'active font-bold text-black' : 'text-gray-700'}`
               }
             >
               Categories
             </NavLink>
-            <NavLink 
+          </div>
+          <div className="mr-5">
+            <NavLink
               to="/contact"
-              className={({ isActive }) => 
-                `text-sm font-bold tracking-wide transition-colors ${
-                  isActive 
-                    ? 'text-black' 
-                    : 'text-gray-600 hover:text-gray-900'
-                }`
+              className={({ isActive }) =>
+                `link-hover transition-all ${isActive ? 'active font-bold text-black' : 'text-gray-700'}`
               }
             >
               Contact
             </NavLink>
-          </nav>
-
-          {/* Centro: Logo - posición absoluta centrada */}
-          <div className="absolute left-1/2 transform -translate-x-1/2">
-            <img src="/IconoProClean.svg" alt="ProClean" className="h-10 w-auto" />
           </div>
 
-          {/* Derecha: Links Admin (solo si es admin) + Iconos - con flex-1 y justify-end */}
-          <div className="flex items-center gap-16 flex-1 justify-end">
-            {/* Links Admin - Solo visible si es admin */}
-            {isAdmin && (
-              <nav className="flex items-center gap-16">
-                <NavLink 
+          {/* Links Admin - Solo visible si es admin */}
+          {isAdmin && (
+            <>
+              <div className="mr-5">
+                <NavLink
                   to="/informes"
-                  className={({ isActive }) => 
-                    `text-sm font-bold tracking-wide transition-colors ${
-                      isActive 
-                        ? 'text-black' 
-                        : 'text-gray-600 hover:text-gray-900'
-                    }`
+                  className={({ isActive }) =>
+                    `link-hover transition-all ${isActive ? 'active font-bold text-black' : 'text-gray-700'}`
                   }
                 >
                   Informes
                 </NavLink>
-                <NavLink 
+              </div>
+              <div className="mr-5">
+                <NavLink
                   to="/gestion"
-                  className={({ isActive }) => 
-                    `text-sm font-bold tracking-wide transition-colors ${
-                      isActive 
-                        ? 'text-black' 
-                        : 'text-gray-600 hover:text-gray-900'
-                    }`
+                  className={({ isActive }) =>
+                    `link-hover transition-all ${isActive ? 'active font-bold text-black' : 'text-gray-700'}`
                   }
                 >
                   Gestión
                 </NavLink>
-              </nav>
-            )}
-            
-            {/* Iconos */}
-            <div className="flex items-center gap-5">
-              {/* Carrito Dropdown */}
-              <CartDropdown />
+              </div>
+            </>
+          )}
+        </nav>
 
-              {/* Usuario Dropdown */}
-              <UserDropdown />
-            </div>
+        {/* Derecha: Iconos */}
+        <div className="flex items-center">
+          <div className="mr-5">
+            <CartDropdown />
+          </div>
+          <div className="mr-5">
+            <UserDropdown />
           </div>
         </div>
       </div>
