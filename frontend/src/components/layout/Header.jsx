@@ -24,8 +24,8 @@ const Header = () => {
 
   return (
     <header className="bg-white border-b border-gray-100">
-      <div className="px-6 py-3">
-        <div className="flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-8 py-2.5">
+        <div className="flex items-center justify-between relative">
           {/* Izquierda: Links de navegación */}
           <nav className="flex items-center gap-8">
             <NavLink 
@@ -56,8 +56,8 @@ const Header = () => {
           </nav>
 
           {/* Centro: Logo */}
-          <div className="absolute left-1/2 transform -translate-x-1/2">
-            <img src="/IconoProClean.svg" alt="ProClean" className="h-12 w-auto" />
+          <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center">
+            <img src="/IconoProClean.svg" alt="ProClean" className="h-8 w-auto" />
           </div>
 
           {/* Derecha: Links Admin (solo si es admin) + Iconos */}
@@ -91,7 +91,7 @@ const Header = () => {
                 {/* Parte izquierda: Texto "Cart" */}
                 <button 
                   onClick={handleCartClick}
-                  className="bg-black text-white px-4 py-2 rounded-l-full hover:bg-gray-800 transition-colors font-merriweather font-bold text-sm"
+                  className="bg-black text-white px-3 py-1.5 rounded-l-full hover:bg-gray-800 transition-colors font-merriweather font-bold text-sm"
                   title="Ver carrito"
                 >
                   Cart
@@ -100,12 +100,12 @@ const Header = () => {
                 {/* Parte derecha: Icono de shopping con badge */}
                 <button 
                   onClick={handleCartClick}
-                  className="navbar-icon-button relative bg-white border-2 border-black rounded-full ml-1"
+                  className="w-9 h-9 relative bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors"
                   title={`Carrito (${getTotalItems()} productos)`}
                 >
-                  <img src="/icons/cartRight.svg" alt="Carrito" className="w-5 h-5" />
+                  <img src="/icons/cartRight.svg" alt="Carrito" className="w-4 h-4" />
                   {getTotalItems() > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full min-w-[18px] h-[18px] flex items-center justify-center font-bold px-1">
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full min-w-[16px] h-[16px] flex items-center justify-center font-bold px-0.5 leading-none">
                       {getTotalItems()}
                     </span>
                   )}
@@ -115,12 +115,12 @@ const Header = () => {
               {/* Usuario */}
               <button 
                 onClick={handleUserClick}
-                className="navbar-icon-button relative"
+                className="w-9 h-9 relative bg-black rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors"
                 title={isAuthenticated ? `Hola, ${user?.nombre}` : "Iniciar sesión"}
               >
-                <img src="/icons/user.svg" alt="Usuario" className="w-5 h-5" />
+                <img src="/icons/user.svg" alt="Usuario" className="w-4 h-4" />
                 {isAuthenticated && (
-                  <span className="absolute -top-1 -right-1 bg-green-500 w-3 h-3 rounded-full border-2 border-white"></span>
+                  <span className="absolute -top-0.5 -right-0.5 bg-green-500 w-2.5 h-2.5 rounded-full border-2 border-white"></span>
                 )}
               </button>
             </div>
