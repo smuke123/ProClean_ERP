@@ -8,14 +8,9 @@ const Header = () => {
 
   return (
     <header className="header py-4 sticky top-0 z-50 bg-white shadow-md">
-      <div className="flex flex-wrap justify-between items-center w-10/12 m-auto">
-        {/* Izquierda: Logo */}
-        <div>
-          <img src="/IconoProClean.svg" alt="ProClean" className="h-10 w-auto" />
-        </div>
-
-        {/* Centro: Links de navegación */}
-        <nav className="md:flex flex-wrap text-base py-3">
+      <div className="flex items-center w-10/12 m-auto relative">
+        {/* Izquierda: Home, Categories, Contact */}
+        <nav className="flex items-center text-base">
           <div className="mr-5">
             <NavLink
               to="/"
@@ -47,10 +42,18 @@ const Header = () => {
               Contact
             </NavLink>
           </div>
+        </nav>
 
+        {/* Centro: Logo - Posición absoluta centrada */}
+        <div className="absolute left-1/2 transform -translate-x-1/2">
+          <img src="/IconoProClean.svg" alt="ProClean" className="h-10 w-auto" />
+        </div>
+
+        {/* Derecha: Links Admin (si es admin) + Iconos */}
+        <div className="flex items-center ml-auto">
           {/* Links Admin - Solo visible si es admin */}
           {isAdmin && (
-            <>
+            <nav className="flex items-center text-base">
               <div className="mr-5">
                 <NavLink
                   to="/informes"
@@ -71,17 +74,17 @@ const Header = () => {
                   Gestión
                 </NavLink>
               </div>
-            </>
+            </nav>
           )}
-        </nav>
 
-        {/* Derecha: Iconos */}
-        <div className="flex items-center">
-          <div className="mr-5">
-            <CartDropdown />
-          </div>
-          <div className="mr-5">
-            <UserDropdown />
+          {/* Iconos */}
+          <div className="flex items-center">
+            <div className="mr-5">
+              <CartDropdown />
+            </div>
+            <div>
+              <UserDropdown />
+            </div>
           </div>
         </div>
       </div>
