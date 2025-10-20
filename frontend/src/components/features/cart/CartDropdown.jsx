@@ -5,12 +5,14 @@ import { useCart } from '../../../contexts/CartContext.jsx';
 
 const CartDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [dropdownPosition, setDropdownPosition] = useState('right-0');
   const dropdownRef = useRef(null);
+  const buttonRef = useRef(null);
   const { isAuthenticated } = useAuth();
   const { cartItems, getTotalItems, getTotalPrice, removeFromCart, updateQuantity } = useCart();
   const navigate = useNavigate();
 
-  // Cerrar dropdown cuando se hace click fuera
+  // Cerrar dropdown cuando se hace click fuera y ajustar posición
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -20,6 +22,20 @@ const CartDropdown = () => {
 
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
+      
+      // Ajustar posición del dropdown para que no se salga de la pantalla
+      if (buttonRef.current) {
+        const buttonRect = buttonRef.current.getBoundingClientRect();
+        const dropdownWidth = 320; // w-80 = 20rem = 320px
+        const screenWidth = window.innerWidth;
+        
+        // Si el dropdown se sale por la derecha, alinearlo a la derecha del viewport
+        if (buttonRect.right + dropdownWidth > screenWidth) {
+          setDropdownPosition('right-0');
+        } else {
+          setDropdownPosition('left-0');
+        }
+      }
     }
 
     return () => {
@@ -39,11 +55,11 @@ const CartDropdown = () => {
   return (
     <div className="relative" ref={dropdownRef}>
       {/* Botón de Carrito Dual */}
-      <div className="flex items-center">
+      <div className="flex items-center" ref={buttonRef}>
         {/* Parte izquierda: Texto "Cart" */}
         <button 
           onClick={handleButtonClick}
-          className="bg-black text-white px-3 py-1.5 rounded-l-full hover:bg-gray-800 transition-colors font-merriweather font-bold text-sm"
+          className="bg-black text-white px-4 py-2 rounded-l-full hover:bg-gray-800 transition-colors font-merriweather font-bold text-sm"
           title="Ver carrito"
         >
           Cart
@@ -52,12 +68,12 @@ const CartDropdown = () => {
         {/* Parte derecha: Icono de shopping con badge */}
         <button 
           onClick={handleButtonClick}
-          className="w-9 h-9 relative bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors"
+          className="w-10 h-10 relative bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors -ml-1"
           title={`Carrito (${getTotalItems()} productos)`}
         >
           <img src="/icons/cartRight.svg" alt="Carrito" className="w-4 h-4" />
           {getTotalItems() > 0 && (
-            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full min-w-[16px] h-[16px] flex items-center justify-center font-bold px-0.5 leading-none">
+            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full min-w-[18px] h-[18px] flex items-center justify-center font-bold px-1 leading-none">
               {getTotalItems()}
             </span>
           )}
@@ -66,7 +82,7 @@ const CartDropdown = () => {
 
       {/* Dropdown Menu */}
       {isOpen && isAuthenticated && (
-        <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 z-50 max-h-96 flex flex-col">
+        <div className={`absolute ${dropdownPosition} mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 z-50 max-h-96 flex flex-col`}>
           {/* Header */}
           <div className="px-4 py-3 border-b border-gray-100">
             <h3 className="text-lg font-semibold text-gray-800">

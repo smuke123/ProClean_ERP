@@ -8,10 +8,10 @@ const Header = () => {
 
   return (
     <header className="bg-white border-b border-gray-100">
-      <div className="max-w-7xl mx-auto px-8 py-2.5">
-        <div className="flex items-center justify-between relative">
+      <div className="w-full px-12 py-3">
+        <div className="flex items-center justify-between relative max-w-screen-2xl mx-auto">
           {/* Izquierda: Links de navegación */}
-          <nav className="flex items-center gap-8">
+          <nav className="flex items-center gap-10">
             <NavLink 
               to="/" 
               end
@@ -41,14 +41,14 @@ const Header = () => {
 
           {/* Centro: Logo */}
           <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center">
-            <img src="/IconoProClean.svg" alt="ProClean" className="h-8 w-auto" />
+            <img src="/IconoProClean.svg" alt="ProClean" className="h-10 w-auto" />
           </div>
 
           {/* Derecha: Links Admin (solo si es admin) + Iconos */}
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-8">
             {/* Links Admin - Solo visible si es admin */}
             {isAdmin && (
-              <nav className="flex items-center gap-6">
+              <nav className="flex items-center gap-8">
                 <NavLink 
                   to="/informes"
                   className={({ isActive }) => 
@@ -69,7 +69,7 @@ const Header = () => {
             )}
             
             {/* Iconos */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               {/* Carrito Dropdown */}
               <CartDropdown />
 
