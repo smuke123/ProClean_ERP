@@ -8,9 +8,7 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Header from "./components/layout/Header.jsx";
 import Footer from "./components/layout/Footer.jsx";
 
-// Feature Components
-import UserSidebar from "./components/features/auth/UserSidebar.jsx";
-import CartSidebar from "./components/features/cart/CartSidebar.jsx";
+// Ya no necesitamos los Sidebars porque ahora usamos Dropdowns
 
 // Pages
 import Home from "./pages/Home.jsx";
@@ -58,10 +56,6 @@ const AppContent = () => {
           />
         </Routes>
       </main>
-
-      {/* Sidebars globales */}
-      <UserSidebar />
-      <CartSidebar />
 
       {!isLoginPage && <Footer />}
     </div>
