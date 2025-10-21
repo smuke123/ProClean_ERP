@@ -121,6 +121,11 @@ body {
   overflow: hidden;
 }
 
+.image-container:hover .opacity-0 {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;

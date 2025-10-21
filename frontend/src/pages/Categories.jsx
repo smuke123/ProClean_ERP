@@ -90,30 +90,29 @@ export default function Categories() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Header */}
-        <div className="text-center mb-10">
-          <h1 className="text-4xl font-bold text-gray-900 mb-3">
-            Catálogo de Productos
-          </h1>
-          <p className="text-lg text-gray-600">
-            Encuentra los mejores productos de limpieza profesional
-          </p>
-        </div>
+    <div>
+      {/* Header */}
+      <div className="text-center my-8">
+        <h1 className="text-4xl font-bold text-gray-900 mb-3">
+          Catálogo de Productos
+        </h1>
+        <p className="text-lg text-gray-600">
+          Encuentra los mejores productos de limpieza profesional
+        </p>
+      </div>
 
-        {/* Layout: Filtros + Productos */}
-        <div className="flex gap-8 items-start">
+      <div>
+        <div className="w-10/12 m-auto flex gap-3 items-start mt-8">
           {/* Panel de Filtros */}
-          <div className="w-1/4 min-w-[250px]">
-            <div className="bg-white border border-gray-200 rounded-xl p-6 sticky top-24 shadow-sm">
-              <div className="mb-6 pb-4 border-b border-gray-200">
-                <h2 className="text-2xl font-bold text-gray-900">Filter</h2>
+          <div className="filterproduct w-1/4 bg-white shadow-lg p-4">
+            <div>
+              <div className="my-4">
+                <h1 className="text-4xl font-semibold">Filter</h1>
               </div>
 
               {/* Filtro por Precio */}
-              <div className="mb-6 pb-6 border-b border-gray-200">
-                <h3 className="mb-4 text-base font-semibold text-gray-900">Por precio</h3>
+              <div className="my-4">
+                <h1 className="mb-3 text-3xl font-semibold">Por precio</h1>
                 <div>
                   <input
                     type="range"
@@ -126,9 +125,9 @@ export default function Categories() {
                         priceRange: [parseInt(e.target.value), filters.priceRange[1]],
                       })
                     }
-                    className="w-full mb-3 accent-gray-800"
+                    className="w-full"
                   />
-                  <div className="flex justify-between text-sm text-gray-600">
+                  <div className="flex justify-between">
                     <span>Min: ${filters.priceRange[0].toLocaleString()}</span>
                     <span>Max: ${filters.priceRange[1].toLocaleString()}</span>
                   </div>
@@ -137,19 +136,18 @@ export default function Categories() {
 
               {/* Filtro por Categoría */}
               {categoryList.length > 0 && (
-                <div className="mb-6 pb-6 border-b border-gray-200">
-                  <h3 className="mb-4 text-base font-semibold text-gray-900">Por categoría</h3>
-                  <div className="space-y-3">
+                <div className="my-4">
+                  <h1 className="mb-3 text-3xl font-semibold">Por categoría</h1>
+                  <div>
                     {categoryList.map((category, key) => (
-                      <label key={key} className="flex items-center cursor-pointer group">
+                      <div className="flex items-center" key={key}>
                         <input
                           type="checkbox"
                           checked={filters.categories.includes(category)}
                           onChange={() => handleCheckboxChange('categories', category)}
-                          className="mr-3 w-4 h-4 rounded border-gray-300 text-gray-800 focus:ring-gray-800"
                         />
-                        <span className="text-sm text-gray-700 group-hover:text-gray-900">{category}</span>
-                      </label>
+                        <div className="ml-2">{category}</div>
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -157,99 +155,70 @@ export default function Categories() {
 
               {/* Filtro por Marca */}
               {brandList.length > 0 && (
-                <div className="mb-6">
-                  <h3 className="mb-4 text-base font-semibold text-gray-900">Por marca</h3>
-                  <div className="space-y-3">
+                <div className="my-4">
+                  <h1 className="mb-3 text-3xl font-semibold">Por marca</h1>
+                  <div>
                     {brandList.map((brand, key) => (
-                      <label key={key} className="flex items-center cursor-pointer group">
+                      <div className="flex items-center" key={key}>
                         <input
                           type="checkbox"
                           checked={filters.brands.includes(brand)}
                           onChange={() => handleCheckboxChange('brands', brand)}
-                          className="mr-3 w-4 h-4 rounded border-gray-300 text-gray-800 focus:ring-gray-800"
                         />
-                        <span className="text-sm text-gray-700 group-hover:text-gray-900">{brand}</span>
-                      </label>
+                        <div className="ml-2">{brand}</div>
+                      </div>
                     ))}
                   </div>
                 </div>
               )}
-
-              {/* Botón limpiar filtros */}
-              <button
-                onClick={() => setFilters({ categories: [], brands: [], priceRange: [0, filters.priceRange[1]] })}
-                className="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2.5 px-4 rounded-lg transition-colors text-sm"
-              >
-                Limpiar Filtros
-              </button>
             </div>
           </div>
 
           {/* Grid de Productos */}
-          <div className="flex-1">
-            <div className="mb-6 flex items-center justify-between">
-              <p className="text-sm text-gray-600">
-                Mostrando <span className="font-semibold">{filteredProducts.length}</span> de <span className="font-semibold">{products.length}</span> productos
-              </p>
-            </div>
-
+          <div className="w-3/4">
             {filteredProducts.length === 0 ? (
-              <div className="bg-white border border-gray-200 rounded-xl p-12 text-center">
-                <p className="text-lg text-gray-500">
+              <div className="text-center py-12">
+                <p className="text-xl text-gray-500">
                   No se encontraron productos con los filtros seleccionados
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredProducts.map((product) => (
-                  <div 
-                    key={product.id_producto} 
-                    className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow duration-300 group"
-                  >
-                    {/* Contenedor de imagen */}
-                    <div className="relative bg-gray-50 overflow-hidden" style={{ height: '280px' }}>
-                      <img
-                        src={product.imagen || '/images/Detergente.webp'}
-                        alt={product.nombre}
-                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
-                      
-                      {/* Iconos de acción en hover */}
-                      <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <button 
-                          className="bg-white p-2.5 rounded-full shadow-md hover:bg-gray-100 transition-colors"
-                          title="Vista rápida"
-                        >
-                          <IoMdSearch className="text-lg text-gray-700" />
-                        </button>
+              <div className="grid grid-cols-3 gap-3">
+                {filteredProducts.map((product, index) => (
+                  <div key={index}>
+                    <div className="overflow-hidden relative ml-4">
+                      <div className="image-container relative">
+                        <div className="rounded-3xl">
+                          <img
+                            src={product.imagen || '/images/Detergente.webp'}
+                            alt={product.nombre}
+                            className="rounded-3xl w-full"
+                          />
+                        </div>
+
+                        <div className="opacity-0 absolute top-0 right-0 m-4">
+                          <div>
+                            <div className="bg-white p-4 rounded-full">
+                              <IoMdSearch />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="opacity-0 absolute -bottom-3 right-0 bg-white p-4 rounded-s-2xl">
+                          <div className="bg-black text-white h-10 w-10 grid place-items-center rounded-3xl">
+                            <button
+                              className="text-2xl"
+                              onClick={() => handleAddToCart(product)}
+                            >
+                              <BiCart />
+                            </button>
+                          </div>
+                        </div>
                       </div>
 
-                      {/* Botón de carrito en hover */}
-                      <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <button
-                          onClick={() => handleAddToCart(product)}
-                          className="bg-gray-900 text-white p-3 rounded-full shadow-lg hover:bg-gray-800 transition-colors"
-                          title="Añadir al carrito"
-                        >
-                          <BiCart className="text-xl" />
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Información del producto */}
-                    <div className="p-5">
-                      <div className="mb-2">
-                        <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">
-                          {product.marca}
-                        </span>
-                      </div>
-                      <h3 className="font-semibold text-gray-900 mb-2 text-base line-clamp-2 min-h-[3rem]">
-                        {product.nombre}
-                      </h3>
-                      <div className="flex items-center justify-between mt-3">
-                        <p className="text-xl font-bold text-gray-900">
-                          ${parseFloat(product.precio).toLocaleString()}
-                        </p>
+                      <div className="product-details mt-2">
+                        <p className="mb-2">{product.nombre}</p>
+                        <p>${parseFloat(product.precio).toLocaleString()}</p>
                       </div>
                     </div>
                   </div>
