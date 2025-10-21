@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Dropdown } from 'primereact/dropdown';
 import { getSucursales } from "../utils/api.js";
 
 export default function SelectSucursal({ value, onChange }) {
@@ -8,14 +9,19 @@ export default function SelectSucursal({ value, onChange }) {
     getSucursales().then(setSucursales).catch(console.error);
   }, []);
 
+  const opciones = sucursales.map((s) => ({
+    label: s.nombre,
+    value: s.id_sucursal
+  }));
+
   return (
-    <select value={value ?? ""} onChange={(e) => onChange(Number(e.target.value))}>
-      <option value="">-- Selecciona sucursal --</option>
-      {sucursales.map((s) => (
-        <option key={s.id_sucursal} value={s.id_sucursal}>
-          {s.nombre}
-        </option>
-      ))}
-    </select>
+    <Dropdown 
+      value={value || null} 
+      onChange={(e) => onChange(e.value || "")} 
+      options={opciones}
+      placeholder="-- Todas las sucursales --"
+      showClear
+      className="w-full"
+    />
   );
 }
