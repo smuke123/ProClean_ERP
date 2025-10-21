@@ -4,16 +4,26 @@ import { useCart } from '../contexts/CartContext.jsx';
 import { IoMdSearch } from 'react-icons/io';
 import { BiCart } from 'react-icons/bi';
 import Card from '../components/ui/Card.jsx';
+import Modal from '../components/common/Modal.jsx';
 
 export default function Categories() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(null);
   const [filters, setFilters] = useState({
     categories: [],
     brands: [],
     priceRange: [0, 100000],
   });
   const { addToCart } = useCart();
+
+  const handleOpenModal = (productId) => {
+    setIsModalOpen(productId);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(null);
+  };
 
   useEffect(() => {
     loadProducts();
@@ -188,26 +198,29 @@ export default function Categories() {
                   <div key={index}>
                     <div className="overflow-hidden relative ml-4">
                       <div className="image-container relative">
-                        <div className="rounded-3xl">
+                        <div className="rounded-3xl h-72 flex items-center justify-center bg-gray-50 overflow-hidden">
                           <img
                             src={product.imagen || '/images/Detergente.webp'}
                             alt={product.nombre}
-                            className="rounded-3xl w-full"
+                            className="rounded-3xl w-full h-full object-contain"
                           />
                         </div>
 
                         <div className="opacity-0 absolute top-0 right-0 m-4">
                           <div>
-                            <div className="bg-white p-4 rounded-full">
+                            <button 
+                              className="bg-white p-4 rounded-full hover:bg-gray-100 transition-colors"
+                              onClick={() => handleOpenModal(product.id_producto)}
+                            >
                               <IoMdSearch />
-                            </div>
+                            </button>
                           </div>
                         </div>
 
                         <div className="opacity-0 absolute -bottom-3 right-0 bg-white p-4 rounded-s-2xl">
                           <div className="bg-black text-white h-10 w-10 grid place-items-center rounded-3xl">
                             <button
-                              className="text-2xl"
+                              className="text-2xl hover:bg-gray-800 transition-colors"
                               onClick={() => handleAddToCart(product)}
                             >
                               <BiCart />
@@ -217,8 +230,8 @@ export default function Categories() {
                       </div>
 
                       <div className="product-details mt-2">
-                        <p className="mb-2">{product.nombre}</p>
-                        <p>${parseFloat(product.precio).toLocaleString()}</p>
+                        <p className="mb-2 font-semibold">{product.nombre}</p>
+                        <p className="text-lg font-bold">${parseFloat(product.precio).toLocaleString()}</p>
                       </div>
                     </div>
                   </div>
@@ -228,6 +241,13 @@ export default function Categories() {
           </div>
         </div>
       </div>
+
+      {/* Modal de detalles del producto */}
+      <Modal
+        data={products.find((item) => item.id_producto === isModalOpen)}
+        isModalOpen={isModalOpen}
+        handleClose={handleCloseModal}
+      />
     </div>
   );
 }
