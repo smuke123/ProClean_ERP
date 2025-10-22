@@ -496,8 +496,9 @@ export default function Informes() {
   };
 
   return (
-    <div className="grid gap-4">
-      <h2 className="text-2xl font-semibold">Informes y Analytics</h2>
+    <div className="px-4 md:px-6 lg:px-8 py-6 max-w-[1600px] mx-auto">
+      <div className="grid gap-4">
+        <h2 className="text-2xl font-semibold">Informes y Analytics</h2>
 
       {/* Filtros Globales */}
       <div className="bg-white rounded-lg shadow p-4">
@@ -607,72 +608,34 @@ export default function Informes() {
         </Card>
       </div>
 
-      {/* Gráficos */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* Tendencia Mensual */}
-        <Card title="Tendencia Mensual" className="shadow-lg">
-          <div style={{ height: '300px' }}>
-            <Chart type="line" data={chartTendenciaMensual} options={chartOptions} />
-          </div>
-        </Card>
-
-        {/* Distribución por Sucursal */}
-        <Card title="Distribución por Sucursal" className="shadow-lg">
-          <div style={{ height: '300px' }}>
-            <Chart type="doughnut" data={chartSucursales} options={pieOptions} />
-          </div>
-        </Card>
-
-        {/* Estados de Transacciones */}
-        <Card title="Estados de Transacciones" className="shadow-lg">
-          <div style={{ height: '300px' }}>
-            <Chart type="pie" data={chartEstados} options={pieOptions} />
-          </div>
-        </Card>
-
-        {/* Top Productos */}
-        {analytics.topProductos.length > 0 && (
-          <Card title="Top 10 Productos" className="shadow-lg">
-            <div style={{ height: '300px' }}>
-              <Chart type="bar" data={chartTopProductos} options={{
-                ...chartOptions,
-                indexAxis: 'y',
-                plugins: {
-                  legend: {
-                    display: false
-                  }
-                }
-              }} />
-            </div>
-          </Card>
-        )}
-      </div>
-
-      {/* DataTable */}
+      {/* DataTable - Datos Detallados */}
       <div className="bg-white rounded-lg shadow overflow-hidden">
-        <DataTable 
-          ref={dt}
-          value={rows} 
-          paginator 
-          rows={20} 
-          rowsPerPageOptions={[10, 20, 50, 100]}
-          dataKey="id"
-          filters={filters} 
-          filterDisplay="menu"
-          loading={loading}
-          globalFilterFields={['id', 'fecha', 'productos', 'estado']}
-          header={renderHeader()}
-          emptyMessage="No se encontraron registros."
-          expandedRows={expandedRows}
-          onRowToggle={(e) => setExpandedRows(e.data)}
-          onRowExpand={onRowExpand}
-          onRowCollapse={onRowCollapse}
-          rowExpansionTemplate={rowExpansionTemplate}
-          className="text-sm"
-          stripedRows
-          removableSort
-        >
-          <Column expander={true} style={{ width: '3rem' }} />
+        <div className="overflow-x-auto">
+          <DataTable 
+            ref={dt}
+            value={rows} 
+            paginator 
+            rows={20} 
+            rowsPerPageOptions={[10, 20, 50, 100]}
+            dataKey="id"
+            filters={filters} 
+            filterDisplay="menu"
+            loading={loading}
+            globalFilterFields={['id', 'fecha', 'productos', 'estado']}
+            header={renderHeader()}
+            emptyMessage="No se encontraron registros."
+            expandedRows={expandedRows}
+            onRowToggle={(e) => setExpandedRows(e.data)}
+            onRowExpand={onRowExpand}
+            onRowCollapse={onRowCollapse}
+            rowExpansionTemplate={rowExpansionTemplate}
+            className="text-sm"
+            stripedRows
+            removableSort
+            scrollable
+            scrollHeight="600px"
+          >
+          <Column expander={true} style={{ width: '3.5rem' }} frozen />
           
           <Column 
             field="id" 
@@ -680,8 +643,9 @@ export default function Informes() {
             sortable 
             filter 
             filterPlaceholder="Buscar por ID"
-            style={{ minWidth: '8rem' }}
+            style={{ minWidth: '100px', width: '100px' }}
             body={idBodyTemplate}
+            frozen
           />
           
           <Column 
@@ -691,7 +655,7 @@ export default function Informes() {
             filter 
             filterElement={fechaFilterTemplate}
             dataType="date"
-            style={{ minWidth: '10rem' }}
+            style={{ minWidth: '140px', width: '140px' }}
             body={fechaBodyTemplate}
           />
 
@@ -701,7 +665,7 @@ export default function Informes() {
             sortable 
             filter 
             filterPlaceholder="Buscar..."
-            style={{ minWidth: '12rem' }}
+            style={{ minWidth: '180px', width: '180px' }}
             body={clienteProveedorBodyTemplate}
           />
 
@@ -711,14 +675,14 @@ export default function Informes() {
             sortable 
             filter 
             filterPlaceholder="Buscar sucursal"
-            style={{ minWidth: '10rem' }}
+            style={{ minWidth: '150px', width: '150px' }}
             body={sucursalBodyTemplate}
           />
 
           <Column 
             field="productos" 
             header="Productos" 
-            style={{ minWidth: '15rem' }}
+            style={{ minWidth: '250px', width: '250px' }}
             body={productosBodyTemplate}
           />
 
@@ -729,7 +693,7 @@ export default function Informes() {
             filter 
             filterElement={totalFilterTemplate}
             dataType="numeric"
-            style={{ minWidth: '10rem' }}
+            style={{ minWidth: '130px', width: '130px' }}
             body={totalBodyTemplate}
           />
 
@@ -739,10 +703,56 @@ export default function Informes() {
             sortable 
             filter 
             filterElement={estadoFilterTemplate}
-            style={{ minWidth: '10rem' }}
+            style={{ minWidth: '130px', width: '130px' }}
             body={estadoBodyTemplate}
           />
-        </DataTable>
+          </DataTable>
+        </div>
+      </div>
+
+      {/* Gráficos y Análisis Visual */}
+      <div className="mt-6">
+        <h3 className="text-xl font-semibold mb-4">📊 Análisis Visual</h3>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {/* Tendencia Mensual */}
+          <Card title="Tendencia Mensual" className="shadow-lg">
+            <div style={{ height: '300px' }}>
+              <Chart type="line" data={chartTendenciaMensual} options={chartOptions} />
+            </div>
+          </Card>
+
+          {/* Distribución por Sucursal */}
+          <Card title="Distribución por Sucursal" className="shadow-lg">
+            <div style={{ height: '300px' }}>
+              <Chart type="doughnut" data={chartSucursales} options={pieOptions} />
+            </div>
+          </Card>
+
+          {/* Estados de Transacciones */}
+          <Card title="Estados de Transacciones" className="shadow-lg">
+            <div style={{ height: '300px' }}>
+              <Chart type="pie" data={chartEstados} options={pieOptions} />
+            </div>
+          </Card>
+
+          {/* Top Productos */}
+          {analytics.topProductos.length > 0 && (
+            <Card title="Top 10 Productos" className="shadow-lg">
+              <div style={{ height: '300px' }}>
+                <Chart type="bar" data={chartTopProductos} options={{
+                  ...chartOptions,
+                  indexAxis: 'y',
+                  plugins: {
+                    legend: {
+                      display: false
+                    }
+                  }
+                }} />
+              </div>
+            </Card>
+          )}
+        </div>
+      </div>
       </div>
     </div>
   );
