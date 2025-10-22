@@ -1,16 +1,29 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../../contexts/AuthContext.jsx';
+import { useAuth } from '../../../hooks/useAuth.js';
 import { useCart } from '../../../contexts/CartContext.jsx';
 
 const CartDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownPosition, setDropdownPosition] = useState('right-0');
+  const [badgeAnimation, setBadgeAnimation] = useState(false);
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
+  const prevItemCountRef = useRef(0);
   const { isAuthenticated } = useAuth();
   const { cartItems, getTotalItems, getTotalPrice, removeFromCart, updateQuantity } = useCart();
   const navigate = useNavigate();
+
+  // Animación del badge cuando cambia la cantidad
+  useEffect(() => {
+    const currentCount = getTotalItems();
+    if (currentCount > prevItemCountRef.current) {
+      // Se agregó un item, activar animación
+      setBadgeAnimation(true);
+      setTimeout(() => setBadgeAnimation(false), 600);
+    }
+    prevItemCountRef.current = currentCount;
+  }, [cartItems, getTotalItems]);
 
   // Cerrar dropdown cuando se hace click fuera y ajustar posición
   useEffect(() => {
@@ -73,7 +86,11 @@ const CartDropdown = () => {
         >
           <img src="/icons/cartRight.svg" alt="Carrito" className="w-5 h-5" />
           {getTotalItems() > 0 && (
-            <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full min-w-[20px] h-[20px] flex items-center justify-center font-bold px-1.5 leading-none shadow-lg">
+            <span 
+              className={`absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full min-w-[20px] h-[20px] flex items-center justify-center font-bold px-1.5 leading-none shadow-lg transition-transform duration-300 ${
+                badgeAnimation ? 'animate-bounce' : ''
+              }`}
+            >
               {getTotalItems()}
             </span>
           )}
@@ -98,44 +115,47 @@ const CartDropdown = () => {
               </div>
             ) : (
               <div className="divide-y divide-gray-100">
-                {cartItems.map((item) => (
-                  <div key={item.id} className="px-4 py-3">
-                    <div className="flex justify-between items-start mb-2">
-                      <h4 className="text-sm font-medium text-gray-800 flex-1">
-                        {item.nombre}
-                      </h4>
-                      <button
-                        onClick={() => removeFromCart(item.id)}
-                        className="text-red-500 hover:text-red-700 text-xs ml-2"
-                        title="Eliminar"
-                      >
-                        ✕
-                      </button>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
+                {cartItems.map((item) => {
+                  const itemId = item.id_producto || item.id;
+                  return (
+                    <div key={itemId} className="px-4 py-3">
+                      <div className="flex justify-between items-start mb-2">
+                        <h4 className="text-sm font-medium text-gray-800 flex-1">
+                          {item.nombre}
+                        </h4>
                         <button
-                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                          className="w-6 h-6 rounded bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-sm"
+                          onClick={() => removeFromCart(itemId)}
+                          className="text-red-500 hover:text-red-700 text-xs ml-2"
+                          title="Eliminar"
                         >
-                          −
-                        </button>
-                        <span className="text-sm font-medium w-8 text-center">
-                          {item.quantity}
-                        </span>
-                        <button
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                          className="w-6 h-6 rounded bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-sm"
-                        >
-                          +
+                          ✕
                         </button>
                       </div>
-                      <span className="text-sm font-semibold text-gray-800">
-                        ${(item.precio * item.quantity).toLocaleString()}
-                      </span>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => updateQuantity(itemId, item.quantity - 1)}
+                            className="w-6 h-6 rounded bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-sm"
+                          >
+                            −
+                          </button>
+                          <span className="text-sm font-medium w-8 text-center">
+                            {item.quantity}
+                          </span>
+                          <button
+                            onClick={() => updateQuantity(itemId, item.quantity + 1)}
+                            className="w-6 h-6 rounded bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-sm"
+                          >
+                            +
+                          </button>
+                        </div>
+                        <span className="text-sm font-semibold text-gray-800">
+                          ${(parseFloat(item.precio) * item.quantity).toLocaleString()}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>
@@ -152,11 +172,11 @@ const CartDropdown = () => {
               <button
                 onClick={() => {
                   setIsOpen(false);
-                  // Aquí puedes navegar a checkout cuando lo implementes
+                  navigate('/cart');
                 }}
                 className="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800 transition-colors font-medium text-sm"
               >
-                Proceder al Pago
+                Ver Carrito Completo
               </button>
             </div>
           )}

@@ -11,6 +11,13 @@ const Modal = ({ isModalOpen, handleClose, data }) => {
   const addItemToCart = (product) => {
     addToCart(product, qty);
     setAddedItemToCart(true);
+    
+    // Cerrar el modal después de mostrar feedback (1 segundo)
+    setTimeout(() => {
+      handleClose();
+      setAddedItemToCart(false);
+      setQty(1);
+    }, 1000);
   };
 
   useEffect(() => {

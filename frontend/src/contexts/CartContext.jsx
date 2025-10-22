@@ -12,7 +12,6 @@ export const useCart = () => {
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
-  const [isCartOpen, setIsCartOpen] = useState(false);
 
   // Cargar carrito desde localStorage al inicializar
   useEffect(() => {
@@ -34,11 +33,14 @@ export const CartProvider = ({ children }) => {
 
   const addToCart = (product, quantity = 1) => {
     setCartItems(prevItems => {
-      const existingItem = prevItems.find(item => item.id === product.id);
+      const productId = product.id_producto || product.id;
+      const existingItem = prevItems.find(item => 
+        (item.id_producto || item.id) === productId
+      );
       
       if (existingItem) {
         return prevItems.map(item =>
-          item.id === product.id
+          (item.id_producto || item.id) === productId
             ? { ...item, quantity: item.quantity + quantity }
             : item
         );
@@ -49,7 +51,9 @@ export const CartProvider = ({ children }) => {
   };
 
   const removeFromCart = (productId) => {
-    setCartItems(prevItems => prevItems.filter(item => item.id !== productId));
+    setCartItems(prevItems => prevItems.filter(item => 
+      (item.id_producto || item.id) !== productId
+    ));
   };
 
   const updateQuantity = (productId, quantity) => {
@@ -60,7 +64,7 @@ export const CartProvider = ({ children }) => {
     
     setCartItems(prevItems =>
       prevItems.map(item =>
-        item.id === productId ? { ...item, quantity } : item
+        (item.id_producto || item.id) === productId ? { ...item, quantity } : item
       )
     );
   };
@@ -77,20 +81,14 @@ export const CartProvider = ({ children }) => {
     return cartItems.reduce((total, item) => total + (item.precio * item.quantity), 0);
   };
 
-  const openCart = () => setIsCartOpen(true);
-  const closeCart = () => setIsCartOpen(false);
-
   const value = {
     cartItems,
-    isCartOpen,
     addToCart,
     removeFromCart,
     updateQuantity,
     clearCart,
     getTotalItems,
-    getTotalPrice,
-    openCart,
-    closeCart
+    getTotalPrice
   };
 
   return (

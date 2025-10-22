@@ -1,4 +1,4 @@
-import { useAuth } from '../../../contexts/AuthContext.jsx';
+import { useAuth } from '../../../hooks/useAuth.js';
 import { useUserSidebar } from '../../../contexts/UserSidebarContext.jsx';
 import Sidebar from '../../ui/Sidebar.jsx';
 import Button from '../../ui/Button.jsx';

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../../contexts/AuthContext.jsx';
+import { useAuth } from '../../../hooks/useAuth.js';
 
 const UserDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
