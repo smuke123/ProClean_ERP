@@ -8,7 +8,6 @@ import { Button } from 'primereact/button';
 
 const CartDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [dropdownPosition, setDropdownPosition] = useState('right-0');
   const [badgeAnimation, setBadgeAnimation] = useState(false);
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
@@ -28,7 +27,7 @@ const CartDropdown = () => {
     prevItemCountRef.current = currentCount;
   }, [cartItems, getTotalItems]);
 
-  // Cerrar dropdown cuando se hace click fuera y ajustar posición
+  // Cerrar dropdown cuando se hace click fuera
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -38,20 +37,6 @@ const CartDropdown = () => {
 
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
-      
-      // Ajustar posición del dropdown para que no se salga de la pantalla
-      if (buttonRef.current) {
-        const buttonRect = buttonRef.current.getBoundingClientRect();
-        const dropdownWidth = 320; // w-80 = 20rem = 320px
-        const screenWidth = window.innerWidth;
-        
-        // Si el dropdown se sale por la derecha, alinearlo a la derecha del viewport
-        if (buttonRect.right + dropdownWidth > screenWidth) {
-          setDropdownPosition('right-0');
-        } else {
-          setDropdownPosition('left-0');
-        }
-      }
     }
 
     return () => {
@@ -75,9 +60,9 @@ const CartDropdown = () => {
     const itemTotal = itemPrice * item.quantity;
 
     return (
-      <div className="flex gap-3 p-3 border-b border-gray-100">
+      <div className="flex gap-2 p-2 border-b border-gray-100">
         {/* Imagen del producto */}
-        <div className="flex-shrink-0 w-16 h-16 bg-gray-100 rounded overflow-hidden">
+        <div className="flex-shrink-0 w-10 h-10 bg-gray-100 rounded overflow-hidden">
           <img
             src={item.imagen || '/images/Detergente.webp'}
             alt={item.nombre}
@@ -88,39 +73,39 @@ const CartDropdown = () => {
         {/* Información del producto */}
         <div className="flex-1 min-w-0">
           <div className="flex justify-between items-start mb-1">
-            <h4 className="text-sm font-medium text-gray-800 truncate pr-2">
+            <h4 className="text-xs font-medium text-gray-800 truncate pr-1">
               {item.nombre}
             </h4>
             <Button
               icon="pi pi-times"
               onClick={() => removeFromCart(itemId)}
               className="p-button-text p-button-danger p-button-sm"
-              style={{ minWidth: '2rem', height: '2rem' }}
+              style={{ minWidth: '1.5rem', height: '1.5rem', fontSize: '0.7rem' }}
               tooltip="Eliminar"
               tooltipOptions={{ position: 'top' }}
             />
           </div>
 
           {/* Controles de cantidad y precio */}
-          <div className="flex items-center justify-between mt-2">
+          <div className="flex items-center justify-between mt-1">
             <div className="flex items-center gap-1">
               <Button
                 icon="pi pi-minus"
                 onClick={() => updateQuantity(itemId, item.quantity - 1)}
                 className="p-button-outlined p-button-sm"
-                style={{ width: '1.75rem', height: '1.75rem', padding: 0 }}
+                style={{ width: '1.5rem', height: '1.5rem', padding: 0, fontSize: '0.7rem' }}
               />
-              <span className="text-sm font-medium px-2 min-w-[2rem] text-center">
+              <span className="text-xs font-medium px-1 min-w-[1.5rem] text-center">
                 {item.quantity}
               </span>
               <Button
                 icon="pi pi-plus"
                 onClick={() => updateQuantity(itemId, item.quantity + 1)}
                 className="p-button-outlined p-button-sm"
-                style={{ width: '1.75rem', height: '1.75rem', padding: 0 }}
+                style={{ width: '1.5rem', height: '1.5rem', padding: 0, fontSize: '0.7rem' }}
               />
             </div>
-            <span className="text-sm font-semibold text-gray-800">
+            <span className="text-xs font-semibold text-gray-800">
               ${itemTotal.toLocaleString()}
             </span>
           </div>
@@ -151,22 +136,26 @@ const CartDropdown = () => {
       {/* Dropdown Menu */}
       {isOpen && isAuthenticated && (
         <div 
-          className={`absolute ${dropdownPosition} mt-2 w-96 bg-white rounded-lg shadow-xl border border-gray-200 z-50 max-h-[500px] flex flex-col`}
-          style={{ backgroundColor: '#ffffff', opacity: 1 }}
+          className="absolute right-1/2 mt-2 w-72 bg-white rounded-lg shadow-xl border border-gray-200 z-50 max-h-[500px] flex flex-col"
+          style={{ 
+            backgroundColor: '#ffffff', 
+            opacity: 1, 
+            transform: 'translateX(50%)' 
+          }}
         >
           {/* Header */}
-          <div className="px-4 py-3 border-b border-gray-100 bg-white">
-            <h3 className="text-lg font-semibold text-gray-800">
-              Carrito ({getTotalItems()} {getTotalItems() === 1 ? 'producto' : 'productos'})
+          <div className="px-3 py-2 border-b border-gray-100 bg-white">
+            <h3 className="text-sm font-semibold text-gray-800">
+              Carrito ({getTotalItems()})
             </h3>
           </div>
 
           {/* Items del carrito con DataView */}
           <div className="flex-1 overflow-y-auto bg-white">
             {cartItems.length === 0 ? (
-              <div className="px-4 py-8 text-center text-gray-500">
-                <i className="pi pi-shopping-cart text-4xl mb-3 block text-gray-300"></i>
-                <p>Tu carrito está vacío</p>
+              <div className="px-4 py-6 text-center text-gray-500">
+                <i className="pi pi-shopping-cart text-3xl mb-2 block text-gray-300"></i>
+                <p className="text-xs">Tu carrito está vacío</p>
               </div>
             ) : (
               <DataView
@@ -180,22 +169,22 @@ const CartDropdown = () => {
 
           {/* Footer con total */}
           {cartItems.length > 0 && (
-            <div className="border-t border-gray-100 px-4 py-3 bg-gray-50">
-              <div className="flex justify-between items-center mb-3">
-                <span className="text-sm font-medium text-gray-600">Total:</span>
-                <span className="text-lg font-bold text-gray-800">
+            <div className="border-t border-gray-100 px-3 py-2 bg-gray-50">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-xs font-medium text-gray-600">Total:</span>
+                <span className="text-sm font-bold text-gray-800">
                   ${getTotalPrice().toLocaleString()}
                 </span>
               </div>
               <Button
-                label="Ver Carrito Completo"
+                label="Ver Carrito"
                 icon="pi pi-shopping-cart"
                 onClick={() => {
                   setIsOpen(false);
                   navigate('/cart');
                 }}
-                className="w-full p-button-dark"
-                style={{ backgroundColor: '#000', borderColor: '#000' }}
+                className="w-full p-button-dark p-button-sm"
+                style={{ backgroundColor: '#000', borderColor: '#000', fontSize: '0.75rem' }}
               />
             </div>
           )}

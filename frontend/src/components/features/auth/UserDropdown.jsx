@@ -5,13 +5,12 @@ import { HiOutlineUser } from 'react-icons/hi';
 
 const UserDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [dropdownPosition, setDropdownPosition] = useState('right-0');
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
   const { user, logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
-  // Cerrar dropdown cuando se hace click fuera y ajustar posición
+  // Cerrar dropdown cuando se hace click fuera
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -21,20 +20,6 @@ const UserDropdown = () => {
 
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
-      
-      // Ajustar posición del dropdown para que no se salga de la pantalla
-      if (buttonRef.current) {
-        const buttonRect = buttonRef.current.getBoundingClientRect();
-        const dropdownWidth = 256; // w-64 = 16rem = 256px
-        const screenWidth = window.innerWidth;
-        
-        // Si el dropdown se sale por la derecha, alinearlo a la derecha del viewport
-        if (buttonRect.right + dropdownWidth > screenWidth) {
-          setDropdownPosition('right-0');
-        } else {
-          setDropdownPosition('left-0');
-        }
-      }
     }
 
     return () => {
@@ -71,8 +56,12 @@ const UserDropdown = () => {
       {/* Dropdown Menu */}
       {isOpen && (
         <div 
-          className={`absolute ${dropdownPosition} mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50`}
-          style={{ backgroundColor: '#ffffff', opacity: 1 }}
+          className="absolute right-1/2 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50"
+          style={{ 
+            backgroundColor: '#ffffff', 
+            opacity: 1, 
+            transform: 'translateX(50%)' 
+          }}
         >
           {isAuthenticated ? (
             <>
