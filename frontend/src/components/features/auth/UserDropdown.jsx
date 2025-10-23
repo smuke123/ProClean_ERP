@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth.js';
+import { HiOutlineUser } from 'react-icons/hi';
 
 const UserDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -58,12 +59,12 @@ const UserDropdown = () => {
       <button 
         ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
-        className="w-11 h-11 relative bg-black rounded-full flex items-center justify-center hover:bg-gray-800 transition-all duration-200 hover:scale-105 shadow-md"
+        className="text-2xl relative hover:scale-110 transition-all duration-200"
         title={isAuthenticated ? `Hola, ${user?.nombre}` : "Iniciar sesión"}
       >
-        <img src="/icons/user.svg" alt="Usuario" className="w-5 h-5" />
+        <HiOutlineUser className="text-gray-700" />
         {isAuthenticated && (
-          <span className="absolute -top-1 -right-1 bg-green-500 w-3.5 h-3.5 rounded-full border-[3px] border-white shadow-sm"></span>
+          <span className="absolute -top-1 -right-1 bg-green-500 w-2.5 h-2.5 rounded-full border-2 border-white shadow-sm"></span>
         )}
       </button>
 

@@ -199,16 +199,14 @@ export default function Categories() {
                         </div>
 
                         {/* Botón Agregar al Carrito - Siempre visible */}
-                        <div className="absolute -bottom-3 right-0 bg-white p-4 rounded-s-2xl shadow-lg transition-transform duration-300 group-hover:scale-110">
-                          <div className="bg-black text-white h-10 w-10 grid place-items-center rounded-3xl hover:bg-gray-800 transition-colors">
-                            <button
-                              className="text-2xl w-full h-full flex items-center justify-center"
-                              onClick={() => handleOpenModal(product.id_producto)}
-                              title="Ver detalles y agregar al carrito"
-                            >
-                              <BiCart />
-                            </button>
-                          </div>
+                        <div className="absolute bottom-2 right-2 z-10">
+                          <button
+                            className="bg-black text-white h-12 w-12 rounded-full flex items-center justify-center hover:bg-gray-800 transition-all duration-200 hover:scale-110 shadow-xl"
+                            onClick={() => handleOpenModal(product.id_producto)}
+                            title="Ver detalles y agregar al carrito"
+                          >
+                            <BiCart className="text-2xl" />
+                          </button>
                         </div>
                       </div>
 

@@ -193,3 +193,29 @@ body {
 .animate-fade-in {
   animation: fade-in 0.3s ease-out;
 }
+
+/* Header sticky con fondo oscuro */
+.header {
+  background-color: #1f2937;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.header .link-hover {
+  color: #d1d5db;
+  transition: color 0.2s ease;
+}
+
+.header .link-hover:hover {
+  color: white;
+}
+
+.header .link-hover.active {
+  color: white;
+  font-weight: bold;
+}
+
+/* Iconos del header cambiar a blanco cuando sticky */
+.header svg {
+  color: white !important;
+}

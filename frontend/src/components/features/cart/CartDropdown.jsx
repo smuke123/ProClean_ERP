@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth.js';
 import { useCart } from '../../../contexts/CartContext.jsx';
+import { MdOutlineShoppingBag } from 'react-icons/md';
 
 const CartDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -67,35 +68,22 @@ const CartDropdown = () => {
 
   return (
     <div className="relative" ref={dropdownRef}>
-      {/* Botón de Carrito Dual */}
-      <div className="flex items-center" ref={buttonRef}>
-        {/* Parte izquierda: Texto "Cart" */}
-        <button 
-          onClick={handleButtonClick}
-          className="bg-black text-white px-5 py-2.5 rounded-l-full hover:bg-gray-800 transition-all duration-200 font-bold text-xs tracking-widest uppercase"
-          title="Ver carrito"
-        >
-          CART
-        </button>
-        
-        {/* Parte derecha: Icono de shopping con badge */}
-        <button 
-          onClick={handleButtonClick}
-          className="w-11 h-11 relative bg-white border-[3px] border-black rounded-full flex items-center justify-center hover:bg-gray-50 transition-all duration-200 -ml-1 hover:scale-105"
-          title={`Carrito (${getTotalItems()} productos)`}
-        >
-          <img src="/icons/cartRight.svg" alt="Carrito" className="w-5 h-5" />
-          {getTotalItems() > 0 && (
-            <span 
-              className={`absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full min-w-[20px] h-[20px] flex items-center justify-center font-bold px-1.5 leading-none shadow-lg transition-transform duration-300 ${
-                badgeAnimation ? 'animate-bounce' : ''
-              }`}
-            >
-              {getTotalItems()}
-            </span>
-          )}
-        </button>
-      </div>
+      {/* Botón de Carrito */}
+      <button 
+        ref={buttonRef}
+        onClick={handleButtonClick}
+        className="text-2xl relative hover:scale-110 transition-all duration-200"
+        title={`Carrito (${getTotalItems()} productos)`}
+      >
+        <MdOutlineShoppingBag className="text-gray-700" />
+        {getTotalItems() > 0 && (
+          <span 
+            className={`absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1 border-2 border-white shadow-md ${badgeAnimation ? 'animate-bounce' : ''}`}
+          >
+            {getTotalItems()}
+          </span>
+        )}
+      </button>
 
       {/* Dropdown Menu */}
       {isOpen && isAuthenticated && (
