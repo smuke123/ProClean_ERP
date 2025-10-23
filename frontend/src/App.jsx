@@ -24,12 +24,7 @@ const AppContent = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {!isLoginPage && (
-        <>
-          <Header />
-          <hr className="border-gray-100 fixed top-[64px] left-0 right-0 z-40" />
-        </>
-      )}
+      {!isLoginPage && <Header />}
       
       <main className={`container mx-auto px-4 py-8 ${!isLoginPage ? 'pt-[80px]' : ''}`}>
         <Routes>
