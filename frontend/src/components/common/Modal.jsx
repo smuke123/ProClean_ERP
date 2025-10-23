@@ -45,17 +45,22 @@ const Modal = ({ isModalOpen, handleClose, data }) => {
 
   return (
     <div 
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"
+      className="fixed inset-0 flex items-center justify-center p-4"
       style={{ 
         zIndex: 99999, 
         position: 'fixed',
         top: 0,
         left: 0,
         right: 0,
-        bottom: 0
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.75)'
       }}
+      onClick={handleClose}
     >
-      <div className="bg-white rounded-lg w-full max-w-4xl relative overflow-hidden max-h-[90vh] overflow-y-auto">
+      <div 
+        className="bg-white rounded-2xl w-full max-w-3xl relative overflow-hidden max-h-[85vh] overflow-y-auto shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
         <button
           className="absolute top-4 right-4 z-10 bg-white rounded-full p-2 hover:bg-gray-100"
           onClick={handleClose}
