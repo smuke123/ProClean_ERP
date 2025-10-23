@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth.js';
 import { useCart } from '../../../contexts/CartContext.jsx';
 import { MdOutlineShoppingBag } from 'react-icons/md';
+import { DataView } from 'primereact/dataview';
+import { Button } from 'primereact/button';
 
 const CartDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -66,6 +68,67 @@ const CartDropdown = () => {
     setIsOpen(!isOpen);
   };
 
+  // Template para cada item del carrito usando DataView
+  const itemTemplate = (item) => {
+    const itemId = item.id_producto || item.id;
+    const itemPrice = parseFloat(item.precio);
+    const itemTotal = itemPrice * item.quantity;
+
+    return (
+      <div className="flex gap-3 p-3 border-b border-gray-100">
+        {/* Imagen del producto */}
+        <div className="flex-shrink-0 w-16 h-16 bg-gray-100 rounded overflow-hidden">
+          <img
+            src={item.imagen || '/images/Detergente.webp'}
+            alt={item.nombre}
+            className="w-full h-full object-contain"
+          />
+        </div>
+
+        {/* Información del producto */}
+        <div className="flex-1 min-w-0">
+          <div className="flex justify-between items-start mb-1">
+            <h4 className="text-sm font-medium text-gray-800 truncate pr-2">
+              {item.nombre}
+            </h4>
+            <Button
+              icon="pi pi-times"
+              onClick={() => removeFromCart(itemId)}
+              className="p-button-text p-button-danger p-button-sm"
+              style={{ minWidth: '2rem', height: '2rem' }}
+              tooltip="Eliminar"
+              tooltipOptions={{ position: 'top' }}
+            />
+          </div>
+
+          {/* Controles de cantidad y precio */}
+          <div className="flex items-center justify-between mt-2">
+            <div className="flex items-center gap-1">
+              <Button
+                icon="pi pi-minus"
+                onClick={() => updateQuantity(itemId, item.quantity - 1)}
+                className="p-button-outlined p-button-sm"
+                style={{ width: '1.75rem', height: '1.75rem', padding: 0 }}
+              />
+              <span className="text-sm font-medium px-2 min-w-[2rem] text-center">
+                {item.quantity}
+              </span>
+              <Button
+                icon="pi pi-plus"
+                onClick={() => updateQuantity(itemId, item.quantity + 1)}
+                className="p-button-outlined p-button-sm"
+                style={{ width: '1.75rem', height: '1.75rem', padding: 0 }}
+              />
+            </div>
+            <span className="text-sm font-semibold text-gray-800">
+              ${itemTotal.toLocaleString()}
+            </span>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="relative" ref={dropdownRef}>
       {/* Botón de Carrito */}
@@ -87,64 +150,31 @@ const CartDropdown = () => {
 
       {/* Dropdown Menu */}
       {isOpen && isAuthenticated && (
-        <div className={`absolute ${dropdownPosition} mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 z-50 max-h-96 flex flex-col`}>
+        <div 
+          className={`absolute ${dropdownPosition} mt-2 w-96 bg-white rounded-lg shadow-xl border border-gray-200 z-50 max-h-[500px] flex flex-col`}
+          style={{ backgroundColor: '#ffffff', opacity: 1 }}
+        >
           {/* Header */}
-          <div className="px-4 py-3 border-b border-gray-100">
+          <div className="px-4 py-3 border-b border-gray-100 bg-white">
             <h3 className="text-lg font-semibold text-gray-800">
               Carrito ({getTotalItems()} {getTotalItems() === 1 ? 'producto' : 'productos'})
             </h3>
           </div>
 
-          {/* Items del carrito */}
-          <div className="flex-1 overflow-y-auto">
+          {/* Items del carrito con DataView */}
+          <div className="flex-1 overflow-y-auto bg-white">
             {cartItems.length === 0 ? (
               <div className="px-4 py-8 text-center text-gray-500">
+                <i className="pi pi-shopping-cart text-4xl mb-3 block text-gray-300"></i>
                 <p>Tu carrito está vacío</p>
               </div>
             ) : (
-              <div className="divide-y divide-gray-100">
-                {cartItems.map((item) => {
-                  const itemId = item.id_producto || item.id;
-                  return (
-                    <div key={itemId} className="px-4 py-3">
-                      <div className="flex justify-between items-start mb-2">
-                        <h4 className="text-sm font-medium text-gray-800 flex-1">
-                          {item.nombre}
-                        </h4>
-                        <button
-                          onClick={() => removeFromCart(itemId)}
-                          className="text-red-500 hover:text-red-700 text-xs ml-2"
-                          title="Eliminar"
-                        >
-                          ✕
-                        </button>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={() => updateQuantity(itemId, item.quantity - 1)}
-                            className="w-6 h-6 rounded bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-sm"
-                          >
-                            −
-                          </button>
-                          <span className="text-sm font-medium w-8 text-center">
-                            {item.quantity}
-                          </span>
-                          <button
-                            onClick={() => updateQuantity(itemId, item.quantity + 1)}
-                            className="w-6 h-6 rounded bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-sm"
-                          >
-                            +
-                          </button>
-                        </div>
-                        <span className="text-sm font-semibold text-gray-800">
-                          ${(parseFloat(item.precio) * item.quantity).toLocaleString()}
-                        </span>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+              <DataView
+                value={cartItems}
+                itemTemplate={itemTemplate}
+                layout="list"
+                className="cart-dataview"
+              />
             )}
           </div>
 
@@ -157,15 +187,16 @@ const CartDropdown = () => {
                   ${getTotalPrice().toLocaleString()}
                 </span>
               </div>
-              <button
+              <Button
+                label="Ver Carrito Completo"
+                icon="pi pi-shopping-cart"
                 onClick={() => {
                   setIsOpen(false);
                   navigate('/cart');
                 }}
-                className="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800 transition-colors font-medium text-sm"
-              >
-                Ver Carrito Completo
-              </button>
+                className="w-full p-button-dark"
+                style={{ backgroundColor: '#000', borderColor: '#000' }}
+              />
             </div>
           )}
         </div>

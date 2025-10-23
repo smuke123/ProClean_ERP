@@ -70,7 +70,10 @@ const UserDropdown = () => {
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className={`absolute ${dropdownPosition} mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50`}>
+        <div 
+          className={`absolute ${dropdownPosition} mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50`}
+          style={{ backgroundColor: '#ffffff', opacity: 1 }}
+        >
           {isAuthenticated ? (
             <>
               {/* Información del usuario */}
