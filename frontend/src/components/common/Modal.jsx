@@ -58,28 +58,28 @@ const Modal = ({ isModalOpen, handleClose, data }) => {
       onClick={handleClose}
     >
       <div 
-        className="bg-white rounded-2xl w-full max-w-3xl relative overflow-hidden max-h-[85vh] overflow-y-auto shadow-2xl"
+        className="bg-white rounded-2xl w-full max-w-xl mx-4 relative overflow-hidden max-h-[90vh] overflow-y-auto shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <button
-          className="absolute top-4 right-4 z-10 bg-white rounded-full p-2 hover:bg-gray-100"
+          className="absolute top-4 right-4 z-10 bg-white rounded-full p-2 hover:bg-gray-100 shadow-md"
           onClick={handleClose}
         >
           <FaTimes className="text-xl" />
         </button>
 
-        <div className="flex flex-col md:flex-row">
-          {/* Imagen del producto */}
-          <div className="md:w-1/2 bg-gray-50 p-8 flex items-center justify-center">
+        <div className="flex flex-col p-6">
+          {/* Imagen del producto - Centrada y pequeña */}
+          <div className="flex items-center justify-center bg-gray-50 rounded-lg p-6 mb-6">
             <img
               src={data.imagen || '/images/Detergente.webp'}
               alt={data.nombre}
-              className="w-full h-auto object-contain max-h-96"
+              className="w-auto h-48 object-contain"
             />
           </div>
 
           {/* Información del producto */}
-          <div className="md:w-1/2 p-8">
+          <div>
             <div className="mb-4">
               <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">
                 {data.marca}
