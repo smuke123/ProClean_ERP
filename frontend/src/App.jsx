@@ -27,11 +27,11 @@ const AppContent = () => {
       {!isLoginPage && (
         <>
           <Header />
-          <hr className="border-gray-100" />
+          <hr className="border-gray-100 fixed top-[64px] left-0 right-0 z-40" />
         </>
       )}
       
-      <main className="container mx-auto px-4 py-8">
+      <main className={`container mx-auto px-4 py-8 ${!isLoginPage ? 'pt-[80px]' : ''}`}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/categories" element={<Categories />} />

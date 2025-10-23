@@ -7,7 +7,7 @@ const Header = () => {
   const { isAdmin } = useAuth();
 
   return (
-    <header className="header sticky top-0 z-50 bg-white shadow-md overflow-visible" style={{ height: '64px' }}>
+    <header className="header fixed top-0 left-0 right-0 z-50 bg-white shadow-md overflow-visible" style={{ height: '64px' }}>
       <div className="flex items-center w-10/12 m-auto relative flex-nowrap" style={{ height: '64px' }}>
         {/* Izquierda: Home, Categories, Contact */}
         <nav className="flex items-center text-base">

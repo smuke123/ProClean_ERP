@@ -1,4 +1,8 @@
 import { useState, useEffect } from "react";
+import { Button } from 'primereact/button';
+import { Dropdown } from 'primereact/dropdown';
+import { InputNumber } from 'primereact/inputnumber';
+import { Card } from 'primereact/card';
 import SelectSucursal from "../components/SelectSucursal.jsx";
 import { getProductos } from "../utils/api.js";
 
@@ -150,126 +154,263 @@ export default function Gestion() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-2rem)] p-4 md:p-6">
-      <div className="mx-auto max-w-5xl bg-white rounded-xl shadow p-5 md:p-8 grid gap-5">
+    <div className="px-4 md:px-6 lg:px-8 py-6 max-w-[1600px] mx-auto">
+      <div className="grid gap-8">
         <h2 className="text-2xl font-semibold">Gestión Administrador</h2>
       
-      <div className="flex items-center gap-3">
-        <b>Tipo de Transacción:</b>
-        <select className="border rounded px-2 py-1" value={tipoFormulario} onChange={(e) => setTipoFormulario(e.target.value)}>
-          <option value="compras">Compras</option>
-          <option value="ventas">Ventas</option>
-        </select>
+      {/* Selector de Tipo de Transacción */}
+      <div className="bg-white rounded-lg shadow p-4">
+        <div className="flex flex-col md:flex-row md:items-end gap-3">
+          <div className="flex-1">
+            <label className="block text-sm text-gray-600 mb-2 font-semibold">Tipo de Transacción</label>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                className={`px-4 py-2 rounded-lg border font-semibold transition-all ${
+                  tipoFormulario === 'compras' 
+                    ? 'bg-emerald-600 text-white border-emerald-600 shadow-md' 
+                    : 'bg-white text-gray-800 border-gray-300 hover:bg-gray-50'
+                }`}
+                onClick={() => setTipoFormulario('compras')}
+              >
+                <i className="pi pi-inbox mr-2"></i>
+                Compras
+              </button>
+              <button
+                type="button"
+                className={`px-4 py-2 rounded-lg border font-semibold transition-all ${
+                  tipoFormulario === 'ventas' 
+                    ? 'bg-blue-600 text-white border-blue-600 shadow-md' 
+                    : 'bg-white text-gray-800 border-gray-300 hover:bg-gray-50'
+                }`}
+                onClick={() => setTipoFormulario('ventas')}
+              >
+                <i className="pi pi-shopping-cart mr-2"></i>
+                Ventas
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
       {tipoFormulario === "compras" ? (
-        <form onSubmit={handleComprar} className="grid gap-3 max-w-[600px] p-5 rounded-lg bg-gray-50">
-          <h3 className="text-xl font-semibold">Formulario de Compras</h3>
-          
-          <div className="flex flex-col gap-1">
-            <label className="text-sm text-gray-600">Sucursal:</label>
-            <SelectSucursal value={sucursal} onChange={setSucursal} />
-          </div>
-          
-          <div>
-            <h4 className="font-medium mb-2">Productos a Comprar</h4>
-            {itemsCompra.map((item, index) => (
-              <div key={index} className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_auto] gap-2 items-center mb-3 p-3 bg-white rounded">
-                <select 
-                  value={item.id_producto} 
-                  onChange={(e) => updateItemCompra(index, "id_producto", e.target.value)}
-                  className="border rounded px-2 py-1 w-full"
-                >
-                  <option value="">Seleccionar producto</option>
-                  {productos.map((p) => (
-                    <option key={p.id_producto} value={p.id_producto}>
-                      {p.nombre} - ${p.precio}
-                    </option>
-                  ))}
-                </select>
-                
-                <input 
-                  type="number" 
-                  value={item.cantidad} 
-                  onChange={(e) => updateItemCompra(index, "cantidad", parseInt(e.target.value) || 0)}
-                  min="1"
-                  placeholder="Cantidad"
-                  className="border rounded px-2 py-1 w-full"
-                />
-                
-                <span className="text-sm font-medium">${item.precio_unitario}</span>
-                
-                <button 
-                  type="button" 
-                  onClick={() => removeItemCompra(index)}
-                  className="px-3 py-2 rounded bg-red-600 text-white hover:bg-red-700 transition-colors w-full md:w-auto"
-                >
-                  Eliminar
-                </button>
-              </div>
-            ))}
+        <Card className="shadow-lg">
+          <form onSubmit={handleComprar} className="grid gap-6">
+            <div className="flex items-center gap-3">
+              <i className="pi pi-inbox text-3xl text-emerald-600"></i>
+              <h3 className="text-xl font-semibold">Formulario de Compras</h3>
+            </div>
             
-            <button type="button" onClick={addItemCompra} className="px-3 py-2 rounded bg-gray-600 text-white w-fit">+ Añadir Producto</button>
-          </div>
-          
-          <div className="font-bold text-base">Total: ${itemsCompra.reduce((sum, item) => sum + (item.cantidad * item.precio_unitario), 0).toLocaleString()}</div>
-          
-          <button type="submit" className="px-4 py-2 rounded bg-blue-600 text-white">Registrar Compra</button>
-        </form>
+            <div className="flex flex-col gap-2">
+              <label className="text-sm text-gray-600 font-semibold">Sucursal:</label>
+              <SelectSucursal value={sucursal} onChange={setSucursal} />
+            </div>
+            
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <h4 className="font-semibold text-lg">Productos a Comprar</h4>
+                <Button 
+                  type="button" 
+                  label="Añadir Producto" 
+                  icon="pi pi-plus" 
+                  onClick={addItemCompra}
+                  severity="success"
+                  outlined
+                />
+              </div>
+              
+              {itemsCompra.length === 0 ? (
+                <div className="text-center py-8 text-gray-500 bg-gray-50 rounded-lg">
+                  <i className="pi pi-inbox text-4xl mb-2 block"></i>
+                  <p>No hay productos agregados. Haz clic en "Añadir Producto" para comenzar.</p>
+                </div>
+              ) : (
+                <div className="grid gap-3">
+                  {itemsCompra.map((item, index) => (
+                    <div key={index} className="grid grid-cols-1 md:grid-cols-[2fr_120px_100px_auto] gap-3 items-end p-4 bg-gray-50 rounded-lg border border-gray-200">
+                      <div className="flex flex-col gap-2">
+                        <label className="text-xs text-gray-600 font-semibold">Producto</label>
+                        <Dropdown 
+                          value={item.id_producto} 
+                          onChange={(e) => updateItemCompra(index, "id_producto", e.value)}
+                          options={productos.map(p => ({ 
+                            label: `${p.nombre} - $${p.precio}`, 
+                            value: p.id_producto 
+                          }))}
+                          placeholder="Seleccionar producto"
+                          className="w-full"
+                          filter
+                        />
+                      </div>
+                      
+                      <div className="flex flex-col gap-2">
+                        <label className="text-xs text-gray-600 font-semibold">Cantidad</label>
+                        <InputNumber 
+                          value={item.cantidad} 
+                          onValueChange={(e) => updateItemCompra(index, "cantidad", e.value || 0)}
+                          min={1}
+                          showButtons
+                          buttonLayout="horizontal"
+                          decrementButtonClassName="p-button-danger"
+                          incrementButtonClassName="p-button-success"
+                          incrementButtonIcon="pi pi-plus"
+                          decrementButtonIcon="pi pi-minus"
+                          className="w-full"
+                        />
+                      </div>
+                      
+                      <div className="flex flex-col gap-2">
+                        <label className="text-xs text-gray-600 font-semibold">Precio Unit.</label>
+                        <div className="h-[42px] flex items-center px-3 bg-white rounded border border-gray-300">
+                          <span className="text-sm font-semibold">${item.precio_unitario}</span>
+                        </div>
+                      </div>
+                      
+                      <Button 
+                        type="button" 
+                        icon="pi pi-trash" 
+                        onClick={() => removeItemCompra(index)}
+                        severity="danger"
+                        outlined
+                        tooltip="Eliminar"
+                        tooltipOptions={{ position: 'top' }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            
+            {itemsCompra.length > 0 && (
+              <>
+                <div className="flex justify-end items-center gap-3 pt-4 border-t border-gray-200">
+                  <span className="text-lg font-semibold text-gray-700">Total:</span>
+                  <span className="text-2xl font-bold text-emerald-600">
+                    ${itemsCompra.reduce((sum, item) => sum + (item.cantidad * item.precio_unitario), 0).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  </span>
+                </div>
+                
+                <Button 
+                  type="submit" 
+                  label="Registrar Compra" 
+                  icon="pi pi-check" 
+                  severity="success"
+                  size="large"
+                  className="w-full md:w-auto"
+                />
+              </>
+            )}
+          </form>
+        </Card>
       ) : (
-        <form onSubmit={handleVender} className="grid gap-3 max-w-[600px] p-5 rounded-lg bg-gray-50">
-          <h3 className="text-xl font-semibold">Formulario de Ventas</h3>
-          
-          <div className="flex flex-col gap-1">
-            <label className="text-sm text-gray-600">Sucursal:</label>
-            <SelectSucursal value={sucursal} onChange={setSucursal} />
-          </div>
-          
-          <div>
-            <h4 className="font-medium mb-2">Productos a Vender</h4>
-            {itemsVenta.map((item, index) => (
-              <div key={index} className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_auto] gap-2 items-center mb-3 p-3 bg-white rounded">
-                <select 
-                  value={item.id_producto} 
-                  onChange={(e) => updateItemVenta(index, "id_producto", e.target.value)}
-                  className="border rounded px-2 py-1 w-full"
-                >
-                  <option value="">Seleccionar producto</option>
-                  {productos.map((p) => (
-                    <option key={p.id_producto} value={p.id_producto}>
-                      {p.nombre} - ${p.precio}
-                    </option>
-                  ))}
-                </select>
-                
-                <input 
-                  type="number" 
-                  value={item.cantidad} 
-                  onChange={(e) => updateItemVenta(index, "cantidad", parseInt(e.target.value) || 0)}
-                  min="1"
-                  placeholder="Cantidad"
-                  className="border rounded px-2 py-1 w-full"
-                />
-                
-                <span className="text-sm font-medium">${item.precio_unitario}</span>
-                
-                <button 
-                  type="button" 
-                  onClick={() => removeItemVenta(index)}
-                  className="px-3 py-2 rounded bg-red-600 text-white hover:bg-red-700 transition-colors w-full md:w-auto"
-                >
-                  Eliminar
-                </button>
-              </div>
-            ))}
+        <Card className="shadow-lg">
+          <form onSubmit={handleVender} className="grid gap-6">
+            <div className="flex items-center gap-3">
+              <i className="pi pi-shopping-cart text-3xl text-blue-600"></i>
+              <h3 className="text-xl font-semibold">Formulario de Ventas</h3>
+            </div>
             
-            <button type="button" onClick={addItemVenta} className="px-3 py-2 rounded bg-gray-600 text-white w-fit">+ Añadir Producto</button>
-          </div>
-          
-          <div className="font-bold text-base">Total: ${itemsVenta.reduce((sum, item) => sum + (item.cantidad * item.precio_unitario), 0).toLocaleString()}</div>
-          
-          <button type="submit" className="px-4 py-2 rounded bg-green-600 text-white">Registrar Venta</button>
-        </form>
+            <div className="flex flex-col gap-2">
+              <label className="text-sm text-gray-600 font-semibold">Sucursal:</label>
+              <SelectSucursal value={sucursal} onChange={setSucursal} />
+            </div>
+            
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <h4 className="font-semibold text-lg">Productos a Vender</h4>
+                <Button 
+                  type="button" 
+                  label="Añadir Producto" 
+                  icon="pi pi-plus" 
+                  onClick={addItemVenta}
+                  severity="info"
+                  outlined
+                />
+              </div>
+              
+              {itemsVenta.length === 0 ? (
+                <div className="text-center py-8 text-gray-500 bg-gray-50 rounded-lg">
+                  <i className="pi pi-shopping-cart text-4xl mb-2 block"></i>
+                  <p>No hay productos agregados. Haz clic en "Añadir Producto" para comenzar.</p>
+                </div>
+              ) : (
+                <div className="grid gap-3">
+                  {itemsVenta.map((item, index) => (
+                    <div key={index} className="grid grid-cols-1 md:grid-cols-[2fr_120px_100px_auto] gap-3 items-end p-4 bg-gray-50 rounded-lg border border-gray-200">
+                      <div className="flex flex-col gap-2">
+                        <label className="text-xs text-gray-600 font-semibold">Producto</label>
+                        <Dropdown 
+                          value={item.id_producto} 
+                          onChange={(e) => updateItemVenta(index, "id_producto", e.value)}
+                          options={productos.map(p => ({ 
+                            label: `${p.nombre} - $${p.precio}`, 
+                            value: p.id_producto 
+                          }))}
+                          placeholder="Seleccionar producto"
+                          className="w-full"
+                          filter
+                        />
+                      </div>
+                      
+                      <div className="flex flex-col gap-2">
+                        <label className="text-xs text-gray-600 font-semibold">Cantidad</label>
+                        <InputNumber 
+                          value={item.cantidad} 
+                          onValueChange={(e) => updateItemVenta(index, "cantidad", e.value || 0)}
+                          min={1}
+                          showButtons
+                          buttonLayout="horizontal"
+                          decrementButtonClassName="p-button-danger"
+                          incrementButtonClassName="p-button-success"
+                          incrementButtonIcon="pi pi-plus"
+                          decrementButtonIcon="pi pi-minus"
+                          className="w-full"
+                        />
+                      </div>
+                      
+                      <div className="flex flex-col gap-2">
+                        <label className="text-xs text-gray-600 font-semibold">Precio Unit.</label>
+                        <div className="h-[42px] flex items-center px-3 bg-white rounded border border-gray-300">
+                          <span className="text-sm font-semibold">${item.precio_unitario}</span>
+                        </div>
+                      </div>
+                      
+                      <Button 
+                        type="button" 
+                        icon="pi pi-trash" 
+                        onClick={() => removeItemVenta(index)}
+                        severity="danger"
+                        outlined
+                        tooltip="Eliminar"
+                        tooltipOptions={{ position: 'top' }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            
+            {itemsVenta.length > 0 && (
+              <>
+                <div className="flex justify-end items-center gap-3 pt-4 border-t border-gray-200">
+                  <span className="text-lg font-semibold text-gray-700">Total:</span>
+                  <span className="text-2xl font-bold text-blue-600">
+                    ${itemsVenta.reduce((sum, item) => sum + (item.cantidad * item.precio_unitario), 0).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  </span>
+                </div>
+                
+                <Button 
+                  type="submit" 
+                  label="Registrar Venta" 
+                  icon="pi pi-check" 
+                  severity="info"
+                  size="large"
+                  className="w-full md:w-auto"
+                />
+              </>
+            )}
+          </form>
+        </Card>
       )}
       </div>
     </div>

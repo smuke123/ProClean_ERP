@@ -293,7 +293,7 @@ export default function Informes() {
         <h4 className="m-0 text-lg font-semibold">
           {tipoTransaccion === 'ventas' ? 'Ventas' : 'Compras'} - {rows.length} registros
         </h4>
-        <div className="flex gap-2">
+        <div className="flex gap-3">
           <Button 
             type="button" 
             icon="pi pi-filter-slash" 
@@ -497,7 +497,7 @@ export default function Informes() {
 
   return (
     <div className="px-4 md:px-6 lg:px-8 py-6 max-w-[1600px] mx-auto">
-      <div className="grid gap-4">
+      <div className="grid gap-8">
         <h2 className="text-2xl font-semibold">Informes y Analytics</h2>
 
       {/* Filtros Globales */}
@@ -661,8 +661,10 @@ export default function Informes() {
       </div>
 
       {/* KPIs Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-        <Card className="bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg">
+      <div className="mt-8">
+        <h3 className="text-xl font-semibold mb-6">Información general</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Card className="bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-blue-100 text-sm mb-1">Total {tipoTransaccion === 'ventas' ? 'Ventas' : 'Compras'}</p>
@@ -708,12 +710,13 @@ export default function Informes() {
             <i className="pi pi-clock text-5xl opacity-30"></i>
           </div>
         </Card>
+        </div>
       </div>
 
       {/* Gráficos y Análisis Visual */}
-      <div className="mt-6">
-        <h3 className="text-xl font-semibold mb-4">📊 Análisis Visual</h3>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="mt-8">
+        <h3 className="text-xl font-semibold mb-6">Análisis Visual</h3>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Tendencia Mensual */}
           <Card title="Tendencia Mensual" className="shadow-lg">
             <div style={{ height: '300px' }}>

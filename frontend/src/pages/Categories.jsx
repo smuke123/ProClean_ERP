@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { getProductos } from '../utils/api.js';
-import { IoMdSearch } from 'react-icons/io';
 import { BiCart } from 'react-icons/bi';
 import Modal from '../components/common/Modal.jsx';
 
@@ -21,6 +20,7 @@ export default function Categories() {
   const handleCloseModal = () => {
     setIsModalOpen(null);
   };
+
 
   useEffect(() => {
     loadProducts();
@@ -198,24 +198,13 @@ export default function Categories() {
                           />
                         </div>
 
-                        <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-0 right-0 m-4">
-                          <div>
-                            <button 
-                              className="bg-white p-4 rounded-full hover:bg-gray-100 transition-colors shadow-lg"
-                              onClick={() => handleOpenModal(product.id_producto)}
-                              title="Ver detalles"
-                            >
-                              <IoMdSearch className="text-xl" />
-                            </button>
-                          </div>
-                        </div>
-
-                        <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute -bottom-3 right-0 bg-white p-4 rounded-s-2xl shadow-lg">
+                        {/* Botón Agregar al Carrito - Siempre visible */}
+                        <div className="absolute -bottom-3 right-0 bg-white p-4 rounded-s-2xl shadow-lg transition-transform duration-300 group-hover:scale-110">
                           <div className="bg-black text-white h-10 w-10 grid place-items-center rounded-3xl hover:bg-gray-800 transition-colors">
                             <button
                               className="text-2xl w-full h-full flex items-center justify-center"
                               onClick={() => handleOpenModal(product.id_producto)}
-                              title="Agregar al carrito"
+                              title="Ver detalles y agregar al carrito"
                             >
                               <BiCart />
                             </button>
