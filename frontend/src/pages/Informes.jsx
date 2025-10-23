@@ -558,8 +558,110 @@ export default function Informes() {
         </div>
       </div>
 
+      {/* DataTable - Datos Detallados */}
+      <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="overflow-x-auto">
+          <DataTable 
+            ref={dt}
+            value={rows} 
+            paginator 
+            rows={20} 
+            rowsPerPageOptions={[10, 20, 50, 100]}
+            dataKey="id"
+            filters={filters} 
+            filterDisplay="menu"
+            loading={loading}
+            globalFilterFields={['id', 'fecha', 'productos', 'estado']}
+            header={renderHeader()}
+            emptyMessage="No se encontraron registros."
+            expandedRows={expandedRows}
+            onRowToggle={(e) => setExpandedRows(e.data)}
+            onRowExpand={onRowExpand}
+            onRowCollapse={onRowCollapse}
+            rowExpansionTemplate={rowExpansionTemplate}
+            className="text-sm"
+            stripedRows
+            removableSort
+            scrollable
+            scrollHeight="600px"
+          >
+          <Column expander={true} style={{ width: '5rem' }} frozen />
+          
+          <Column 
+            field="id" 
+            header="ID" 
+            sortable 
+            filter 
+            filterPlaceholder="Buscar por ID"
+            style={{ minWidth: '120px', width: '120px' }}
+            body={idBodyTemplate}
+            frozen
+          />
+          
+          <Column 
+            field="fechaDate" 
+            header="Fecha" 
+            sortable 
+            filter 
+            filterElement={fechaFilterTemplate}
+            dataType="date"
+            style={{ minWidth: '160px', width: '160px' }}
+            body={fechaBodyTemplate}
+          />
+
+          <Column 
+            field={tipoTransaccion === 'ventas' ? 'cliente' : 'proveedor'}
+            header={tipoTransaccion === 'ventas' ? 'Cliente' : 'Proveedor'}
+            sortable 
+            filter 
+            filterPlaceholder="Buscar..."
+            style={{ minWidth: '200px', width: '200px' }}
+            body={clienteProveedorBodyTemplate}
+          />
+
+          <Column 
+            field="sucursal" 
+            header="Sucursal" 
+            sortable 
+            filter 
+            filterPlaceholder="Buscar sucursal"
+            style={{ minWidth: '170px', width: '170px' }}
+            body={sucursalBodyTemplate}
+          />
+
+          <Column 
+            field="productos" 
+            header="Productos" 
+            style={{ minWidth: '250px', width: '250px' }}
+            body={productosBodyTemplate}
+          />
+
+          <Column 
+            field="totalNumeric" 
+            header="Total" 
+            sortable 
+            filter 
+            filterElement={totalFilterTemplate}
+            dataType="numeric"
+            style={{ minWidth: '150px', width: '150px' }}
+            body={totalBodyTemplate}
+          />
+
+          <Column 
+            field="estado" 
+            header="Estado" 
+            sortable 
+            filter 
+            filterElement={estadoFilterTemplate}
+            style={{ minWidth: '150px', width: '150px' }}
+            body={estadoBodyTemplate}
+          />
+          </DataTable>
+        </div>
+      </div>
+
       {/* KPIs Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
         <Card className="bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg">
           <div className="flex items-center justify-between">
             <div>
@@ -608,112 +710,10 @@ export default function Informes() {
         </Card>
       </div>
 
-      {/* DataTable - Datos Detallados */}
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="overflow-x-auto">
-          <DataTable 
-            ref={dt}
-            value={rows} 
-            paginator 
-            rows={20} 
-            rowsPerPageOptions={[10, 20, 50, 100]}
-            dataKey="id"
-            filters={filters} 
-            filterDisplay="menu"
-            loading={loading}
-            globalFilterFields={['id', 'fecha', 'productos', 'estado']}
-            header={renderHeader()}
-            emptyMessage="No se encontraron registros."
-            expandedRows={expandedRows}
-            onRowToggle={(e) => setExpandedRows(e.data)}
-            onRowExpand={onRowExpand}
-            onRowCollapse={onRowCollapse}
-            rowExpansionTemplate={rowExpansionTemplate}
-            className="text-sm"
-            stripedRows
-            removableSort
-            scrollable
-            scrollHeight="600px"
-          >
-          <Column expander={true} style={{ width: '3.5rem' }} frozen />
-          
-          <Column 
-            field="id" 
-            header="ID" 
-            sortable 
-            filter 
-            filterPlaceholder="Buscar por ID"
-            style={{ minWidth: '100px', width: '100px' }}
-            body={idBodyTemplate}
-            frozen
-          />
-          
-          <Column 
-            field="fechaDate" 
-            header="Fecha" 
-            sortable 
-            filter 
-            filterElement={fechaFilterTemplate}
-            dataType="date"
-            style={{ minWidth: '140px', width: '140px' }}
-            body={fechaBodyTemplate}
-          />
-
-          <Column 
-            field={tipoTransaccion === 'ventas' ? 'cliente' : 'proveedor'}
-            header={tipoTransaccion === 'ventas' ? 'Cliente' : 'Proveedor'}
-            sortable 
-            filter 
-            filterPlaceholder="Buscar..."
-            style={{ minWidth: '180px', width: '180px' }}
-            body={clienteProveedorBodyTemplate}
-          />
-
-          <Column 
-            field="sucursal" 
-            header="Sucursal" 
-            sortable 
-            filter 
-            filterPlaceholder="Buscar sucursal"
-            style={{ minWidth: '150px', width: '150px' }}
-            body={sucursalBodyTemplate}
-          />
-
-          <Column 
-            field="productos" 
-            header="Productos" 
-            style={{ minWidth: '250px', width: '250px' }}
-            body={productosBodyTemplate}
-          />
-
-          <Column 
-            field="totalNumeric" 
-            header="Total" 
-            sortable 
-            filter 
-            filterElement={totalFilterTemplate}
-            dataType="numeric"
-            style={{ minWidth: '130px', width: '130px' }}
-            body={totalBodyTemplate}
-          />
-
-          <Column 
-            field="estado" 
-            header="Estado" 
-            sortable 
-            filter 
-            filterElement={estadoFilterTemplate}
-            style={{ minWidth: '130px', width: '130px' }}
-            body={estadoBodyTemplate}
-          />
-          </DataTable>
-        </div>
-      </div>
-
       {/* Gráficos y Análisis Visual */}
       <div className="mt-6">
         <h3 className="text-xl font-semibold mb-4">📊 Análisis Visual</h3>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Tendencia Mensual */}
           <Card title="Tendencia Mensual" className="shadow-lg">
             <div style={{ height: '300px' }}>

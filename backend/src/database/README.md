@@ -47,23 +47,3 @@ mysql -u usuario -p proclean_erp < data.sql
 ### Cliente
 - **Cliente**: `cliente@proclean.com` / `cliente123`
 
-## Estructura de la base de datos
-
-### Tablas principales
-- **Sucursales**: Información de las sucursales
-- **Usuarios**: Usuarios del sistema (admin/cliente)
-- **Proveedores**: Proveedores de productos
-- **Productos**: Catálogo de productos
-- **Inventario**: Stock por sucursal
-- **Compras**: Registro de compras
-- **Detalle_Compras**: Items de cada compra
-- **Pedidos**: Órdenes de venta
-- **Detalle_Pedidos**: Items de cada pedido
-
-### Relaciones
-- Usuarios → Sucursales (opcional)
-- Inventario → Sucursales + Productos
-- Compras → Proveedores + Sucursales
-- Detalle_Compras → Compras + Productos
-- Pedidos → Usuarios + Sucursales
-- Detalle_Pedidos → Pedidos + Productos
