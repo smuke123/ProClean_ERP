@@ -185,33 +185,29 @@ export default function Categories() {
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-3 gap-4">
                 {filteredProducts.map((product, index) => (
-                  <div key={index}>
-                    <div className="relative ml-4">
-                      <div className="image-container relative group rounded-3xl">
-                        <div className="rounded-3xl h-72 flex items-center justify-center bg-gray-50 overflow-hidden">
-                          <img
-                            src={product.imagen || '/images/Detergente.webp'}
-                            alt={product.nombre}
-                            className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
-                          />
-                        </div>
+                  <div key={index} className="relative group">
+                    <div className="relative rounded-3xl h-72 flex items-center justify-center bg-gray-50 overflow-hidden">
+                      <img
+                        src={product.imagen || '/images/Detergente.webp'}
+                        alt={product.nombre}
+                        className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
+                      />
+                      
+                      {/* Botón Agregar al Carrito */}
+                      <button
+                        className="absolute bottom-3 right-3 bg-black text-white h-14 w-14 rounded-full flex items-center justify-center hover:bg-gray-800 transition-all duration-200 hover:scale-110 shadow-2xl"
+                        onClick={() => handleOpenModal(product.id_producto)}
+                        title="Ver detalles y agregar al carrito"
+                      >
+                        <BiCart className="text-3xl" />
+                      </button>
+                    </div>
 
-                        {/* Botón Agregar al Carrito - Siempre visible */}
-                        <button
-                          className="absolute bottom-4 right-4 bg-black text-white h-12 w-12 rounded-full flex items-center justify-center hover:bg-gray-800 transition-all duration-200 hover:scale-110 shadow-2xl z-20"
-                          onClick={() => handleOpenModal(product.id_producto)}
-                          title="Ver detalles y agregar al carrito"
-                        >
-                          <BiCart className="text-2xl" />
-                        </button>
-                      </div>
-
-                      <div className="product-details mt-2">
-                        <p className="mb-2 font-semibold">{product.nombre}</p>
-                        <p className="text-lg font-bold">${parseFloat(product.precio).toLocaleString()}</p>
-                      </div>
+                    <div className="mt-3">
+                      <p className="mb-2 font-semibold text-gray-800">{product.nombre}</p>
+                      <p className="text-lg font-bold text-black">${parseFloat(product.precio).toLocaleString()}</p>
                     </div>
                   </div>
                 ))}
