@@ -36,10 +36,15 @@ const Modal = ({ isModalOpen, handleClose, data }) => {
     setQty(newQty);
   };
 
-  if (!isModalOpen || !data) return null;
+  if (!isModalOpen || !data) {
+    console.log('Modal NO se muestra. isModalOpen:', isModalOpen, 'data:', data);
+    return null;
+  }
+
+  console.log('Modal SÍ se va a mostrar. data:', data);
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999] p-4">
       <div className="bg-white rounded-lg w-full max-w-4xl relative overflow-hidden max-h-[90vh] overflow-y-auto">
         <button
           className="absolute top-4 right-4 z-10 bg-white rounded-full p-2 hover:bg-gray-100"
