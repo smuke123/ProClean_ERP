@@ -1,13 +1,11 @@
 import { Route, Routes, useLocation } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext.jsx";
 import { CartProvider } from "./contexts/CartContext.jsx";
-import { UserSidebarProvider } from "./contexts/UserSidebarContext.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 // Layout Components
 import Header from "./components/layout/Header.jsx";
 import Footer from "./components/layout/Footer.jsx";
-import UserSidebar from "./components/features/auth/UserSidebar.jsx";
 
 // Pages
 import Home from "./pages/Home.jsx";
@@ -17,6 +15,7 @@ import Contact from "./pages/Contact.jsx";
 import Gestion from "./pages/Gestion.jsx";
 import Informes from "./pages/Informes.jsx";
 import Login from "./pages/Login.jsx";
+import Perfil from "./pages/Perfil.jsx";
 
 // Componente principal de la aplicación
 const AppContent = () => {
@@ -40,6 +39,14 @@ const AppContent = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
           <Route 
+            path="/perfil" 
+            element={
+              <ProtectedRoute>
+                <Perfil />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
             path="/informes" 
             element={
               <ProtectedRoute requireAdmin={true}>
@@ -59,9 +66,6 @@ const AppContent = () => {
       </main>
 
       {!isLoginPage && <Footer />}
-      
-      {/* Sidebars globales */}
-      <UserSidebar />
     </div>
   );
 };
@@ -71,9 +75,7 @@ export default function App() {
   return (
     <AuthProvider>
       <CartProvider>
-        <UserSidebarProvider>
-          <AppContent />
-        </UserSidebarProvider>
+        <AppContent />
       </CartProvider>
     </AuthProvider>
   );

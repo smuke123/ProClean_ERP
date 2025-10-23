@@ -1,4 +1,12 @@
-// Componente Sidebar base reutilizable con Tailwind
+/**
+ * Sidebar - Componente reutilizable para paneles laterales
+ * 
+ * @param {boolean} isOpen - Controla si el sidebar está visible
+ * @param {function} onClose - Función para cerrar el sidebar
+ * @param {string} title - Título del sidebar
+ * @param {node} children - Contenido del sidebar
+ * @param {string} width - Ancho del sidebar (clases Tailwind, default: 'w-96')
+ */
 const Sidebar = ({ 
   isOpen, 
   onClose, 
