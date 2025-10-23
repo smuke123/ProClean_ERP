@@ -15,6 +15,8 @@ export default function Categories() {
 
   const handleOpenModal = (productId) => {
     console.log('Abriendo modal para producto:', productId);
+    const producto = products.find((item) => item.id_producto === productId);
+    console.log('Producto encontrado:', producto);
     setIsModalOpen(productId);
   };
 
