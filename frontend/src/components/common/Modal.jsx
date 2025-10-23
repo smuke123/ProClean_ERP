@@ -59,6 +59,7 @@ const Modal = ({ isModalOpen, handleClose, data }) => {
     >
       <div 
         className="bg-white rounded-lg w-2/3 max-w-4xl relative shadow-2xl"
+        style={{ backgroundColor: '#ffffff', opacity: 1 }}
         onClick={(e) => e.stopPropagation()}
       >
         <button
