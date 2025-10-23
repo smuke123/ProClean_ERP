@@ -188,26 +188,24 @@ export default function Categories() {
               <div className="grid grid-cols-3 gap-3">
                 {filteredProducts.map((product, index) => (
                   <div key={index}>
-                    <div className="overflow-hidden relative ml-4">
-                      <div className="image-container relative group">
+                    <div className="relative ml-4">
+                      <div className="image-container relative group rounded-3xl">
                         <div className="rounded-3xl h-72 flex items-center justify-center bg-gray-50 overflow-hidden">
                           <img
                             src={product.imagen || '/images/Detergente.webp'}
                             alt={product.nombre}
-                            className="rounded-3xl w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
+                            className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
                           />
                         </div>
 
                         {/* Botón Agregar al Carrito - Siempre visible */}
-                        <div className="absolute bottom-2 right-2 z-10">
-                          <button
-                            className="bg-black text-white h-12 w-12 rounded-full flex items-center justify-center hover:bg-gray-800 transition-all duration-200 hover:scale-110 shadow-xl"
-                            onClick={() => handleOpenModal(product.id_producto)}
-                            title="Ver detalles y agregar al carrito"
-                          >
-                            <BiCart className="text-2xl" />
-                          </button>
-                        </div>
+                        <button
+                          className="absolute bottom-4 right-4 bg-black text-white h-12 w-12 rounded-full flex items-center justify-center hover:bg-gray-800 transition-all duration-200 hover:scale-110 shadow-2xl z-20"
+                          onClick={() => handleOpenModal(product.id_producto)}
+                          title="Ver detalles y agregar al carrito"
+                        >
+                          <BiCart className="text-2xl" />
+                        </button>
                       </div>
 
                       <div className="product-details mt-2">

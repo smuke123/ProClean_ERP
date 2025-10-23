@@ -20,7 +20,7 @@ const Header = () => {
   }, []);
 
   return (
-    <header className={`${sticky ? 'header py-4 sticky top-0 z-50 shadow-xl' : ''}`}>
+    <header className={`py-4 ${sticky ? 'header sticky top-0 z-50 shadow-xl' : ''}`}>
       <div className="flex items-center w-10/12 m-auto relative flex-nowrap" style={{ height: '64px' }}>
         {/* Izquierda: Home, Categories, Contact */}
         <nav className="flex items-center text-base">
