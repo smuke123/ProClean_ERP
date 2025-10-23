@@ -58,7 +58,7 @@ const Modal = ({ isModalOpen, handleClose, data }) => {
       onClick={handleClose}
     >
       <div 
-        className="bg-white rounded-2xl w-full max-w-xl mx-4 relative overflow-hidden max-h-[90vh] overflow-y-auto shadow-2xl"
+        className="bg-white rounded-lg w-2/3 max-w-4xl relative shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -68,60 +68,54 @@ const Modal = ({ isModalOpen, handleClose, data }) => {
           <FaTimes className="text-xl" />
         </button>
 
-        <div className="flex flex-col p-6">
-          {/* Imagen del producto - Centrada y pequeña */}
-          <div className="flex items-center justify-center bg-gray-50 rounded-lg p-6 mb-6">
+        <div className="flex flex-row p-6">
+          {/* Imagen del producto - Pequeña a la izquierda */}
+          <div className="flex items-center justify-center bg-gray-50 rounded-lg p-4 mr-6" style={{ minWidth: '200px', maxWidth: '200px' }}>
             <img
               src={data.imagen || '/images/Detergente.webp'}
               alt={data.nombre}
-              className="w-auto h-48 object-contain"
+              className="w-full h-auto object-contain"
+              style={{ maxHeight: '180px' }}
             />
           </div>
 
-          {/* Información del producto */}
-          <div>
-            <div className="mb-4">
+          {/* Información del producto - A la derecha */}
+          <div className="flex-1">
+            <div className="mb-2">
               <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">
                 {data.marca}
               </span>
             </div>
 
-            <h2 className="text-2xl font-bold mb-2">{data.nombre}</h2>
+            <h2 className="text-xl font-bold mb-2">{data.nombre}</h2>
             
-            {data.descripcion_corta && (
-              <p className="text-gray-600 mb-4">{data.descripcion_corta}</p>
-            )}
-
-            <p className="text-3xl font-bold text-red-600 mb-4">
+            <p className="text-2xl font-bold text-red-600 mb-3">
               ${parseFloat(data.precio).toLocaleString()}
             </p>
 
-            {data.descripcion && (
-              <div className="mb-6">
-                <h3 className="font-semibold mb-2">Descripción:</h3>
-                <p className="text-gray-700 text-sm">{data.descripcion}</p>
-              </div>
+            {data.descripcion_corta && (
+              <p className="text-gray-600 text-sm mb-3">{data.descripcion_corta}</p>
             )}
 
-            <div className="mb-4">
-              <p className="text-sm text-gray-500 mb-2">Categoría: {data.categoria}</p>
-              <p className="text-green-600 font-medium">En Stock</p>
+            <div className="mb-3">
+              <p className="text-sm text-gray-500">Categoría: {data.categoria}</p>
+              <p className="text-green-600 text-sm font-medium">En Stock</p>
             </div>
 
             {/* Selector de cantidad */}
-            <div className="flex items-center gap-4 mb-6">
+            <div className="flex items-center gap-3 mt-4">
               <div className="flex items-center border border-gray-300 rounded">
                 <button
-                  className="px-4 py-3 hover:bg-gray-100 transition-colors"
+                  className="px-3 py-2 hover:bg-gray-100 transition-colors"
                   onClick={decreaseQuantity}
                 >
                   <PiMinus />
                 </button>
-                <span className="px-6 py-3 border-x border-gray-300 min-w-[60px] text-center">
+                <span className="px-4 py-2 border-x border-gray-300 min-w-[50px] text-center">
                   {qty}
                 </span>
                 <button
-                  className="px-4 py-3 hover:bg-gray-100 transition-colors"
+                  className="px-3 py-2 hover:bg-gray-100 transition-colors"
                   onClick={increaseQuantity}
                 >
                   <PiPlus />
@@ -132,7 +126,7 @@ const Modal = ({ isModalOpen, handleClose, data }) => {
               <div className="flex-1">
                 {addedItemToCart ? (
                   <button
-                    className="w-full bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                    className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-medium transition-colors text-sm"
                     onClick={handleClose}
                   >
                     ✓ Agregado al Carrito
@@ -140,7 +134,7 @@ const Modal = ({ isModalOpen, handleClose, data }) => {
                 ) : (
                   <button
                     onClick={() => addItemToCart(data)}
-                    className="w-full bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                    className="w-full bg-black hover:bg-gray-800 text-white px-4 py-2 rounded font-medium transition-colors text-sm"
                   >
                     Agregar al Carrito
                   </button>
