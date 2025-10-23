@@ -14,6 +14,7 @@ export default function Categories() {
   });
 
   const handleOpenModal = (productId) => {
+    console.log('Abriendo modal para producto:', productId);
     setIsModalOpen(productId);
   };
 
@@ -220,7 +221,7 @@ export default function Categories() {
       {/* Modal de detalles del producto */}
       <Modal
         data={products.find((item) => item.id_producto === isModalOpen)}
-        isModalOpen={isModalOpen}
+        isModalOpen={isModalOpen !== null}
         handleClose={handleCloseModal}
       />
     </div>
