@@ -57,7 +57,9 @@ const CartDropdown = () => {
   const itemTemplate = (item) => {
     const itemId = item.id_producto || item.id;
     const itemPrice = parseFloat(item.precio);
-    const itemTotal = itemPrice * item.quantity;
+    // Recalcular el total usando la cantidad actual del item
+    const currentItem = cartItems.find(ci => (ci.id_producto || ci.id) === itemId);
+    const itemTotal = itemPrice * (currentItem?.quantity || item.quantity);
 
     return (
       <div className="flex gap-2 p-2 border-b border-gray-100">
@@ -91,22 +93,22 @@ const CartDropdown = () => {
             <div className="flex items-center gap-1">
               <Button
                 icon="pi pi-minus"
-                onClick={() => updateQuantity(itemId, item.quantity - 1)}
+                onClick={() => updateQuantity(itemId, (currentItem?.quantity || item.quantity) - 1)}
                 className="p-button-outlined p-button-sm"
                 style={{ width: '1.5rem', height: '1.5rem', padding: 0, fontSize: '0.65rem' }}
               />
               <span className="text-xs font-medium px-2 min-w-[2rem] text-center">
-                {item.quantity}
+                {currentItem?.quantity || item.quantity}
               </span>
               <Button
                 icon="pi pi-plus"
-                onClick={() => updateQuantity(itemId, item.quantity + 1)}
+                onClick={() => updateQuantity(itemId, (currentItem?.quantity || item.quantity) + 1)}
                 className="p-button-outlined p-button-sm"
                 style={{ width: '1.5rem', height: '1.5rem', padding: 0, fontSize: '0.65rem' }}
               />
             </div>
             <span className="text-xs font-semibold text-gray-800">
-              ${itemTotal.toLocaleString()}
+              ${itemTotal.toFixed(2)}
             </span>
           </div>
         </div>
@@ -163,6 +165,7 @@ const CartDropdown = () => {
                 itemTemplate={itemTemplate}
                 layout="list"
                 className="cart-dataview"
+                key={cartItems.map(item => `${item.id_producto || item.id}-${item.quantity}`).join('-')}
               />
             )}
           </div>
