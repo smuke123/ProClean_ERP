@@ -10,6 +10,8 @@ import comprasRoutes from "./routes/compras.routes.js";
 import pedidosRoutes from "./routes/pedidos.routes.js";
 import proveedoresRoutes from "./routes/proveedores.routes.js";
 import carritoRoutes from "./routes/carrito.routes.js";
+import exportRoutes from "./routes/export.routes.js";
+import apiKeysRoutes from "./routes/apiKeys.routes.js";
 
 const app = express();
 app.use(cors()); // habilita CORS
@@ -39,5 +41,9 @@ app.use("/api/compras", comprasRoutes);
 app.use("/api/pedidos", pedidosRoutes);
 app.use("/api/proveedores", proveedoresRoutes);
 app.use("/api/carrito", carritoRoutes);
+
+// Integration & Export Routes
+app.use("/api/export", exportRoutes);
+app.use("/api/api-keys", apiKeysRoutes);
 
 export default app;
