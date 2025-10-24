@@ -86,3 +86,26 @@ export const getUsers = () => req("/api/auth/users");
 export const setToken = (token) => localStorage.setItem('token', token);
 export const removeToken = () => localStorage.removeItem('token');
 export const getStoredToken = () => getToken();
+
+// Carrito
+export const getCarrito = () => req("/api/carrito");
+export const getCarritoSummary = () => req("/api/carrito/summary");
+export const addToCarrito = (id_producto, cantidad = 1) =>
+  req("/api/carrito", { 
+    method: "POST", 
+    body: JSON.stringify({ id_producto, cantidad }) 
+  });
+export const updateCarritoItem = (id_producto, cantidad) =>
+  req(`/api/carrito/${id_producto}`, { 
+    method: "PUT", 
+    body: JSON.stringify({ cantidad }) 
+  });
+export const removeFromCarrito = (id_producto) =>
+  req(`/api/carrito/${id_producto}`, { method: "DELETE" });
+export const clearCarrito = () =>
+  req("/api/carrito", { method: "DELETE" });
+export const syncCarrito = (items) =>
+  req("/api/carrito/sync", { 
+    method: "POST", 
+    body: JSON.stringify({ items }) 
+  });

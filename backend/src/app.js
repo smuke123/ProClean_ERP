@@ -9,6 +9,7 @@ import inventarioRoutes from "./routes/inventario.routes.js";
 import comprasRoutes from "./routes/compras.routes.js";
 import pedidosRoutes from "./routes/pedidos.routes.js";
 import proveedoresRoutes from "./routes/proveedores.routes.js";
+import carritoRoutes from "./routes/carrito.routes.js";
 
 const app = express();
 app.use(cors()); // habilita CORS
@@ -37,5 +38,6 @@ app.use("/api/inventario", inventarioRoutes);
 app.use("/api/compras", comprasRoutes);
 app.use("/api/pedidos", pedidosRoutes);
 app.use("/api/proveedores", proveedoresRoutes);
+app.use("/api/carrito", carritoRoutes);
 
 export default app;
