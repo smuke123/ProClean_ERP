@@ -10,7 +10,7 @@ import { Chart } from 'primereact/chart';
 import { Card } from 'primereact/card';
 import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import SelectSucursal from "../components/SelectSucursal.jsx";
-import { getPedidos, getCompras, getCompra, getPedido } from "../utils/api.js";
+import { getPedidos, getCompras, getCompra, getPedido, getDatasetsExternos, getDatosDatasetExterno } from "../utils/api.js";
 
 export default function Informes() {
   const [tipoTransaccion, setTipoTransaccion] = useState("ventas"); 
@@ -21,6 +21,12 @@ export default function Informes() {
   const [detallesCache, setDetallesCache] = useState({});
   const [globalFilterValue, setGlobalFilterValue] = useState('');
   const dt = useRef(null);
+  
+  // Nuevos estados para datasets externos
+  const [fuenteDatos, setFuenteDatos] = useState("propios"); // "propios" o "externos"
+  const [datasetsExternos, setDatasetsExternos] = useState([]);
+  const [datasetSeleccionado, setDatasetSeleccionado] = useState(null);
+  const [estructuraExterna, setEstructuraExterna] = useState(null);
 
   // Configuración de filtros
   const [filters, setFilters] = useState({
@@ -34,44 +40,96 @@ export default function Informes() {
     estado: { operator: FilterOperator.OR, constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }] },
   });
 
+  // Cargar datasets externos disponibles
+  useEffect(() => {
+    const cargarDatasetsExternos = async () => {
+      try {
+        const response = await getDatasetsExternos({ activo: true });
+        setDatasetsExternos(response.datasets || []);
+      } catch (error) {
+        console.error("Error al cargar datasets externos:", error);
+      }
+    };
+    cargarDatasetsExternos();
+  }, []);
+
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
-      const params = {};
-      if (sucursal) params.id_sucursal = sucursal;
-      const data = tipoTransaccion === "ventas" ? await getPedidos(params) : await getCompras(params);
+      let data = [];
       
-      // Procesar datos para agregar campos calculados
-      const processedData = (data || []).map(row => {
-        // Procesar fecha - manejar diferentes formatos
-        let fechaDate = null;
-        if (row.fecha) {
-          try {
-            // Intenta parsear la fecha
-            const parsedDate = new Date(row.fecha);
-            // Verifica si es una fecha válida
-            fechaDate = isNaN(parsedDate.getTime()) ? null : parsedDate;
-          } catch {
-            console.warn("Fecha inválida:", row.fecha);
+      if (fuenteDatos === "propios") {
+        // Cargar datos propios (ventas o compras)
+        const params = {};
+        if (sucursal) params.id_sucursal = sucursal;
+        data = tipoTransaccion === "ventas" ? await getPedidos(params) : await getCompras(params);
+        
+        // Procesar datos para agregar campos calculados
+        const processedData = (data || []).map(row => {
+          // Procesar fecha - manejar diferentes formatos
+          let fechaDate = null;
+          if (row.fecha) {
+            try {
+              // Intenta parsear la fecha
+              const parsedDate = new Date(row.fecha);
+              // Verifica si es una fecha válida
+              fechaDate = isNaN(parsedDate.getTime()) ? null : parsedDate;
+            } catch {
+              console.warn("Fecha inválida:", row.fecha);
+            }
           }
-        }
 
-        return {
-          ...row,
-          id: tipoTransaccion === "ventas" ? row.id_pedido : row.id_compra,
-          fechaDate,
-          totalNumeric: parseFloat(row.total) || 0,
-        };
-      });
-      
-      setRows(processedData);
+          return {
+            ...row,
+            id: tipoTransaccion === "ventas" ? row.id_pedido : row.id_compra,
+            fechaDate,
+            totalNumeric: parseFloat(row.total) || 0,
+          };
+        });
+        
+        setRows(processedData);
+        setEstructuraExterna(null);
+      } else if (fuenteDatos === "externos" && datasetSeleccionado) {
+        // Cargar datos externos
+        const response = await getDatosDatasetExterno(datasetSeleccionado);
+        const datosExternos = response.datos || [];
+        
+        // Guardar estructura
+        setEstructuraExterna(response.dataset.estructura);
+        
+        // Procesar datos externos dinámicamente
+        const processedData = datosExternos.map((row, index) => {
+          const processed = { ...row, id: row.id || index };
+          
+          // Detectar y procesar campos de fecha
+          Object.keys(row).forEach(key => {
+            const valor = row[key];
+            if (typeof valor === 'string' && valor.match(/\d{4}-\d{2}-\d{2}/)) {
+              const fecha = new Date(valor);
+              if (!isNaN(fecha.getTime())) {
+                processed[`${key}Date`] = fecha;
+              }
+            }
+            // Detectar y procesar campos numéricos
+            if (typeof valor === 'number' || !isNaN(parseFloat(valor))) {
+              processed[`${key}Numeric`] = parseFloat(valor) || 0;
+            }
+          });
+          
+          return processed;
+        });
+        
+        setRows(processedData);
+      } else {
+        setRows([]);
+      }
     } catch (error) {
       console.error("Error al cargar datos:", error);
       setRows([]);
     } finally {
       setLoading(false);
     }
-  }, [tipoTransaccion, sucursal]);
+  }, [tipoTransaccion, sucursal, fuenteDatos, datasetSeleccionado]);
 
   useEffect(() => {
     loadData();
@@ -80,34 +138,82 @@ export default function Informes() {
   // Calcular KPIs y datos para gráficos
   const analytics = useMemo(() => {
     const totalTransacciones = rows.length;
-    const totalMonto = rows.reduce((sum, row) => sum + row.totalNumeric, 0);
-    const completadas = rows.filter(r => r.estado === 'completado' || r.estado === 'pagada').length;
-    const pendientes = rows.filter(r => r.estado === 'pendiente').length;
+    
+    // Detectar campo numérico principal (total, monto, amount, etc.)
+    const campoNumerico = estructuraExterna 
+      ? Object.keys(estructuraExterna.tipos || {}).find(k => 
+          (k.toLowerCase().includes('total') || k.toLowerCase().includes('monto') || k.toLowerCase().includes('amount')) &&
+          estructuraExterna.tipos[k] === 'number'
+        ) || Object.keys(estructuraExterna.tipos || {}).find(k => estructuraExterna.tipos[k] === 'number')
+      : 'totalNumeric';
+    
+    const totalMonto = rows.reduce((sum, row) => {
+      const valor = row[campoNumerico] || row[`${campoNumerico}Numeric`] || row.totalNumeric || 0;
+      return sum + (typeof valor === 'number' ? valor : parseFloat(valor) || 0);
+    }, 0);
+    
+    // Detectar campo de estado (estado, status, state, etc.)
+    const campoEstado = estructuraExterna
+      ? Object.keys(estructuraExterna.tipos || {}).find(k => 
+          k.toLowerCase().includes('estado') || k.toLowerCase().includes('status') || k.toLowerCase().includes('state')
+        ) || 'estado'
+      : 'estado';
+    
+    const completadas = rows.filter(r => {
+      const estado = r[campoEstado];
+      return estado === 'completado' || estado === 'pagada' || estado === 'complete' || estado === 'paid';
+    }).length;
+    
+    const pendientes = rows.filter(r => {
+      const estado = r[campoEstado];
+      return estado === 'pendiente' || estado === 'pending';
+    }).length;
+    
     const promedio = totalTransacciones > 0 ? totalMonto / totalTransacciones : 0;
 
+    // Detectar campo de fecha
+    const campoFecha = estructuraExterna
+      ? Object.keys(estructuraExterna.tipos || {}).find(k => estructuraExterna.tipos[k] === 'date')
+      : null;
+    
     // Agrupar por mes
     const porMes = {};
     rows.forEach(row => {
-      if (row.fechaDate) {
-        const mes = row.fechaDate.toLocaleDateString('es-ES', { year: 'numeric', month: 'short' });
+      let fecha = row.fechaDate;
+      if (!fecha && campoFecha) {
+        fecha = row[`${campoFecha}Date`] || (row[campoFecha] ? new Date(row[campoFecha]) : null);
+      }
+      
+      if (fecha && !isNaN(fecha.getTime())) {
+        const mes = fecha.toLocaleDateString('es-ES', { year: 'numeric', month: 'short' });
         if (!porMes[mes]) porMes[mes] = { ventas: 0, compras: 0, count: 0 };
-        porMes[mes][tipoTransaccion] += row.totalNumeric;
+        const valor = row[campoNumerico] || row[`${campoNumerico}Numeric`] || row.totalNumeric || 0;
+        porMes[mes][tipoTransaccion] += typeof valor === 'number' ? valor : parseFloat(valor) || 0;
         porMes[mes].count += 1;
       }
     });
 
-    // Agrupar por sucursal
+    // Agrupar por sucursal o categoría principal
+    const campoAgrupacion = estructuraExterna
+      ? Object.keys(estructuraExterna.tipos || {}).find(k => 
+          k.toLowerCase().includes('sucursal') || k.toLowerCase().includes('branch') ||
+          k.toLowerCase().includes('categoria') || k.toLowerCase().includes('category') ||
+          k.toLowerCase().includes('tipo') || k.toLowerCase().includes('type')
+        ) || Object.keys(estructuraExterna.tipos || {}).find(k => estructuraExterna.tipos[k] === 'string')
+      : 'sucursal';
+    
     const porSucursal = {};
     rows.forEach(row => {
-      const sucursalNombre = row.sucursal || row.id_sucursal || 'Sin especificar';
-      if (!porSucursal[sucursalNombre]) porSucursal[sucursalNombre] = 0;
-      porSucursal[sucursalNombre] += row.totalNumeric;
+      const nombre = row[campoAgrupacion] || row.sucursal || row.id_sucursal || 'Sin especificar';
+      if (!porSucursal[nombre]) porSucursal[nombre] = 0;
+      const valor = row[campoNumerico] || row[`${campoNumerico}Numeric`] || row.totalNumeric || 0;
+      porSucursal[nombre] += typeof valor === 'number' ? valor : parseFloat(valor) || 0;
     });
 
     // Agrupar por estado
     const porEstado = {};
     rows.forEach(row => {
-      const estado = row.estado || 'sin estado';
+      const estado = row[campoEstado] || row.estado || 'sin estado';
       if (!porEstado[estado]) porEstado[estado] = 0;
       porEstado[estado] += 1;
     });
@@ -138,9 +244,12 @@ export default function Informes() {
       porMes,
       porSucursal,
       porEstado,
-      topProductos
+      topProductos,
+      campoNumerico,
+      campoEstado,
+      campoAgrupacion
     };
-  }, [rows, tipoTransaccion]);
+  }, [rows, tipoTransaccion, estructuraExterna]);
 
   // Datos para gráfico de tendencia mensual
   const chartTendenciaMensual = useMemo(() => {
@@ -435,6 +544,20 @@ export default function Informes() {
     return rowData.sucursal || rowData.id_sucursal || 'N/A';
   };
 
+  // Generar columnas dinámicas para datos externos
+  const columnasExternas = useMemo(() => {
+    if (fuenteDatos === 'propios' || !estructuraExterna || rows.length === 0) return [];
+    
+    const campos = Object.keys(estructuraExterna.tipos || {});
+    return campos.slice(0, 10).map(campo => ({ // Limitar a 10 columnas para no sobrecargar
+      field: campo,
+      header: campo.charAt(0).toUpperCase() + campo.slice(1).replace(/_/g, ' '),
+      tipo: estructuraExterna.tipos[campo],
+      sortable: true,
+      filter: true
+    }));
+  }, [fuenteDatos, estructuraExterna, rows]);
+
   // Plantilla de expansión de fila
   const rowExpansionTemplate = (rowData) => {
     const cacheKey = `${tipoTransaccion}-${rowData.id}`;
@@ -512,58 +635,128 @@ export default function Informes() {
 
       {/* Filtros Globales */}
       <div className="bg-white rounded-lg shadow p-4">
-        <div className="flex flex-col md:flex-row md:items-end gap-3">
+        <div className="flex flex-col gap-4">
+          {/* Selector de Fuente de Datos */}
           <div>
-            <label className="block text-sm text-gray-600 mb-2 font-semibold">Tipo de Transacción</label>
+            <label className="block text-sm text-gray-600 mb-2 font-semibold">Fuente de Datos</label>
             <div className="flex items-center gap-2">
               <button
                 type="button"
                 className={`px-4 py-2 rounded-lg border font-semibold transition-all ${
-                  tipoTransaccion === 'ventas' 
-                    ? 'bg-blue-600 text-white border-blue-600 shadow-md' 
+                  fuenteDatos === 'propios' 
+                    ? 'bg-purple-600 text-white border-purple-600 shadow-md' 
                     : 'bg-white text-gray-800 border-gray-300 hover:bg-gray-50'
                 }`}
                 onClick={() => {
-                  setTipoTransaccion('ventas');
+                  setFuenteDatos('propios');
+                  setDatasetSeleccionado(null);
                   setExpandedRows(null);
                   setDetallesCache({});
                 }}
               >
-                <i className="pi pi-shopping-cart mr-2"></i>
-                Ventas
+                <i className="pi pi-database mr-2"></i>
+                Datos Propios
               </button>
               <button
                 type="button"
                 className={`px-4 py-2 rounded-lg border font-semibold transition-all ${
-                  tipoTransaccion === 'compras' 
-                    ? 'bg-emerald-600 text-white border-emerald-600 shadow-md' 
+                  fuenteDatos === 'externos' 
+                    ? 'bg-indigo-600 text-white border-indigo-600 shadow-md' 
                     : 'bg-white text-gray-800 border-gray-300 hover:bg-gray-50'
                 }`}
                 onClick={() => {
-                  setTipoTransaccion('compras');
+                  setFuenteDatos('externos');
                   setExpandedRows(null);
                   setDetallesCache({});
                 }}
               >
-                <i className="pi pi-inbox mr-2"></i>
-                Compras
+                <i className="pi pi-cloud-download mr-2"></i>
+                Datos Externos ({datasetsExternos.length})
               </button>
             </div>
           </div>
-          
-          <div className="flex-1">
-            <label className="block text-sm text-gray-600 mb-2 font-semibold">Filtrar por Sucursal</label>
-            <SelectSucursal value={sucursal} onChange={setSucursal} />
-          </div>
 
-          <div>
-            <Button 
-              label="Recargar Datos" 
-              icon="pi pi-refresh" 
-              onClick={loadData}
-              loading={loading}
-              className="w-full md:w-auto"
-            />
+          {/* Filtros específicos según fuente */}
+          <div className="flex flex-col md:flex-row md:items-end gap-3">
+            {fuenteDatos === 'propios' ? (
+              <>
+                <div>
+                  <label className="block text-sm text-gray-600 mb-2 font-semibold">Tipo de Transacción</label>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      className={`px-4 py-2 rounded-lg border font-semibold transition-all ${
+                        tipoTransaccion === 'ventas' 
+                          ? 'bg-blue-600 text-white border-blue-600 shadow-md' 
+                          : 'bg-white text-gray-800 border-gray-300 hover:bg-gray-50'
+                      }`}
+                      onClick={() => {
+                        setTipoTransaccion('ventas');
+                        setExpandedRows(null);
+                        setDetallesCache({});
+                      }}
+                    >
+                      <i className="pi pi-shopping-cart mr-2"></i>
+                      Ventas
+                    </button>
+                    <button
+                      type="button"
+                      className={`px-4 py-2 rounded-lg border font-semibold transition-all ${
+                        tipoTransaccion === 'compras' 
+                          ? 'bg-emerald-600 text-white border-emerald-600 shadow-md' 
+                          : 'bg-white text-gray-800 border-gray-300 hover:bg-gray-50'
+                      }`}
+                      onClick={() => {
+                        setTipoTransaccion('compras');
+                        setExpandedRows(null);
+                        setDetallesCache({});
+                      }}
+                    >
+                      <i className="pi pi-inbox mr-2"></i>
+                      Compras
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="flex-1">
+                  <label className="block text-sm text-gray-600 mb-2 font-semibold">Filtrar por Sucursal</label>
+                  <SelectSucursal value={sucursal} onChange={setSucursal} />
+                </div>
+              </>
+            ) : (
+              <div className="flex-1">
+                <label className="block text-sm text-gray-600 mb-2 font-semibold">Seleccionar Empresa Externa</label>
+                <Dropdown 
+                  value={datasetSeleccionado} 
+                  options={datasetsExternos.map(d => ({ label: d.nombre_empresa, value: d.id_dataset }))} 
+                  onChange={(e) => {
+                    setDatasetSeleccionado(e.value);
+                    setExpandedRows(null);
+                    setDetallesCache({});
+                  }} 
+                  placeholder="Seleccione una empresa..." 
+                  className="w-full"
+                  showClear
+                  emptyMessage="No hay datasets externos disponibles"
+                />
+                {datasetSeleccionado && (
+                  <div className="mt-2 text-xs text-gray-500">
+                    {datasetsExternos.find(d => d.id_dataset === datasetSeleccionado)?.descripcion}
+                  </div>
+                )}
+              </div>
+            )}
+
+            <div>
+              <Button 
+                label="Recargar Datos" 
+                icon="pi pi-refresh" 
+                onClick={loadData}
+                loading={loading}
+                className="w-full md:w-auto"
+                disabled={fuenteDatos === 'externos' && !datasetSeleccionado}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -596,77 +789,117 @@ export default function Informes() {
             scrollable
             scrollHeight="600px"
           >
-          <Column expander={true} style={{ width: '5rem' }} frozen />
+          {fuenteDatos === 'propios' && <Column expander={true} style={{ width: '5rem' }} frozen />}
           
-          <Column 
-            field="id" 
-            header="ID" 
-            sortable 
-            filter 
-            filterPlaceholder="Buscar por ID"
-            style={{ minWidth: '120px', width: '120px' }}
-            body={idBodyTemplate}
-            frozen
-          />
-          
-          <Column 
-            field="fechaDate" 
-            header="Fecha" 
-            sortable 
-            filter 
-            filterElement={fechaFilterTemplate}
-            dataType="date"
-            style={{ minWidth: '160px', width: '160px' }}
-            body={fechaBodyTemplate}
-          />
+          {/* Columnas para datos propios */}
+          {fuenteDatos === 'propios' && (
+            <>
+              <Column 
+                field="id" 
+                header="ID" 
+                sortable 
+                filter 
+                filterPlaceholder="Buscar por ID"
+                style={{ minWidth: '120px', width: '120px' }}
+                body={idBodyTemplate}
+                frozen
+              />
+              
+              <Column 
+                field="fechaDate" 
+                header="Fecha" 
+                sortable 
+                filter 
+                filterElement={fechaFilterTemplate}
+                dataType="date"
+                style={{ minWidth: '160px', width: '160px' }}
+                body={fechaBodyTemplate}
+              />
 
-          <Column 
-            field={tipoTransaccion === 'ventas' ? 'cliente' : 'proveedor'}
-            header={tipoTransaccion === 'ventas' ? 'Cliente' : 'Proveedor'}
-            sortable 
-            filter 
-            filterPlaceholder="Buscar..."
-            style={{ minWidth: '200px', width: '200px' }}
-            body={clienteProveedorBodyTemplate}
-          />
+              <Column 
+                field={tipoTransaccion === 'ventas' ? 'cliente' : 'proveedor'}
+                header={tipoTransaccion === 'ventas' ? 'Cliente' : 'Proveedor'}
+                sortable 
+                filter 
+                filterPlaceholder="Buscar..."
+                style={{ minWidth: '200px', width: '200px' }}
+                body={clienteProveedorBodyTemplate}
+              />
 
-          <Column 
-            field="sucursal" 
-            header="Sucursal" 
-            sortable 
-            filter 
-            filterPlaceholder="Buscar sucursal"
-            style={{ minWidth: '170px', width: '170px' }}
-            body={sucursalBodyTemplate}
-          />
+              <Column 
+                field="sucursal" 
+                header="Sucursal" 
+                sortable 
+                filter 
+                filterPlaceholder="Buscar sucursal"
+                style={{ minWidth: '170px', width: '170px' }}
+                body={sucursalBodyTemplate}
+              />
 
-          <Column 
-            field="productos" 
-            header="Productos" 
-            style={{ minWidth: '250px', width: '250px' }}
-            body={productosBodyTemplate}
-          />
+              <Column 
+                field="productos" 
+                header="Productos" 
+                style={{ minWidth: '250px', width: '250px' }}
+                body={productosBodyTemplate}
+              />
 
-          <Column 
-            field="totalNumeric" 
-            header="Total" 
-            sortable 
-            filter 
-            filterElement={totalFilterTemplate}
-            dataType="numeric"
-            style={{ minWidth: '150px', width: '150px' }}
-            body={totalBodyTemplate}
-          />
+              <Column 
+                field="totalNumeric" 
+                header="Total" 
+                sortable 
+                filter 
+                filterElement={totalFilterTemplate}
+                dataType="numeric"
+                style={{ minWidth: '150px', width: '150px' }}
+                body={totalBodyTemplate}
+              />
 
-          <Column 
-            field="estado" 
-            header="Estado" 
-            sortable 
-            filter 
-            filterElement={estadoFilterTemplate}
-            style={{ minWidth: '150px', width: '150px' }}
-            body={estadoBodyTemplate}
-          />
+              <Column 
+                field="estado" 
+                header="Estado" 
+                sortable 
+                filter 
+                filterElement={estadoFilterTemplate}
+                style={{ minWidth: '150px', width: '150px' }}
+                body={estadoBodyTemplate}
+              />
+            </>
+          )}
+
+          {/* Columnas dinámicas para datos externos */}
+          {fuenteDatos === 'externos' && columnasExternas.map((col, idx) => (
+            <Column 
+              key={idx}
+              field={col.field} 
+              header={col.header} 
+              sortable={col.sortable}
+              filter={col.filter}
+              filterPlaceholder={`Buscar ${col.header.toLowerCase()}...`}
+              style={{ minWidth: '150px' }}
+              body={(rowData) => {
+                const valor = rowData[col.field];
+                if (valor === null || valor === undefined) return 'N/A';
+                if (col.tipo === 'number') {
+                  return typeof valor === 'number' 
+                    ? valor.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                    : valor;
+                }
+                if (col.tipo === 'date') {
+                  try {
+                    const fecha = new Date(valor);
+                    return !isNaN(fecha.getTime()) 
+                      ? fecha.toLocaleDateString('es-ES') 
+                      : valor;
+                  } catch {
+                    return valor;
+                  }
+                }
+                return String(valor).length > 50 
+                  ? String(valor).substring(0, 50) + '...' 
+                  : String(valor);
+              }}
+            />
+          ))}
           </DataTable>
         </div>
       </div>

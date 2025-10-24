@@ -12,6 +12,7 @@ import proveedoresRoutes from "./routes/proveedores.routes.js";
 import carritoRoutes from "./routes/carrito.routes.js";
 import exportRoutes from "./routes/export.routes.js";
 import apiKeysRoutes from "./routes/apiKeys.routes.js";
+import datasetExternoRoutes from "./routes/datasetExterno.routes.js";
 
 const app = express();
 app.use(cors()); // habilita CORS
@@ -45,5 +46,6 @@ app.use("/api/carrito", carritoRoutes);
 // Integration & Export Routes
 app.use("/api/export", exportRoutes);
 app.use("/api/api-keys", apiKeysRoutes);
+app.use("/api/datasets-externos", datasetExternoRoutes);
 
 export default app;

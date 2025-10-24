@@ -109,3 +109,38 @@ export const syncCarrito = (items) =>
     method: "POST", 
     body: JSON.stringify({ items }) 
   });
+
+// Datasets Externos
+export const getDatasetsExternos = (params = {}) => {
+  const qs = new URLSearchParams(params).toString();
+  return req(`/api/datasets-externos${qs ? `?${qs}` : ""}`);
+};
+
+export const getDatasetExterno = (id) => 
+  req(`/api/datasets-externos/${id}`);
+
+export const getDatosDatasetExterno = (id, params = {}) => {
+  const qs = new URLSearchParams(params).toString();
+  return req(`/api/datasets-externos/${id}/datos${qs ? `?${qs}` : ""}`);
+};
+
+export const importarDatasetExterno = (data) =>
+  req("/api/datasets-externos/importar", { 
+    method: "POST", 
+    body: JSON.stringify(data) 
+  });
+
+export const actualizarDatasetExterno = (id, data) =>
+  req(`/api/datasets-externos/${id}`, { 
+    method: "PUT", 
+    body: JSON.stringify(data) 
+  });
+
+export const reemplazarDatosDatasetExterno = (id, datos) =>
+  req(`/api/datasets-externos/${id}/datos`, { 
+    method: "PUT", 
+    body: JSON.stringify({ datos }) 
+  });
+
+export const eliminarDatasetExterno = (id) =>
+  req(`/api/datasets-externos/${id}`, { method: "DELETE" });

@@ -19,6 +19,24 @@ export const authenticateToken = (req, res, next) => {
   });
 };
 
+// Middleware para verificar rol del usuario
+export const requireRole = (rol) => {
+  return (req, res, next) => {
+    if (!req.user) {
+      return res.status(401).json({ error: 'No autenticado' });
+    }
+
+    if (req.user.rol !== rol) {
+      return res.status(403).json({ 
+        error: 'Acceso denegado',
+        message: `Se requiere rol de ${rol}` 
+      });
+    }
+
+    next();
+  };
+};
+
 export const authController = {
   async login(req, res) {
     try {
