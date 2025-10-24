@@ -111,7 +111,7 @@ export const datasetExternoController = {
   async importar(req, res) {
     try {
       const { nombre_empresa, descripcion, datos, metadata } = req.body;
-      const userId = req.user?.id_usuario;
+      const userId = req.user?.id;
 
       // Validaciones
       if (!nombre_empresa) {

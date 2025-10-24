@@ -9,7 +9,7 @@ export const carritoController = {
    */
   async getCarrito(req, res) {
     try {
-      const id_usuario = req.user.id_usuario; // Del middleware de autenticación
+      const id_usuario = req.user.id; // Del middleware de autenticación (JWT guarda id: user.id_usuario)
       
       const items = await Carrito.getByUsuario(id_usuario);
       const total = await Carrito.getTotal(id_usuario);
@@ -34,7 +34,7 @@ export const carritoController = {
    */
   async addItem(req, res) {
     try {
-      const id_usuario = req.user.id_usuario;
+      const id_usuario = req.user.id;
       const { id_producto, cantidad = 1 } = req.body;
 
       if (!id_producto) {
@@ -75,7 +75,7 @@ export const carritoController = {
    */
   async updateQuantity(req, res) {
     try {
-      const id_usuario = req.user.id_usuario;
+      const id_usuario = req.user.id;
       const id_producto = parseInt(req.params.id_producto);
       const { cantidad } = req.body;
 
@@ -134,7 +134,7 @@ export const carritoController = {
    */
   async removeItem(req, res) {
     try {
-      const id_usuario = req.user.id_usuario;
+      const id_usuario = req.user.id;
       const id_producto = parseInt(req.params.id_producto);
 
       await Carrito.removeItem(id_usuario, id_producto);
@@ -166,7 +166,7 @@ export const carritoController = {
    */
   async clearCarrito(req, res) {
     try {
-      const id_usuario = req.user.id_usuario;
+      const id_usuario = req.user.id;
 
       await Carrito.clearCarrito(id_usuario);
 
@@ -193,7 +193,7 @@ export const carritoController = {
    */
   async syncCarrito(req, res) {
     try {
-      const id_usuario = req.user.id_usuario;
+      const id_usuario = req.user.id;
       const { items = [] } = req.body;
 
       if (!Array.isArray(items)) {
@@ -239,7 +239,7 @@ export const carritoController = {
    */
   async getSummary(req, res) {
     try {
-      const id_usuario = req.user.id_usuario;
+      const id_usuario = req.user.id;
       
       const total = await Carrito.getTotal(id_usuario);
       const itemCount = await Carrito.getItemCount(id_usuario);

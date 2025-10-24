@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS Datasets_Externos (
   total_registros INT DEFAULT 0 COMMENT 'Cantidad de registros en el dataset',
   metadata JSON COMMENT 'Metadata adicional del dataset',
   activo BOOLEAN DEFAULT TRUE,
-  creado_por INT COMMENT 'ID del usuario que importó el dataset',
+  creado_por INT NULL COMMENT 'ID del usuario que importó el dataset',
   FOREIGN KEY (creado_por) REFERENCES Usuarios(id_usuario) ON DELETE SET NULL,
   INDEX idx_empresa (nombre_empresa),
   INDEX idx_activo (activo),
