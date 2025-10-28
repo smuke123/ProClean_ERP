@@ -115,3 +115,18 @@ CREATE TABLE Detalle_Pedidos (
     FOREIGN KEY (id_pedido) REFERENCES Pedidos(id_pedido),
     FOREIGN KEY (id_producto) REFERENCES Productos(id_producto)
 );
+
+-- Carritos
+CREATE TABLE IF NOT EXISTS Carritos (
+    id_carrito INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    id_producto INT NOT NULL,
+    cantidad INT NOT NULL DEFAULT 1,
+    fecha_agregado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fecha_actualizado TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_usuario) REFERENCES Usuarios(id_usuario) ON DELETE CASCADE,
+    FOREIGN KEY (id_producto) REFERENCES Productos(id_producto) ON DELETE CASCADE,
+    UNIQUE KEY unique_usuario_producto (id_usuario, id_producto),
+    INDEX idx_usuario (id_usuario),
+    INDEX idx_producto (id_producto)
+);

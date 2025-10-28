@@ -1,22 +1,18 @@
-import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { createContext, useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../hooks/useAuth.js';
 import * as api from '../utils/api.js';
 
+// Crear el contexto (no exportado aquí para evitar errores de Fast Refresh)
 const CartContext = createContext();
 
-export const useCart = () => {
-  const context = useContext(CartContext);
-  if (!context) {
-    throw new Error('useCart debe ser usado dentro de un CartProvider');
-  }
-  return context;
-};
+// Exportar solo para el hook useCart
+export { CartContext };
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [synced, setSynced] = useState(false);
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, loading: authLoading } = useAuth();
 
   // Función para obtener la key de localStorage
   const getLocalStorageKey = useCallback(() => {
@@ -74,11 +70,12 @@ export const CartProvider = ({ children }) => {
 
   // Sincronizar localStorage con backend al iniciar sesión
   const syncLocalStorageToBackend = useCallback(async () => {
-    if (!isAuthenticated || !user?.id_usuario || synced) return;
+    if (!isAuthenticated || !user?.id_usuario) return;
     
     const cartKey = getLocalStorageKey();
     const savedCart = localStorage.getItem(cartKey);
     
+    // Si hay carrito en localStorage, sincronizarlo primero
     if (savedCart) {
       try {
         const items = JSON.parse(savedCart);
@@ -91,28 +88,50 @@ export const CartProvider = ({ children }) => {
           
           // Sincronizar con el backend
           await api.syncCarrito(itemsToSync);
-          console.log('Carrito sincronizado con el backend');
+          console.log('Carrito local sincronizado con el backend');
         }
       } catch (error) {
         console.error('Error sincronizando carrito:', error);
       }
     }
     
-    // Cargar el carrito actualizado del backend
+    // Siempre cargar el carrito actualizado del backend
     await loadCarritoFromBackend();
-  }, [isAuthenticated, user?.id_usuario, synced, getLocalStorageKey, loadCarritoFromBackend]);
+  }, [isAuthenticated, user?.id_usuario, getLocalStorageKey, loadCarritoFromBackend]);
 
-  // Cargar carrito cuando el usuario cambie
+  // Cargar carrito cuando el usuario cambie o inicie sesión
   useEffect(() => {
-    if (isAuthenticated && user?.id_usuario) {
-      // Primero sincronizar localStorage si existe
-      syncLocalStorageToBackend();
-    } else {
-      // Si no está autenticado, limpiar el carrito
-      setCartItems([]);
-      setSynced(false);
+    // No hacer nada mientras AuthContext esté cargando
+    if (authLoading) {
+      console.log('Esperando a que AuthContext termine de cargar...');
+      return;
     }
-  }, [user?.id_usuario, isAuthenticated, syncLocalStorageToBackend]);
+    
+    let isMounted = true;
+    
+    const loadUserCart = async () => {
+      if (isAuthenticated && user?.id_usuario) {
+        console.log(`Cargando carrito para usuario ${user.id_usuario}`);
+        await syncLocalStorageToBackend();
+        if (isMounted) {
+          setSynced(true);
+        }
+      } else if (!isAuthenticated && user === null) {
+        // Solo limpiar si definitivamente NO está autenticado (y AuthContext ya terminó de cargar)
+        console.log('Usuario no autenticado confirmado, limpiando carrito');
+        if (isMounted) {
+          setCartItems([]);
+          setSynced(false);
+        }
+      }
+    };
+    
+    loadUserCart();
+    
+    return () => {
+      isMounted = false;
+    };
+  }, [user?.id_usuario, isAuthenticated, user, authLoading, syncLocalStorageToBackend]);
 
   // Guardar en localStorage cuando cambie (como cache)
   useEffect(() => {

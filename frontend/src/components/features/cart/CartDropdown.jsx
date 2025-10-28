@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth.js';
-import { useCart } from '../../../contexts/CartContext.jsx';
+import { useCart } from '../../../hooks/useCart.js';
 import { MdOutlineShoppingBag } from 'react-icons/md';
 import { DataView } from 'primereact/dataview';
 import { Button } from 'primereact/button';

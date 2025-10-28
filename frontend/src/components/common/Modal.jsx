@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import { PiMinus, PiPlus } from 'react-icons/pi';
-import { useCart } from '../../contexts/CartContext.jsx';
+import { useCart } from '../../hooks/useCart.js';
 
 const Modal = ({ isModalOpen, handleClose, data }) => {
   const [qty, setQty] = useState(1);

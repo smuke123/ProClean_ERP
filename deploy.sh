@@ -56,13 +56,22 @@ cd ..
 echo -e "${GREEN}✅ Backend actualizado${NC}"
 
 # 5. Copiar configuración de Nginx (si existe)
+echo -e "${BLUE}🔄 Configurando Nginx...${NC}"
 if [ -f "/etc/nginx/sites-available/proclean" ]; then
-    echo -e "${BLUE}🔄 Actualizando configuración de Nginx...${NC}"
+    echo "Actualizando configuración existente..."
     sudo cp nginx.conf /etc/nginx/sites-available/proclean
     sudo nginx -t && sudo systemctl reload nginx
     echo -e "${GREEN}✅ Nginx actualizado${NC}"
 else
-    echo -e "${BLUE}ℹ️  Configuración de Nginx no encontrada. Configúrala manualmente siguiendo DEPLOYMENT.md${NC}"
+    echo "Creando nueva configuración..."
+    sudo cp nginx.conf /etc/nginx/sites-available/proclean
+    sudo ln -sf /etc/nginx/sites-available/proclean /etc/nginx/sites-enabled/
+    # Deshabilitar configuración por defecto si existe
+    if [ -f "/etc/nginx/sites-enabled/default" ]; then
+        sudo rm /etc/nginx/sites-enabled/default
+    fi
+    sudo nginx -t && sudo systemctl reload nginx
+    echo -e "${GREEN}✅ Nginx configurado${NC}"
 fi
 
 # 6. Mostrar estado

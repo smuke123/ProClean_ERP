@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import { PiMinus, PiPlus } from 'react-icons/pi';
 import { Link, useNavigate } from 'react-router-dom';
-import { useCart } from '../contexts/CartContext.jsx';
+import { useCart } from '../hooks/useCart.js';
 import { useAuth } from '../hooks/useAuth.js';
 import Button from '../components/ui/Button.jsx';
 
