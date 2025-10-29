@@ -87,7 +87,7 @@ export default function Gestion() {
         items: itemsCompra
       };
       
-      const response = await fetch("http://localhost:3000/api/compras", {
+      const response = await fetch("/api/compras", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
@@ -127,7 +127,7 @@ export default function Gestion() {
         items: itemsVenta
       };
       
-      const response = await fetch("http://localhost:3000/api/pedidos", {
+      const response = await fetch("/api/pedidos", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
@@ -139,7 +139,7 @@ export default function Gestion() {
         setItemsVenta([]);
         
         // Cambiar estado a completado para que se descuente el inventario
-        await fetch(`http://localhost:3000/api/pedidos/${result.id_pedido}/estado`, {
+        await fetch(`/api/pedidos/${result.id_pedido}/estado`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ estado: "completado" })

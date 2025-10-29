@@ -1,4 +1,6 @@
-const BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
+// En producción con Nginx, usamos URL relativa (Nginx hace el proxy a :3000)
+// Usar cadena vacía para que todas las URLs sean relativas
+const BASE = "";
 
 // Función para obtener el token del localStorage
 const getToken = () => localStorage.getItem('token');
