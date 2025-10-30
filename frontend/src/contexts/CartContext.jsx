@@ -14,18 +14,38 @@ export const CartProvider = ({ children }) => {
   const [synced, setSynced] = useState(false);
   const { user, isAuthenticated, loading: authLoading } = useAuth();
 
+  // Log de debugging del estado de autenticación
+  useEffect(() => {
+    console.log('[CART-AUTH] Estado de autenticación:', {
+      isAuthenticated,
+      user: user ? { id: user.id, nombre: user.nombre } : null,
+      authLoading
+    });
+  }, [isAuthenticated, user, authLoading]);
+
   // Función para obtener la key de localStorage
   const getLocalStorageKey = useCallback(() => {
-    return user?.id_usuario ? `proclean_cart_${user.id_usuario}` : 'proclean_cart_guest';
-  }, [user?.id_usuario]);
+    return user?.id ? `proclean_cart_${user.id}` : 'proclean_cart_guest';
+  }, [user?.id]);
 
   // Función para cargar el carrito desde el backend
   const loadCarritoFromBackend = useCallback(async () => {
-    if (!isAuthenticated || !user?.id_usuario) return;
+    if (!isAuthenticated || !user?.id) {
+      console.log('[LOAD] No se puede cargar: usuario no autenticado');
+      return;
+    }
+    
+    console.log(`[LOAD] Cargando carrito desde backend para usuario ${user.id}...`);
     
     try {
       setLoading(true);
       const response = await api.getCarrito();
+      
+      console.log(`[LOAD] Respuesta del backend:`, {
+        itemCount: response.itemCount,
+        items: response.items?.length || 0,
+        total: response.total
+      });
       
       // Transformar los datos del backend al formato del frontend
       const transformedItems = response.items.map(item => ({
@@ -42,62 +62,88 @@ export const CartProvider = ({ children }) => {
         activo: item.activo
       }));
       
+      console.log(`[LOAD] Carrito cargado: ${transformedItems.length} items`);
       setCartItems(transformedItems);
       
       // Guardar en localStorage como cache
       const cartKey = getLocalStorageKey();
       localStorage.setItem(cartKey, JSON.stringify(transformedItems));
+      console.log(`[LOAD] Carrito guardado en localStorage`);
       
       setSynced(true);
     } catch (error) {
-      console.error('Error cargando carrito del backend:', error);
+      console.error('[LOAD] Error cargando carrito del backend:', error);
       
-      // Si falla, intentar cargar desde localStorage
+      // Si falla, intentar cargar desde localStorage como fallback
       const cartKey = getLocalStorageKey();
       const savedCart = localStorage.getItem(cartKey);
       if (savedCart) {
         try {
-          setCartItems(JSON.parse(savedCart));
+          const items = JSON.parse(savedCart);
+          console.log(`[LOAD] Usando fallback de localStorage: ${items.length} items`);
+          setCartItems(items);
         } catch (e) {
-          console.error('Error parseando localStorage:', e);
+          console.error('[LOAD] Error parseando localStorage:', e);
           setCartItems([]);
         }
+      } else {
+        console.log('[LOAD] No hay fallback en localStorage');
+        setCartItems([]);
       }
     } finally {
       setLoading(false);
     }
-  }, [isAuthenticated, user?.id_usuario, getLocalStorageKey]);
+  }, [isAuthenticated, user?.id, getLocalStorageKey]);
 
   // Sincronizar localStorage con backend al iniciar sesión
   const syncLocalStorageToBackend = useCallback(async () => {
-    if (!isAuthenticated || !user?.id_usuario) return;
+    if (!isAuthenticated || !user?.id) {
+      console.log('No se puede sincronizar: usuario no autenticado');
+      return;
+    }
     
-    const cartKey = getLocalStorageKey();
-    const savedCart = localStorage.getItem(cartKey);
+    console.log(`[SYNC] Iniciando sincronización para usuario ${user.id}`);
     
-    // Si hay carrito en localStorage, sincronizarlo primero
-    if (savedCart) {
+    // Buscar carrito en múltiples keys (usuario actual y guest)
+    const userCartKey = `proclean_cart_${user.id}`;
+    const guestCartKey = 'proclean_cart_guest';
+    
+    const userCart = localStorage.getItem(userCartKey);
+    const guestCart = localStorage.getItem(guestCartKey);
+    
+    console.log(`[SYNC] Carrito de usuario en localStorage: ${userCart ? JSON.parse(userCart).length : 0} items`);
+    console.log(`[SYNC] Carrito de invitado en localStorage: ${guestCart ? JSON.parse(guestCart).length : 0} items`);
+    
+    // Primero, verificar si hay carrito de invitado para migrar
+    if (guestCart) {
       try {
-        const items = JSON.parse(savedCart);
-        if (items.length > 0) {
-          // Preparar items para sincronización
-          const itemsToSync = items.map(item => ({
+        const guestItems = JSON.parse(guestCart);
+        if (guestItems.length > 0) {
+          console.log(`[SYNC] Migrando ${guestItems.length} items del carrito de invitado...`);
+          const itemsToSync = guestItems.map(item => ({
             id_producto: item.id_producto || item.id,
             cantidad: item.quantity || item.cantidad || 1
           }));
           
-          // Sincronizar con el backend
+          // Sincronizar al backend
           await api.syncCarrito(itemsToSync);
-          console.log('Carrito local sincronizado con el backend');
+          console.log('[SYNC] Carrito de invitado migrado al backend');
+          
+          // Limpiar el carrito de invitado
+          localStorage.removeItem(guestCartKey);
+          console.log('[SYNC] Carrito de invitado limpiado');
         }
       } catch (error) {
-        console.error('Error sincronizando carrito:', error);
+        console.error('[SYNC] Error migrando carrito de invitado:', error);
       }
     }
     
-    // Siempre cargar el carrito actualizado del backend
+    // Cargar el carrito desde el backend (fuente de verdad)
+    console.log('[SYNC] Cargando carrito desde backend...');
     await loadCarritoFromBackend();
-  }, [isAuthenticated, user?.id_usuario, getLocalStorageKey, loadCarritoFromBackend]);
+    
+    console.log('[SYNC] Sincronización completada');
+  }, [isAuthenticated, user?.id, loadCarritoFromBackend]);
 
   // Cargar carrito cuando el usuario cambie o inicie sesión
   useEffect(() => {
@@ -110,19 +156,21 @@ export const CartProvider = ({ children }) => {
     let isMounted = true;
     
     const loadUserCart = async () => {
-      if (isAuthenticated && user?.id_usuario) {
-        console.log(`Cargando carrito para usuario ${user.id_usuario}`);
+      if (isAuthenticated && user?.id) {
+        console.log(`Cargando carrito para usuario ${user.id}`);
         await syncLocalStorageToBackend();
         if (isMounted) {
           setSynced(true);
         }
       } else if (!isAuthenticated && user === null) {
-        // Solo limpiar si definitivamente NO está autenticado (y AuthContext ya terminó de cargar)
-        console.log('Usuario no autenticado confirmado, limpiando carrito');
+        // Solo limpiar el estado de React (NO el localStorage del usuario)
+        // El localStorage se mantiene para cuando el usuario vuelva a iniciar sesión
+        console.log('Usuario no autenticado confirmado, limpiando estado del carrito');
         if (isMounted) {
           setCartItems([]);
           setSynced(false);
         }
+        // NO limpiar el localStorage aquí - se mantiene por usuario específico
       }
     };
     
@@ -131,23 +179,29 @@ export const CartProvider = ({ children }) => {
     return () => {
       isMounted = false;
     };
-  }, [user?.id_usuario, isAuthenticated, user, authLoading, syncLocalStorageToBackend]);
+  }, [user?.id, isAuthenticated, user, authLoading, syncLocalStorageToBackend]);
 
   // Guardar en localStorage cuando cambie (como cache)
   useEffect(() => {
-    if (isAuthenticated && user?.id_usuario && cartItems.length >= 0) {
+    // Solo guardar si el usuario está autenticado Y el carrito está sincronizado
+    // Esto evita guardar un carrito vacío durante el proceso de logout
+    if (isAuthenticated && user?.id && synced) {
       const cartKey = getLocalStorageKey();
       localStorage.setItem(cartKey, JSON.stringify(cartItems));
+      console.log(`Carrito guardado en localStorage para usuario ${user.id}`);
     }
-  }, [cartItems, user?.id_usuario, isAuthenticated, getLocalStorageKey]);
+  }, [cartItems, user?.id, isAuthenticated, synced, getLocalStorageKey]);
 
   const addToCart = async (product, quantity = 1) => {
     const productId = product.id_producto || product.id;
+    console.log(`[ADD] Agregando producto ${productId}, cantidad: ${quantity}`);
     
-    if (isAuthenticated && user?.id_usuario) {
+    if (isAuthenticated && user?.id) {
+      console.log(`[ADD] Usuario autenticado (${user.id}), guardando en backend...`);
       try {
         // Agregar al backend
         const response = await api.addToCarrito(productId, quantity);
+        console.log(`[ADD] Respuesta del backend:`, response);
         
         // Actualizar estado local con la respuesta del backend
         if (response.carrito && response.carrito.items) {
@@ -164,14 +218,16 @@ export const CartProvider = ({ children }) => {
             cantidad: item.cantidad,
             activo: item.activo
           }));
+          console.log(`[ADD] Carrito actualizado: ${transformedItems.length} items`);
           setCartItems(transformedItems);
         }
         
         return response;
       } catch (error) {
-        console.error('Error agregando al carrito:', error);
+        console.error('[ADD] Error agregando al carrito:', error);
         
         // Fallback: actualizar solo localmente
+        console.log('[ADD] Usando fallback local');
         setCartItems(prevItems => {
           const existingItem = prevItems.find(item => 
             (item.id_producto || item.id) === productId
@@ -191,6 +247,7 @@ export const CartProvider = ({ children }) => {
       }
     } else {
       // Si no está autenticado, solo actualizar localmente
+      console.log('[ADD] Usuario no autenticado, guardando solo localmente');
       setCartItems(prevItems => {
         const existingItem = prevItems.find(item => 
           (item.id_producto || item.id) === productId
@@ -210,7 +267,7 @@ export const CartProvider = ({ children }) => {
   };
 
   const removeFromCart = async (productId) => {
-    if (isAuthenticated && user?.id_usuario) {
+    if (isAuthenticated && user?.id) {
       try {
         // Eliminar del backend
         const response = await api.removeFromCarrito(productId);
@@ -254,7 +311,7 @@ export const CartProvider = ({ children }) => {
       return await removeFromCart(productId);
     }
     
-    if (isAuthenticated && user?.id_usuario) {
+    if (isAuthenticated && user?.id) {
       try {
         // Actualizar en el backend
         const response = await api.updateCarritoItem(productId, quantity);
@@ -298,7 +355,7 @@ export const CartProvider = ({ children }) => {
   };
 
   const clearCart = async () => {
-    if (isAuthenticated && user?.id_usuario) {
+    if (isAuthenticated && user?.id) {
       try {
         // Limpiar en el backend
         await api.clearCarrito();
@@ -324,6 +381,21 @@ export const CartProvider = ({ children }) => {
     return cartItems.reduce((total, item) => total + (item.precio * item.quantity), 0);
   };
 
+  // Función para asegurar que el carrito esté guardado en el backend
+  const ensureCartSaved = useCallback(async () => {
+    if (!isAuthenticated || !user?.id) return;
+    
+    try {
+      // Verificar si hay items en el carrito del backend
+      const response = await api.getCarrito();
+      console.log('Carrito verificado en backend:', response.itemCount, 'items');
+      return response;
+    } catch (error) {
+      console.error('Error verificando carrito en backend:', error);
+      throw error;
+    }
+  }, [isAuthenticated, user?.id]);
+
   const value = {
     cartItems,
     addToCart,
@@ -333,7 +405,8 @@ export const CartProvider = ({ children }) => {
     getTotalItems,
     getTotalPrice,
     loading,
-    synced
+    synced,
+    ensureCartSaved
   };
 
   return (

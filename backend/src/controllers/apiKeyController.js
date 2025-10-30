@@ -32,7 +32,7 @@ export const apiKeyController = {
       const keyData = {
         nombre,
         descripcion,
-        creado_por: req.user.id_usuario,
+        creado_por: req.user.id,
         organizacion,
         contacto,
         permisos,

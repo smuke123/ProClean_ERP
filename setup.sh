@@ -175,49 +175,78 @@ echo -e "${YELLOW}¿Deseas insertar datos de prueba? (s/N)${NC}"
 read -p "" INSERT_TEST_DATA
 
 if [[ $INSERT_TEST_DATA =~ ^[Ss]$ ]]; then
-    echo -e "${BLUE}📝 Insertando datos de prueba...${NC}"
+    echo ""
+    echo -e "${YELLOW}⚠️  ¿Deseas limpiar las tablas existentes antes de importar? (s/N)${NC}"
+    echo -e "${YELLOW}   (Esto eliminará todos los datos actuales)${NC}"
+    read -p "" CLEAN_TABLES
     
-    TEST_DATA="
--- Insertar sucursal de prueba
-INSERT INTO Sucursales (nombre, direccion, telefono, codigo_sucursal) 
-VALUES ('Sucursal Principal', 'Calle Principal #123', '1234567890', 'SUC001')
-ON DUPLICATE KEY UPDATE nombre=nombre;
-
--- Insertar usuario admin de prueba (password: admin123)
-INSERT INTO Usuarios (nombre, email, password, rol, id_sucursal)
-VALUES (
-    'Administrador',
-    'admin@proclean.com',
-    '\$2b\$10\$YourHashedPasswordHere',
-    'admin',
-    1
-) ON DUPLICATE KEY UPDATE nombre=nombre;
-
--- Insertar algunos productos de prueba
-INSERT INTO Productos (nombre, precio, categoria, marca, descripcion_corta, activo)
-VALUES 
-    ('Detergente Líquido 1L', 15.50, 'Limpieza', 'ProClean', 'Detergente líquido para ropa', TRUE),
-    ('Jabón en Polvo 500g', 8.75, 'Limpieza', 'ProClean', 'Jabón en polvo multiusos', TRUE),
-    ('Desinfectante 1L', 12.00, 'Desinfección', 'ProClean', 'Desinfectante multiusos', TRUE)
-ON DUPLICATE KEY UPDATE nombre=nombre;
-
--- Insertar inventario inicial
-INSERT INTO Inventario (id_sucursal, id_producto, cantidad, stock_minimo)
-VALUES 
-    (1, 1, 50, 10),
-    (1, 2, 30, 10),
-    (1, 3, 40, 10)
-ON DUPLICATE KEY UPDATE cantidad=cantidad;
+    if [[ $CLEAN_TABLES =~ ^[Ss]$ ]]; then
+        echo -e "${BLUE}🧹 Limpiando tablas existentes...${NC}"
+        
+        CLEAN_SQL="
+SET FOREIGN_KEY_CHECKS = 0;
+TRUNCATE TABLE Detalle_Pedidos;
+TRUNCATE TABLE Detalle_Compras;
+TRUNCATE TABLE Pedidos;
+TRUNCATE TABLE Compras;
+TRUNCATE TABLE Carritos;
+TRUNCATE TABLE Inventario;
+TRUNCATE TABLE Productos;
+TRUNCATE TABLE Proveedores;
+TRUNCATE TABLE Usuarios;
+TRUNCATE TABLE Sucursales;
+SET FOREIGN_KEY_CHECKS = 1;
 "
+        echo "$CLEAN_SQL" | mysql -u $DB_USER -p$DB_PASSWORD $DB_NAME 2>/dev/null
+        
+        if [ $? -eq 0 ]; then
+            echo -e "${GREEN}✅ Tablas limpiadas correctamente${NC}"
+        else
+            echo -e "${RED}❌ Error limpiando las tablas${NC}"
+        fi
+    fi
     
-    echo "$TEST_DATA" | mysql -u $DB_USER -p$DB_PASSWORD $DB_NAME 2>/dev/null
+    echo -e "${BLUE}📝 Insertando datos de prueba completos...${NC}"
     
-    if [ $? -eq 0 ]; then
-        echo -e "${GREEN}✅ Datos de prueba insertados${NC}"
-        echo -e "${YELLOW}📧 Usuario de prueba: admin@proclean.com${NC}"
-        echo -e "${YELLOW}🔑 Contraseña: admin123${NC}"
+    # Verificar si existe el archivo data.sql
+    if [ -f "backend/src/database/data.sql" ]; then
+        mysql -u $DB_USER -p$DB_PASSWORD $DB_NAME < "backend/src/database/data.sql" 2>/dev/null
+        
+        if [ $? -eq 0 ]; then
+            echo -e "${GREEN}✅ Datos de prueba importados correctamente${NC}"
+            echo ""
+            echo -e "${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+            echo -e "${GREEN}📊 Datos Importados:${NC}"
+            echo -e "${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+            echo "   • 2 Sucursales (Norte y Sur)"
+            echo "   • 3 Usuarios (2 admins + 1 cliente)"
+            echo "   • 10 Productos"
+            echo "   • 3 Proveedores"
+            echo "   • 20 Registros de inventario"
+            echo "   • 42 Compras históricas"
+            echo "   • 61 Pedidos/Ventas históricas"
+            echo ""
+            echo -e "${GREEN}👤 Usuarios disponibles:${NC}"
+            echo -e "${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+            echo "   Admin Norte:"
+            echo "   📧 Email: admin@norte.proclean.com"
+            echo "   🔑 Password: admin123"
+            echo ""
+            echo "   Admin Sur:"
+            echo "   📧 Email: admin@sur.proclean.com"
+            echo "   🔑 Password: admin123"
+            echo ""
+            echo "   Cliente:"
+            echo "   📧 Email: cliente@proclean.com"
+            echo "   🔑 Password: cliente123"
+            echo -e "${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+        else
+            echo -e "${RED}❌ Error importando datos de prueba${NC}"
+            echo -e "${YELLOW}⚠️  Puedes importarlos manualmente con:${NC}"
+            echo "   mysql -u $DB_USER -p$DB_PASSWORD $DB_NAME < backend/src/database/data.sql"
+        fi
     else
-        echo -e "${YELLOW}⚠️  Advertencia: Algunos datos pueden ya existir${NC}"
+        echo -e "${RED}❌ No se encuentra el archivo backend/src/database/data.sql${NC}"
     fi
 fi
 

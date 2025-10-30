@@ -13,14 +13,18 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkAuth = async () => {
       const token = getStoredToken();
+      console.log('[AUTH] Verificando autenticación, token encontrado:', !!token);
       if (token) {
         try {
           const response = await getProfile();
+          console.log('[AUTH] Usuario autenticado:', response.user);
           setUser(response.user);
         } catch (error) {
-          console.error('Error verificando autenticación:', error);
+          console.error('[AUTH] Error verificando autenticación:', error);
           removeToken();
         }
+      } else {
+        console.log('[AUTH] No hay token en localStorage');
       }
       setLoading(false);
     };
@@ -34,11 +38,14 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
       
       const response = await loginAPI(email, password);
+      console.log('[AUTH] Login exitoso:', response.user);
       setToken(response.token);
       setUser(response.user);
+      console.log('[AUTH] Token guardado en localStorage');
       
       return response;
     } catch (error) {
+      console.error('[AUTH] Error en login:', error);
       setError(error.message);
       throw error;
     } finally {
