@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth.js';
 import { HiOutlineUser } from 'react-icons/hi';
 
-const UserDropdown = () => {
+const UserDropdown = ({ isHeaderSticky = false }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
@@ -44,10 +44,17 @@ const UserDropdown = () => {
       <button 
         ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
-        className="text-2xl relative hover:scale-110 transition-all duration-200"
+        className="relative hover:scale-110 transition-all duration-200"
+        style={{ 
+          background: 'transparent', 
+          border: 'none', 
+          padding: 0,
+          cursor: 'pointer',
+          fontSize: '28px'
+        }}
         title={isAuthenticated ? `Hola, ${user?.nombre}` : "Iniciar sesión"}
       >
-        <HiOutlineUser className="text-gray-700" />
+        <HiOutlineUser style={{ color: isHeaderSticky ? '#ffffff' : '#000000' }} />
         {isAuthenticated && (
           <span className="absolute -top-1 -right-1 bg-green-500 w-2.5 h-2.5 rounded-full border-2 border-white shadow-sm"></span>
         )}

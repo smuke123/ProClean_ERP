@@ -197,25 +197,178 @@ body {
 /* Header sticky con fondo oscuro */
 .header {
   background-color: #1f2937;
-  color: white;
   transition: all 0.3s ease;
 }
 
+/* NO aplicar color blanco a todo - removemos "color: white" del header */
+
 .header .link-hover {
-  color: #d1d5db;
   transition: color 0.2s ease;
 }
 
+.header .link-hover::after {
+  background-color: #ffffff !important;
+}
+
 .header .link-hover:hover {
-  color: white;
+  color: white !important;
+}
+
+.header .link-hover:hover::after {
+  background-color: #ffffff !important;
 }
 
 .header .link-hover.active {
-  color: white;
+  color: white !important;
   font-weight: bold;
 }
 
-/* Iconos del header cambiar a blanco cuando sticky */
-.header svg {
-  color: white !important;
+.header .link-hover.active::after {
+  background-color: #ffffff !important;
+}
+
+/* Los dropdowns deben mantener su estilo original */
+.header .absolute.bg-white,
+.header .absolute[style*="backgroundColor: rgb(255, 255, 255)"] {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+/* Textos dentro de dropdowns */
+.header .absolute.bg-white *,
+.header .absolute[style*="backgroundColor: rgb(255, 255, 255)"] * {
+  color: #374151 !important;
+}
+
+.header .absolute.bg-white p,
+.header .absolute.bg-white span,
+.header .absolute.bg-white h4,
+.header .absolute.bg-white button {
+  color: #374151 !important;
+}
+
+/* Clases específicas de texto */
+.header .absolute.bg-white .text-gray-800 {
+  color: #1f2937 !important;
+}
+
+.header .absolute.bg-white .text-gray-700 {
+  color: #374151 !important;
+}
+
+.header .absolute.bg-white .text-gray-500 {
+  color: #6b7280 !important;
+}
+
+.header .absolute.bg-white .text-red-600 {
+  color: #dc2626 !important;
+}
+
+.header .absolute.bg-white .text-green-700 {
+  color: #15803d !important;
+}
+
+/* Iconos de PrimeReact dentro de dropdowns */
+.header .absolute.bg-white .pi {
+  color: #374151 !important;
+}
+
+/* Botones dentro de dropdowns */
+.header .absolute.bg-white button {
+  color: #374151 !important;
+}
+
+.header .absolute.bg-white button.hover\:bg-red-50,
+.header .absolute.bg-white .text-red-600 {
+  color: #dc2626 !important;
+}
+
+/* Estilos para el slider de Banner */
+.slick-slider {
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  user-select: none;
+  touch-action: pan-y;
+}
+
+.slick-list {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.slick-track {
+  position: relative;
+  top: 0;
+  left: 0;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.slick-slide {
+  display: none;
+  float: left;
+  height: 100%;
+  min-height: 1px;
+}
+
+.slick-slide.slick-active {
+  display: block;
+}
+
+.slick-prev,
+.slick-next {
+  font-size: 0;
+  line-height: 0;
+  position: absolute;
+  top: 50%;
+  display: block;
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: white;
+  border: none;
+  outline: none;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  z-index: 10;
+  transition: background 0.3s ease;
+}
+
+.slick-prev:hover,
+.slick-next:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.slick-prev {
+  left: 25px;
+}
+
+.slick-next {
+  right: 25px;
+}
+
+.slick-prev svg,
+.slick-next svg {
+  width: 40px;
+  height: 40px;
+}
+
+/* Estilos para los componentes del Home */
+.banner {
+  margin-bottom: 2rem;
+}
+
+.craft-img {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.fifth-image {
+  transform: scale(0.95);
 }

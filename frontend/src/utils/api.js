@@ -44,6 +44,9 @@ export const getInventarioBySucursal = (id) =>
 export const setInventario = (data) =>
   req("/api/inventario/set", { method: "PUT", body: JSON.stringify(data) });
 
+// Proveedores
+export const getProveedores = () => req("/api/proveedores");
+
 // Compras (entrada de stock)
 export const postCompra = (data) =>
   req("/api/compras", { method: "POST", body: JSON.stringify(data) });

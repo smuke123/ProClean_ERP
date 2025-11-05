@@ -69,7 +69,7 @@ export default function Cart() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="bg-gray-50">
       {/* Header de la página */}
       <div className="bg-white shadow-sm mb-8">
         <div className="w-10/12 m-auto py-6">
@@ -132,12 +132,34 @@ export default function Cart() {
                           </td>
                           <td className="px-4 py-4">
                             <div className="flex items-center gap-4">
-                              <div className="w-24 h-24 bg-gray-50 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
-                                <img
-                                  src={item.imagen || '/images/Detergente.webp'}
-                                  alt={item.nombre}
-                                  className="w-full h-full object-contain"
-                                />
+                              <div 
+                                className="bg-gray-50 rounded-lg flex-shrink-0"
+                                style={{
+                                  width: '100px',
+                                  height: '100px',
+                                  position: 'relative',
+                                  overflow: 'hidden'
+                                }}
+                              >
+                                <div
+                                  style={{
+                                    position: 'relative',
+                                    width: '100%',
+                                    height: '100%',
+                                    padding: '0.5rem',
+                                    overflow: 'hidden'
+                                  }}
+                                >
+                                  <img
+                                    src={item.imagen || '/images/Detergente.webp'}
+                                    alt={item.nombre}
+                                    style={{
+                                      width: '100%',
+                                      height: '100%',
+                                      objectFit: 'contain'
+                                    }}
+                                  />
+                                </div>
                               </div>
                               <div>
                                 <p className="font-semibold text-gray-800">{item.nombre}</p>

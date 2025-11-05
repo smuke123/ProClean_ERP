@@ -1,14 +1,26 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaTimes } from 'react-icons/fa';
 import { PiMinus, PiPlus } from 'react-icons/pi';
 import { useCart } from '../../hooks/useCart.js';
+import { useAuth } from '../../hooks/useAuth.js';
 
 const Modal = ({ isModalOpen, handleClose, data }) => {
   const [qty, setQty] = useState(1);
   const [addedItemToCart, setAddedItemToCart] = useState(false);
   const { addToCart } = useCart();
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
   const addItemToCart = (product) => {
+    // Verificar si el usuario está autenticado
+    if (!isAuthenticated) {
+      alert('Por favor, inicia sesión para agregar productos al carrito');
+      handleClose();
+      navigate('/login');
+      return;
+    }
+
     addToCart(product, qty);
     setAddedItemToCart(true);
     

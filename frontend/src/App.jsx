@@ -23,10 +23,21 @@ const AppContent = () => {
   const isLoginPage = location.pathname === '/login';
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div 
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column'
+      }}
+    >
       {!isLoginPage && <Header />}
       
-      <main className="flex-1 container mx-auto px-4 py-8">
+      <main 
+        style={{
+          flex: '1 0 auto',
+          width: '100%'
+        }}
+      >
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/categories" element={<Categories />} />

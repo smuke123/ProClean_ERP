@@ -4,21 +4,47 @@ import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 import { Card } from 'primereact/card';
 import SelectSucursal from "../components/SelectSucursal.jsx";
-import { getProductos } from "../utils/api.js";
+import { getProductos, getProveedores, getUsers } from "../utils/api.js";
 
 export default function Gestion() {
   const [sucursal, setSucursal] = useState("");
   const [productos, setProductos] = useState([]);
+  const [proveedores, setProveedores] = useState([]);
+  const [clientes, setClientes] = useState([]);
   const [tipoFormulario, setTipoFormulario] = useState("compras"); // compras | ventas
   
   // Estados para formulario de compras
+  const [proveedorSeleccionado, setProveedorSeleccionado] = useState(null);
   const [itemsCompra, setItemsCompra] = useState([]);
   
   // Estados para formulario de ventas
+  const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
   const [itemsVenta, setItemsVenta] = useState([]);
 
   useEffect(() => {
-    getProductos().then(setProductos).catch(console.error);
+    getProductos()
+      .then(data => setProductos(Array.isArray(data) ? data : []))
+      .catch(err => {
+        console.error('Error cargando productos:', err);
+        setProductos([]);
+      });
+    
+    getProveedores()
+      .then(data => setProveedores(Array.isArray(data) ? data : []))
+      .catch(err => {
+        console.error('Error cargando proveedores:', err);
+        setProveedores([]);
+      });
+    
+    getUsers()
+      .then(data => {
+        console.log('Usuarios recibidos:', data);
+        setClientes(Array.isArray(data) ? data : []);
+      })
+      .catch(err => {
+        console.error('Error cargando usuarios:', err);
+        setClientes([]);
+      });
   }, []);
 
   // Funciones para manejar items de compra
@@ -67,6 +93,12 @@ export default function Gestion() {
 
   const handleComprar = async (e) => {
     e.preventDefault();
+    
+    if (!proveedorSeleccionado) {
+      alert("Por favor selecciona un proveedor");
+      return;
+    }
+    
     if (!sucursal || itemsCompra.length === 0) {
       alert("Por favor selecciona una sucursal y añade al menos un producto");
       return;
@@ -81,7 +113,7 @@ export default function Gestion() {
 
     try {
       const data = {
-        id_proveedor: 1, // Por defecto el primer proveedor
+        id_proveedor: proveedorSeleccionado,
         id_sucursal: sucursal,
         fecha: new Date().toISOString().slice(0, 10),
         items: itemsCompra
@@ -96,6 +128,7 @@ export default function Gestion() {
       if (response.ok) {
         alert("Compra registrada exitosamente");
         setItemsCompra([]);
+        setProveedorSeleccionado(null);
       } else {
         const error = await response.json();
         alert(`Error: ${error.error}`);
@@ -107,6 +140,12 @@ export default function Gestion() {
 
   const handleVender = async (e) => {
     e.preventDefault();
+    
+    if (!clienteSeleccionado) {
+      alert("Por favor selecciona un cliente");
+      return;
+    }
+    
     if (!sucursal || itemsVenta.length === 0) {
       alert("Por favor selecciona una sucursal y añade al menos un producto");
       return;
@@ -121,7 +160,7 @@ export default function Gestion() {
 
     try {
       const data = {
-        id_usuario: 1, // Por defecto el primer usuario admin
+        id_usuario: clienteSeleccionado,
         id_sucursal: sucursal,
         fecha: new Date().toISOString().slice(0, 10),
         items: itemsVenta
@@ -137,6 +176,7 @@ export default function Gestion() {
         const result = await response.json();
         alert("Venta registrada exitosamente");
         setItemsVenta([]);
+        setClienteSeleccionado(null);
         
         // Cambiar estado a completado para que se descuente el inventario
         await fetch(`/api/pedidos/${result.id_pedido}/estado`, {
@@ -202,7 +242,23 @@ export default function Gestion() {
             </div>
             
             <div className="flex flex-col gap-2">
-              <label className="text-sm text-gray-600 font-semibold">Sucursal:</label>
+              <label className="text-sm text-gray-600 font-semibold">Proveedor: *</label>
+              <Dropdown 
+                value={proveedorSeleccionado} 
+                onChange={(e) => setProveedorSeleccionado(e.value)}
+                options={(proveedores || []).map(p => ({ 
+                  label: `${p.nombre} - ${p.empresa || ''}`, 
+                  value: p.id_proveedor 
+                }))}
+                placeholder="Seleccionar proveedor"
+                className="w-full"
+                filter
+                emptyMessage="No hay proveedores disponibles"
+              />
+            </div>
+            
+            <div className="flex flex-col gap-2">
+              <label className="text-sm text-gray-600 font-semibold">Sucursal: *</label>
               <SelectSucursal value={sucursal} onChange={setSucursal} />
             </div>
             
@@ -311,7 +367,23 @@ export default function Gestion() {
             </div>
             
             <div className="flex flex-col gap-2">
-              <label className="text-sm text-gray-600 font-semibold">Sucursal:</label>
+              <label className="text-sm text-gray-600 font-semibold">Cliente: *</label>
+              <Dropdown 
+                value={clienteSeleccionado} 
+                onChange={(e) => setClienteSeleccionado(e.value)}
+                options={(clientes || []).map(c => ({ 
+                  label: `${c.nombre} - ${c.email}`, 
+                  value: c.id_usuario 
+                }))}
+                placeholder="Seleccionar cliente"
+                className="w-full"
+                filter
+                emptyMessage="No hay clientes disponibles"
+              />
+            </div>
+            
+            <div className="flex flex-col gap-2">
+              <label className="text-sm text-gray-600 font-semibold">Sucursal: *</label>
               <SelectSucursal value={sucursal} onChange={setSucursal} />
             </div>
             

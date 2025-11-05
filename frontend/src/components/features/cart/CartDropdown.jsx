@@ -6,7 +6,7 @@ import { MdOutlineShoppingBag } from 'react-icons/md';
 import { DataView } from 'primereact/dataview';
 import { Button } from 'primereact/button';
 
-const CartDropdown = () => {
+const CartDropdown = ({ isHeaderSticky = false }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [badgeAnimation, setBadgeAnimation] = useState(false);
   const dropdownRef = useRef(null);
@@ -122,13 +122,31 @@ const CartDropdown = () => {
       <button 
         ref={buttonRef}
         onClick={handleButtonClick}
-        className="text-2xl relative hover:scale-110 transition-all duration-200"
+        className="relative hover:scale-110 transition-all duration-200"
+        style={{ 
+          background: 'transparent', 
+          border: 'none', 
+          padding: 0,
+          cursor: 'pointer',
+          fontSize: '28px'
+        }}
         title={`Carrito (${getTotalItems()} productos)`}
       >
-        <MdOutlineShoppingBag className="text-gray-700" />
+        <MdOutlineShoppingBag style={{ color: isHeaderSticky ? '#ffffff' : '#000000' }} />
         {getTotalItems() > 0 && (
           <span 
-            className={`absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1 border-2 border-white shadow-md ${badgeAnimation ? 'animate-bounce' : ''}`}
+            className={`absolute rounded-full flex items-center justify-center font-bold ${badgeAnimation ? 'animate-bounce' : ''}`}
+            style={{
+              top: '-8px',
+              right: '-8px',
+              minWidth: '24px',
+              height: '24px',
+              fontSize: '12px',
+              backgroundColor: isHeaderSticky ? '#ffffff' : 'transparent',
+              color: '#000000',
+              border: isHeaderSticky ? 'none' : '2px solid #000000',
+              padding: '2px 6px'
+            }}
           >
             {getTotalItems()}
           </span>

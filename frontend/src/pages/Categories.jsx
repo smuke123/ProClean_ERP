@@ -188,29 +188,103 @@ export default function Categories() {
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-3 gap-6">
                 {filteredProducts.map((product, index) => (
-                  <div key={index} className="relative group">
-                    <div className="relative rounded-3xl h-72 flex items-center justify-center bg-gray-50 overflow-hidden">
-                      <img
-                        src={product.imagen || '/images/Detergente.webp'}
-                        alt={product.nombre}
-                        className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
-                      />
+                  <div 
+                    key={index} 
+                    className="flex flex-col group"
+                    style={{
+                      minHeight: '420px'
+                    }}
+                  >
+                    {/* Contenedor de imagen con altura fija y responsive */}
+                    <div 
+                      className="relative rounded-3xl bg-gray-50 flex-shrink-0"
+                      style={{
+                        height: '280px',
+                        width: '100%',
+                        overflow: 'hidden',
+                        marginBottom: '1rem'
+                      }}
+                    >
+                      <div
+                        style={{
+                          position: 'relative',
+                          width: '100%',
+                          height: '100%',
+                          padding: '1rem',
+                          overflow: 'hidden'
+                        }}
+                      >
+                        <img
+                          src={product.imagen || '/images/Detergente.webp'}
+                          alt={product.nombre}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'contain'
+                          }}
+                          className="transition-transform duration-300 group-hover:scale-105"
+                        />
+                      </div>
                       
-                      {/* Botón Agregar al Carrito */}
+                      {/* Botón Agregar al Carrito - Inferior derecha */}
                       <button
-                        className="absolute bottom-3 right-3 bg-black text-white h-14 w-14 rounded-full flex items-center justify-center hover:bg-gray-800 transition-all duration-200 hover:scale-110 shadow-2xl"
+                        style={{
+                          position: 'absolute',
+                          bottom: '12px',
+                          right: '12px',
+                          width: '45px',
+                          height: '45px',
+                          borderRadius: '50%',
+                          backgroundColor: '#000000',
+                          color: '#ffffff',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          border: 'none',
+                          cursor: 'pointer',
+                          boxShadow: '0 10px 25px rgba(0,0,0,0.3)',
+                          transition: 'all 0.2s ease',
+                          fontSize: '28px',
+                          zIndex: 10
+                        }}
+                        className="hover:scale-110"
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#1f2937'}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#000000'}
                         onClick={() => handleOpenModal(product.id_producto)}
                         title="Ver detalles y agregar al carrito"
                       >
-                        <BiCart className="text-3xl" />
+                        <BiCart />
                       </button>
                     </div>
 
-                    <div className="mt-3">
-                      <p className="mb-2 font-semibold text-gray-800">{product.nombre}</p>
-                      <p className="text-lg font-bold text-black">${parseFloat(product.precio).toLocaleString()}</p>
+                    {/* Información del producto con altura fija */}
+                    <div 
+                      className="flex flex-col"
+                      style={{
+                        minHeight: '100px',
+                        overflow: 'visible'
+                      }}
+                    >
+                      <p 
+                        className="mb-2 font-semibold text-gray-800"
+                        style={{
+                          display: '-webkit-box',
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: 'vertical',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          lineHeight: '1.5em',
+                          maxHeight: '3em',
+                          fontSize: '15px'
+                        }}
+                      >
+                        {product.nombre}
+                      </p>
+                      <p className="text-lg font-bold text-black" style={{ marginTop: '0.5rem' }}>
+                        ${parseFloat(product.precio).toLocaleString()}
+                      </p>
                     </div>
                   </div>
                 ))}
