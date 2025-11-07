@@ -125,6 +125,23 @@ if [ "$SKIP_ENV" != "true" ]; then
     # Generar JWT secret aleatorio
     JWT_SECRET=$(openssl rand -base64 64 | tr -d '\n')
     
+    # Preservar variables de contacto si existen en el .env anterior
+    PRESERVE_CONTACT_EMAIL=""
+    PRESERVE_CONTACT_EMAIL_PASS=""
+    
+    if [ -f "backend/.env" ]; then
+        # Leer CONTACT_EMAIL del .env existente si existe
+        if grep -q "^CONTACT_EMAIL=" backend/.env; then
+            PRESERVE_CONTACT_EMAIL=$(grep "^CONTACT_EMAIL=" backend/.env | cut -d '=' -f2-)
+        fi
+        
+        # Leer CONTACT_EMAIL_PASS del .env existente si existe
+        if grep -q "^CONTACT_EMAIL_PASS=" backend/.env; then
+            PRESERVE_CONTACT_EMAIL_PASS=$(grep "^CONTACT_EMAIL_PASS=" backend/.env | cut -d '=' -f2-)
+        fi
+    fi
+    
+    # Crear el archivo .env base
     cat > backend/.env << EOF
 # ========================================
 # CONFIGURACIÓN DE PROCLEAN ERP
@@ -161,12 +178,34 @@ REACT_LOCAL_PORT=5173
 REACT_DOCKER_PORT=5173
 
 # ========================================
+# CONTACT EMAIL CONFIGURATION
+# ========================================
+# Configuración para el formulario de contacto
+# CONTACT_EMAIL: Correo de Gmail que enviará los mensajes
+# CONTACT_EMAIL_PASS: Contraseña de aplicación de Gmail (no la contraseña normal)
+
+# ========================================
 # ENVIRONMENT
 # ========================================
 NODE_ENV=production
 
 EOF
-    echo -e "${GREEN}✅ Archivo .env creado${NC}"
+    
+    # Agregar las variables de contacto preservadas si existen
+    if [ -n "$PRESERVE_CONTACT_EMAIL" ]; then
+        echo "CONTACT_EMAIL=$PRESERVE_CONTACT_EMAIL" >> backend/.env
+    fi
+    
+    if [ -n "$PRESERVE_CONTACT_EMAIL_PASS" ]; then
+        echo "CONTACT_EMAIL_PASS=$PRESERVE_CONTACT_EMAIL_PASS" >> backend/.env
+    fi
+    
+    if [ -n "$PRESERVE_CONTACT_EMAIL" ] || [ -n "$PRESERVE_CONTACT_EMAIL_PASS" ]; then
+        echo -e "${GREEN}✅ Archivo .env creado (variables de contacto preservadas)${NC}"
+    else
+        echo -e "${GREEN}✅ Archivo .env creado${NC}"
+        echo -e "${YELLOW}💡 Tip: Puedes agregar CONTACT_EMAIL y CONTACT_EMAIL_PASS manualmente para habilitar el formulario de contacto${NC}"
+    fi
 fi
 
 # 6. Datos iniciales (opcional)

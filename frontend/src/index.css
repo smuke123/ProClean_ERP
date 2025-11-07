@@ -5,9 +5,8 @@
 @import 'primereact/resources/primereact.min.css';
 @import 'primeicons/primeicons.css';
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Tailwind CSS v4 */
+@import "tailwindcss";
 
 /* Fondo texturizado en grises suaves */
 :root {
@@ -371,4 +370,27 @@ body {
 
 .fifth-image {
   transform: scale(0.95);
+}
+
+/* Mantener texto e icono blancos en el botón del carrito */
+.cart-button-white,
+.cart-button-white:hover,
+.cart-button-white .p-button-icon,
+.cart-button-white:hover .p-button-icon {
+  color: #ffffff !important;
+}
+
+
+/* Evita que el InputNumber con botones horizontales se deforme */
+.p-inputnumber-button {
+  min-width: unset !important;
+}
+
+.p-inputnumber-button.p-button {
+  width: 36px !important;
+  flex-shrink: 0 !important;
+}
+
+.p-inputnumber-input {
+  min-width: 0 !important;
 }

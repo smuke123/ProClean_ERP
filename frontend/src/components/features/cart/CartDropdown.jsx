@@ -204,8 +204,8 @@ const CartDropdown = ({ isHeaderSticky = false }) => {
                   setIsOpen(false);
                   navigate('/cart');
                 }}
-                className="w-full p-button-dark p-button-sm"
-                style={{ backgroundColor: '#000', borderColor: '#000', fontSize: '0.75rem', padding: '0.375rem 0.75rem' }}
+                className="w-full p-button-dark p-button-sm cart-button-white"
+                style={{ backgroundColor: '#000', borderColor: '#000', fontSize: '0.75rem', padding: '0.375rem 0.75rem', color: '#ffffff' }}
               />
             </div>
           )}

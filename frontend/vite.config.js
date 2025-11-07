@@ -49,6 +49,7 @@ export default defineConfig({
   },
   // Optimizar dependencias que contienen fuentes
   optimizeDeps: {
-    include: ['primeicons', 'primereact']
+    include: ['primereact'],
+    exclude: ['primeicons'] // primeicons es solo CSS/fuentes, no necesita optimización
   }
 })

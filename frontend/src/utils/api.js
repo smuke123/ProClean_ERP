@@ -114,3 +114,10 @@ export const syncCarrito = (items) =>
     method: "POST", 
     body: JSON.stringify({ items }) 
   });
+
+// Contacto
+export const sendContactMessage = (data) =>
+  req("/api/contact/send", {
+    method: "POST",
+    body: JSON.stringify(data)
+  });

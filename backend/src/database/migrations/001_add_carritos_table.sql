@@ -1,9 +1,3 @@
--- =============================================
--- MIGRACIÓN: Agregar tabla de Carritos
--- Fecha: 2025-10-24
--- Descripción: Tabla para gestionar carritos de compra persistentes por usuario
--- =============================================
-
 -- Tabla de Carritos
 CREATE TABLE IF NOT EXISTS Carritos (
     id_carrito INT AUTO_INCREMENT PRIMARY KEY,
@@ -18,7 +12,5 @@ CREATE TABLE IF NOT EXISTS Carritos (
     INDEX idx_usuario (id_usuario),
     INDEX idx_producto (id_producto)
 );
-
 -- Comentarios de la tabla
 ALTER TABLE Carritos COMMENT = 'Almacena los productos en el carrito de cada usuario de forma persistente';
-

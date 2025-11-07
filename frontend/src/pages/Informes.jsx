@@ -508,7 +508,7 @@ export default function Informes() {
   return (
     <div className="px-4 md:px-6 lg:px-8 py-6 max-w-[1600px] mx-auto">
       <div className="grid gap-8">
-        <h2 className="text-2xl font-semibold">Informes y Analytics</h2>
+        <h2 className="text-2xl font-semibold">Informes y Analisis</h2>
 
       {/* Filtros Globales */}
       <div className="bg-white rounded-lg shadow p-4">
@@ -678,7 +678,7 @@ export default function Informes() {
           <Card className="bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-blue-100 text-sm mb-1">Total {tipoTransaccion === 'ventas' ? 'Ventas' : 'Compras'}</p>
+              <p className="text-blue-500 text-sm mb-1">Total {tipoTransaccion === 'ventas' ? 'Ventas' : 'Compras'}</p>
               <h3 className="text-3xl font-bold mb-0">
                 ${analytics.totalMonto.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </h3>
@@ -690,9 +690,9 @@ export default function Informes() {
         <Card className="bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-lg">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-emerald-100 text-sm mb-1">Transacciones</p>
+              <p className="text-emerald-500 text-sm mb-1">Transacciones</p>
               <h3 className="text-3xl font-bold mb-0">{analytics.totalTransacciones}</h3>
-              <p className="text-emerald-100 text-xs mt-1">{analytics.completadas} completadas</p>
+              <p className="text-emerald-500 text-xs mt-1">{analytics.completadas} completadas</p>
             </div>
             <i className="pi pi-list text-5xl opacity-30"></i>
           </div>
@@ -701,11 +701,11 @@ export default function Informes() {
         <Card className="bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-lg">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-amber-100 text-sm mb-1">Promedio</p>
+              <p className="text-amber-500 text-sm mb-1">Promedio</p>
               <h3 className="text-3xl font-bold mb-0">
                 ${analytics.promedio.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </h3>
-              <p className="text-amber-100 text-xs mt-1">por transacción</p>
+              <p className="text-amber-500 text-xs mt-1">por transacción</p>
             </div>
             <i className="pi pi-chart-line text-5xl opacity-30"></i>
           </div>
@@ -714,9 +714,9 @@ export default function Informes() {
         <Card className="bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-lg">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-purple-100 text-sm mb-1">Pendientes</p>
+              <p className="text-purple-500 text-sm mb-1">Pendientes</p>
               <h3 className="text-3xl font-bold mb-0">{analytics.pendientes}</h3>
-              <p className="text-purple-100 text-xs mt-1">requieren atención</p>
+              <p className="text-purple-500 text-xs mt-1">requieren atención</p>
             </div>
             <i className="pi pi-clock text-5xl opacity-30"></i>
           </div>

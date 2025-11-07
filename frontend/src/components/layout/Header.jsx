@@ -70,7 +70,7 @@ const Header = () => {
 
         {/* Centro: Logo - Posición absoluta centrada */}
         <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <img src="/IconoProClean.svg" alt="ProClean" className="w-auto" style={{ maxHeight: '55px', objectFit: 'contain' }} />
+          <img src="/IconoProClean.svg" alt="ProClean" className="object-contain h-24 w-auto"/>
         </div>
 
         {/* Derecha: Links Admin (si es admin) + Iconos */}

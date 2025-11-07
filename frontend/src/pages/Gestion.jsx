@@ -39,7 +39,9 @@ export default function Gestion() {
     getUsers()
       .then(data => {
         console.log('Usuarios recibidos:', data);
-        setClientes(Array.isArray(data) ? data : []);
+        // El backend devuelve { users: [...] }
+        const usuarios = data?.users || (Array.isArray(data) ? data : []);
+        setClientes(usuarios);
       })
       .catch(err => {
         console.error('Error cargando usuarios:', err);
@@ -283,7 +285,7 @@ export default function Gestion() {
               ) : (
                 <div className="grid gap-3">
                   {itemsCompra.map((item, index) => (
-                    <div key={index} className="grid grid-cols-1 md:grid-cols-[2fr_120px_100px_auto] gap-3 items-end p-4 bg-gray-50 rounded-lg border border-gray-200">
+                    <div key={index} className="grid grid-cols-1 md:grid-cols-[2fr_minmax(170px,220px)_130px_60px] gap-5 items-center p-4 bg-gray-50 rounded-lg border border-gray-200">
                       <div className="flex flex-col gap-2">
                         <label className="text-xs text-gray-600 font-semibold">Producto</label>
                         <Dropdown 
@@ -299,38 +301,44 @@ export default function Gestion() {
                         />
                       </div>
                       
-                      <div className="flex flex-col gap-2">
+                      <div className="flex flex-col gap-2 min-w-0">
                         <label className="text-xs text-gray-600 font-semibold">Cantidad</label>
-                        <InputNumber 
-                          value={item.cantidad} 
-                          onValueChange={(e) => updateItemCompra(index, "cantidad", e.value || 0)}
-                          min={1}
-                          showButtons
-                          buttonLayout="horizontal"
-                          decrementButtonClassName="p-button-danger"
-                          incrementButtonClassName="p-button-success"
-                          incrementButtonIcon="pi pi-plus"
-                          decrementButtonIcon="pi pi-minus"
-                          className="w-full"
-                        />
+                        <div className="w-full max-w-full overflow-hidden">
+                          <InputNumber 
+                            value={item.cantidad} 
+                            onValueChange={(e) => updateItemCompra(index, "cantidad", e.value || 0)}
+                            min={1}
+                            showButtons
+                            buttonLayout="horizontal"
+                            decrementButtonClassName="p-button-danger"
+                            incrementButtonClassName="p-button-success"
+                            incrementButtonIcon="pi pi-plus"
+                            decrementButtonIcon="pi pi-minus"
+                            className="w-full"
+                            style={{ maxWidth: '100%' }}
+                          />
+                        </div>
                       </div>
                       
                       <div className="flex flex-col gap-2">
                         <label className="text-xs text-gray-600 font-semibold">Precio Unit.</label>
-                        <div className="h-[42px] flex items-center px-3 bg-white rounded border border-gray-300">
-                          <span className="text-sm font-semibold">${item.precio_unitario}</span>
+                        <div className="h-[42px] flex items-center justify-end px-3 bg-white rounded border border-gray-300 w-full">
+                          <span className="text-sm font-semibold whitespace-nowrap">${item.precio_unitario}</span>
                         </div>
                       </div>
                       
-                      <Button 
-                        type="button" 
-                        icon="pi pi-trash" 
-                        onClick={() => removeItemCompra(index)}
-                        severity="danger"
-                        outlined
-                        tooltip="Eliminar"
-                        tooltipOptions={{ position: 'top' }}
-                      />
+                      <div className="flex items-center justify-center">
+                        <Button 
+                          type="button" 
+                          icon="pi pi-trash" 
+                          onClick={() => removeItemCompra(index)}
+                          severity="danger"
+                          outlined
+                          tooltip="Eliminar"
+                          tooltipOptions={{ position: 'top' }}
+                          className="w-full"
+                        />
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -408,7 +416,7 @@ export default function Gestion() {
               ) : (
                 <div className="grid gap-3">
                   {itemsVenta.map((item, index) => (
-                    <div key={index} className="grid grid-cols-1 md:grid-cols-[2fr_120px_100px_auto] gap-3 items-end p-4 bg-gray-50 rounded-lg border border-gray-200">
+                    <div key={index} className="grid grid-cols-1 md:grid-cols-[2fr_minmax(170px,220px)_130px_60px] gap-5 items-center p-4 bg-gray-50 rounded-lg border border-gray-200">
                       <div className="flex flex-col gap-2">
                         <label className="text-xs text-gray-600 font-semibold">Producto</label>
                         <Dropdown 
@@ -424,38 +432,44 @@ export default function Gestion() {
                         />
                       </div>
                       
-                      <div className="flex flex-col gap-2">
+                      <div className="flex flex-col gap-2 min-w-0">
                         <label className="text-xs text-gray-600 font-semibold">Cantidad</label>
-                        <InputNumber 
-                          value={item.cantidad} 
-                          onValueChange={(e) => updateItemVenta(index, "cantidad", e.value || 0)}
-                          min={1}
-                          showButtons
-                          buttonLayout="horizontal"
-                          decrementButtonClassName="p-button-danger"
-                          incrementButtonClassName="p-button-success"
-                          incrementButtonIcon="pi pi-plus"
-                          decrementButtonIcon="pi pi-minus"
-                          className="w-full"
-                        />
+                        <div className="w-full max-w-full overflow-hidden">
+                          <InputNumber 
+                            value={item.cantidad} 
+                            onValueChange={(e) => updateItemVenta(index, "cantidad", e.value || 0)}
+                            min={1}
+                            showButtons
+                            buttonLayout="horizontal"
+                            decrementButtonClassName="p-button-danger"
+                            incrementButtonClassName="p-button-success"
+                            incrementButtonIcon="pi pi-plus"
+                            decrementButtonIcon="pi pi-minus"
+                            className="w-full"
+                            style={{ maxWidth: '100%' }}
+                          />
+                        </div>
                       </div>
                       
                       <div className="flex flex-col gap-2">
                         <label className="text-xs text-gray-600 font-semibold">Precio Unit.</label>
-                        <div className="h-[42px] flex items-center px-3 bg-white rounded border border-gray-300">
-                          <span className="text-sm font-semibold">${item.precio_unitario}</span>
+                        <div className="h-[42px] flex items-center justify-end px-3 bg-white rounded border border-gray-300 w-full">
+                          <span className="text-sm font-semibold whitespace-nowrap">${item.precio_unitario}</span>
                         </div>
                       </div>
                       
-                      <Button 
-                        type="button" 
-                        icon="pi pi-trash" 
-                        onClick={() => removeItemVenta(index)}
-                        severity="danger"
-                        outlined
-                        tooltip="Eliminar"
-                        tooltipOptions={{ position: 'top' }}
-                      />
+                      <div className="flex items-center justify-center">
+                        <Button 
+                          type="button" 
+                          icon="pi pi-trash" 
+                          onClick={() => removeItemVenta(index)}
+                          severity="danger"
+                          outlined
+                          tooltip="Eliminar"
+                          tooltipOptions={{ position: 'top' }}
+                          className="w-full"
+                        />
+                      </div>
                     </div>
                   ))}
                 </div>

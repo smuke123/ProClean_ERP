@@ -114,6 +114,5 @@ async function testCarritoAPI() {
   }
 }
 
-// Ejecutar las pruebas
 testCarritoAPI();
 
