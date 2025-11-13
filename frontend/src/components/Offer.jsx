@@ -4,7 +4,7 @@ import { offer } from "../data/Data";
 const Offer = () => {
   return (
     <div className="mt-8 py-8">
-      <div className="w-10/12 m-auto">
+      <div className="w-full px-4 sm:w-10/12 m-auto">
         <div>
           {offer.map((data, key) => (
             <div key={key}>
@@ -13,7 +13,7 @@ const Offer = () => {
                   <img
                     src={data.customer_img}
                     alt="Oferta especial"
-                    className="w-full rounded-3xl h-[400px] object-cover"
+                    className="w-full rounded-3xl h-56 sm:h-80 object-cover"
                   />
                 </div>
               </div>

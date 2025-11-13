@@ -49,9 +49,7 @@ export default function Cart() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ total: grandTotal, items: cartItems }),
       });
-
       const data = await response.json();
-
       if (data.url) {
         window.location.href = data.url;
       } else {
@@ -103,114 +101,218 @@ export default function Cart() {
             {/* Tabla de productos */}
             <div className="lg:col-span-2">
               <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-                <table className="w-full">
-                  <thead className="bg-black text-white">
-                    <tr>
-                      <th className="px-4 py-4 text-left"></th>
-                      <th className="px-4 py-4 text-left">Producto</th>
-                      <th className="px-4 py-4 text-center">Precio</th>
-                      <th className="px-4 py-4 text-center">Cantidad</th>
-                      <th className="px-4 py-4 text-right">Subtotal</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200">
-                    {cartItems.map((item) => {
-                      const itemId = item.id_producto || item.id;
-                      const itemPrice = parseFloat(item.precio);
-                      const itemSubtotal = itemPrice * item.quantity;
-                      
-                      return (
-                        <tr key={itemId} className="hover:bg-gray-50 transition-colors">
-                          <td className="px-4 py-4">
-                            <button
-                              className="text-red-500 hover:text-red-700 transition-colors p-2"
-                              onClick={() => removeFromCart(itemId)}
-                              title="Eliminar producto"
-                            >
-                              <FaTimes size={18} />
-                            </button>
-                          </td>
-                          <td className="px-4 py-4">
-                            <div className="flex items-center gap-4">
-                              <div 
-                                className="bg-gray-50 rounded-lg flex-shrink-0"
-                                style={{
-                                  width: '100px',
-                                  height: '100px',
-                                  position: 'relative',
-                                  overflow: 'hidden'
-                                }}
+                {/* Vista de tabla para desktop */}
+                <div className="hidden md:block overflow-x-auto">
+                  <table className="w-full whitespace-nowrap">
+                    <thead className="bg-black text-white">
+                      <tr>
+                        <th className="px-4 py-4 text-left"></th>
+                        <th className="px-4 py-4 text-left">Producto</th>
+                        <th className="px-4 py-4 text-center">Precio</th>
+                        <th className="px-4 py-4 text-center">Cantidad</th>
+                        <th className="px-4 py-4 text-right">Subtotal</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {cartItems.map((item) => {
+                        const itemId = item.id_producto || item.id;
+                        const itemPrice = parseFloat(item.precio);
+                        const itemSubtotal = itemPrice * item.quantity;
+                        
+                        return (
+                          <tr key={itemId} className="hover:bg-gray-50 transition-colors">
+                            <td className="px-4 py-4">
+                              <button
+                                className="text-red-500 hover:text-red-700 transition-colors p-2"
+                                onClick={() => removeFromCart(itemId)}
+                                title="Eliminar producto"
                               >
-                                <div
+                                <FaTimes size={18} />
+                              </button>
+                            </td>
+                            <td className="px-4 py-4">
+                              <div className="flex items-center gap-4">
+                                <div 
+                                  className="bg-gray-50 rounded-lg flex-shrink-0"
                                   style={{
+                                    width: '100px',
+                                    height: '100px',
                                     position: 'relative',
-                                    width: '100%',
-                                    height: '100%',
-                                    padding: '0.5rem',
                                     overflow: 'hidden'
                                   }}
                                 >
-                                  <img
-                                    src={item.imagen || '/images/Detergente.webp'}
-                                    alt={item.nombre}
+                                  <div
                                     style={{
+                                      position: 'relative',
                                       width: '100%',
                                       height: '100%',
-                                      objectFit: 'contain'
+                                      padding: '0.5rem',
+                                      overflow: 'hidden'
                                     }}
-                                  />
+                                  >
+                                    <img
+                                      src={item.imagen || '/images/Detergente.webp'}
+                                      alt={item.nombre}
+                                      style={{
+                                        width: '100%',
+                                        height: '100%',
+                                        objectFit: 'contain'
+                                      }}
+                                    />
+                                  </div>
+                                </div>
+                                <div>
+                                  <p className="font-semibold text-gray-800">{item.nombre}</p>
+                                  {item.marca && (
+                                    <p className="text-sm text-gray-500">{item.marca}</p>
+                                  )}
                                 </div>
                               </div>
-                              <div>
-                                <p className="font-semibold text-gray-800">{item.nombre}</p>
-                                {item.marca && (
-                                  <p className="text-sm text-gray-500">{item.marca}</p>
-                                )}
+                            </td>
+                            <td className="px-4 py-4 text-center font-medium">
+                              ${itemPrice.toLocaleString()}
+                            </td>
+                            <td className="px-4 py-4">
+                              <div className="flex items-center justify-center gap-2">
+                                <button
+                                  className="border border-gray-300 hover:bg-gray-100 rounded px-3 py-2 transition-colors"
+                                  onClick={() => decreaseQuantity(itemId, item.quantity)}
+                                >
+                                  <PiMinus />
+                                </button>
+                                <span className="px-4 py-2 min-w-[50px] text-center font-semibold">
+                                  {item.quantity}
+                                </span>
+                                <button
+                                  className="border border-gray-300 hover:bg-gray-100 rounded px-3 py-2 transition-colors"
+                                  onClick={() => increaseQuantity(itemId, item.quantity)}
+                                >
+                                  <PiPlus />
+                                </button>
                               </div>
+                            </td>
+                            <td className="px-4 py-4 text-right font-bold text-lg">
+                              ${itemSubtotal.toLocaleString()}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Vista de tarjetas para móvil */}
+                <div className="md:hidden divide-y divide-gray-200">
+                  {cartItems.map((item) => {
+                    const itemId = item.id_producto || item.id;
+                    const itemPrice = parseFloat(item.precio);
+                    const itemSubtotal = itemPrice * item.quantity;
+                    
+                    return (
+                      <div key={itemId} className="p-4">
+                        {/* Header con botón eliminar */}
+                        <div className="flex justify-between items-start mb-3">
+                          <div className="flex-1">
+                            <p className="font-semibold text-gray-800 text-lg">{item.nombre}</p>
+                            {item.marca && (
+                              <p className="text-sm text-gray-500">{item.marca}</p>
+                            )}
+                          </div>
+                          <button
+                            className="text-red-500 hover:text-red-700 transition-colors p-2 ml-2"
+                            onClick={() => removeFromCart(itemId)}
+                            title="Eliminar producto"
+                          >
+                            <FaTimes size={18} />
+                          </button>
+                        </div>
+
+                        {/* Imagen centrada */}
+                        <div className="flex justify-center mb-3">
+                          <div 
+                            className="bg-gray-50 rounded-lg"
+                            style={{
+                              width: '120px',
+                              height: '120px',
+                              position: 'relative',
+                              overflow: 'hidden'
+                            }}
+                          >
+                            <div
+                              style={{
+                                position: 'relative',
+                                width: '100%',
+                                height: '100%',
+                                padding: '0.5rem',
+                                overflow: 'hidden'
+                              }}
+                            >
+                              <img
+                                src={item.imagen || '/images/Detergente.webp'}
+                                alt={item.nombre}
+                                style={{
+                                  width: '100%',
+                                  height: '100%',
+                                  objectFit: 'contain'
+                                }}
+                              />
                             </div>
-                          </td>
-                          <td className="px-4 py-4 text-center font-medium">
-                            ${itemPrice.toLocaleString()}
-                          </td>
-                          <td className="px-4 py-4">
-                            <div className="flex items-center justify-center gap-2">
-                              <button
-                                className="border border-gray-300 hover:bg-gray-100 rounded px-3 py-2 transition-colors"
-                                onClick={() => decreaseQuantity(itemId, item.quantity)}
-                              >
-                                <PiMinus />
-                              </button>
-                              <span className="px-4 py-2 min-w-[50px] text-center font-semibold">
-                                {item.quantity}
-                              </span>
-                              <button
-                                className="border border-gray-300 hover:bg-gray-100 rounded px-3 py-2 transition-colors"
-                                onClick={() => increaseQuantity(itemId, item.quantity)}
-                              >
-                                <PiPlus />
-                              </button>
-                            </div>
-                          </td>
-                          <td className="px-4 py-4 text-right font-bold text-lg">
-                            ${itemSubtotal.toLocaleString()}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+                          </div>
+                        </div>
+
+                        {/* Info del producto */}
+                        <div className="space-y-3">
+                          <div className="flex justify-between items-center py-2 border-b">
+                            <span className="text-sm text-gray-600">Precio unitario:</span>
+                            <span className="font-semibold text-gray-900">
+                              ${itemPrice.toLocaleString()}
+                            </span>
+                          </div>
+
+                          {/* Controles de cantidad */}
+                          <div className="flex items-center justify-center gap-2 py-2">
+                            <button
+                              className="border border-gray-300 hover:bg-gray-100 rounded px-4 py-2 transition-colors"
+                              onClick={() => decreaseQuantity(itemId, item.quantity)}
+                            >
+                              <PiMinus />
+                            </button>
+                            <span className="px-6 py-2 font-semibold min-w-[60px] text-center text-lg">
+                              {item.quantity}
+                            </span>
+                            <button
+                              className="border border-gray-300 hover:bg-gray-100 rounded px-4 py-2 transition-colors"
+                              onClick={() => increaseQuantity(itemId, item.quantity)}
+                            >
+                              <PiPlus />
+                            </button>
+                          </div>
+
+                          {/* Subtotal */}
+                          <div className="flex justify-between items-center py-2 border-t">
+                            <span className="text-base font-medium text-gray-600">Subtotal:</span>
+                            <span className="font-bold text-xl text-gray-900">
+                              ${itemSubtotal.toLocaleString()}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
 
               {/* Botones de acción debajo de la tabla */}
-              <div className="flex justify-between items-center mt-6">
-                <Link to="/categories">
-                  <Button variant="secondary" size="lg">
+              <div className="flex flex-col sm:flex-row gap-3 sm:justify-between items-stretch sm:items-center mt-6">
+                <Link to="/categories" className="w-full sm:w-auto">
+                  <Button variant="secondary" size="lg" className="w-full">
                     ← Continuar Comprando
                   </Button>
                 </Link>
                 <Button 
                   variant="ghost" 
                   size="lg"
+                  className="w-full sm:w-auto"
                   onClick={() => {
                     if (window.confirm('¿Estás seguro de vaciar el carrito?')) {
                       clearCart();
@@ -234,12 +336,10 @@ export default function Cart() {
                     <span>Subtotal ({getTotalItems()} productos):</span>
                     <span className="font-semibold">${getTotalPrice().toLocaleString()}</span>
                   </div>
-
                   <div className="flex justify-between text-gray-600">
                     <span>Envío:</span>
                     <span className="font-semibold">${shippingCharge}</span>
                   </div>
-
                   <div className="border-t pt-4">
                     <div className="flex justify-between text-xl font-bold text-gray-900">
                       <span>Total:</span>
@@ -280,4 +380,3 @@ export default function Cart() {
     </div>
   );
 }
-

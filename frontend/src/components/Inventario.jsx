@@ -46,30 +46,32 @@ export default function Inventario({ idSucursal }) {
         <button type="submit">Guardar</button>
       </form>
 
-      <table cellPadding="6" className="w-full">
-        <thead>
-          <tr>
-            <th>Producto</th><th>Cantidad</th><th>Stock mín.</th><th>Actualizar</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((it) => (
-            <tr key={it.id_inventario}>
-              <td>{it.nombre}</td>
-              <td>
-                <input type="number" defaultValue={it.cantidad}
-                  onBlur={(e) => setQty(it.id_producto, Number(e.target.value), it.stock_minimo)} />
-              </td>
-              <td>
-                <input type="number" defaultValue={it.stock_minimo}
-                  onBlur={(e) => setQty(it.id_producto, it.cantidad, Number(e.target.value))} />
-              </td>
-              <td><button onClick={() => setQty(it.id_producto, it.cantidad, it.stock_minimo)}>Refrescar</button></td>
+      <div className="overflow-x-auto">
+        <table cellPadding="6" className="w-full min-w-max whitespace-nowrap">
+          <thead>
+            <tr>
+              <th>Producto</th><th>Cantidad</th><th>Stock mín.</th><th>Actualizar</th>
             </tr>
-          ))}
-          {!items.length && <tr><td colSpan="4">Sin inventario</td></tr>}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {items.map((it) => (
+              <tr key={it.id_inventario}>
+                <td>{it.nombre}</td>
+                <td>
+                  <input type="number" defaultValue={it.cantidad}
+                    onBlur={(e) => setQty(it.id_producto, Number(e.target.value), it.stock_minimo)} />
+                </td>
+                <td>
+                  <input type="number" defaultValue={it.stock_minimo}
+                    onBlur={(e) => setQty(it.id_producto, it.cantidad, Number(e.target.value))} />
+                </td>
+                <td><button onClick={() => setQty(it.id_producto, it.cantidad, it.stock_minimo)}>Refrescar</button></td>
+              </tr>
+            ))}
+            {!items.length && <tr><td colSpan="4">Sin inventario</td></tr>}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

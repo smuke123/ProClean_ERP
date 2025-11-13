@@ -204,8 +204,14 @@ const CartDropdown = ({ isHeaderSticky = false }) => {
                   setIsOpen(false);
                   navigate('/cart');
                 }}
-                className="w-full p-button-dark p-button-sm cart-button-white"
-                style={{ backgroundColor: '#000', borderColor: '#000', fontSize: '0.75rem', padding: '0.375rem 0.75rem', color: '#ffffff' }}
+                className="w-full p-button-sm"
+                style={{ 
+                  backgroundColor: isHeaderSticky ? '#ffffff' : '#ffffff', 
+                  borderColor: isHeaderSticky ? '#000' : '#000', 
+                  color: isHeaderSticky ? '#001924' : '#001924',
+                  fontSize: '0.75rem', 
+                  padding: '0.375rem 0.75rem'
+                }}
               />
             </div>
           )}

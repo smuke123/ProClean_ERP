@@ -54,15 +54,15 @@ export default function Contact() {
   };
 
   return (
-    <section className="px-8 py-8 lg:py-16">
+    <section className="px-4 sm:px-8 py-8 lg:py-16">
       <div className="container mx-auto text-center">
         <h5 className="mb-4 text-base lg:text-2xl text-gray-700">
           Atención al Cliente
         </h5>
-        <h1 className="mb-4 text-3xl lg:text-5xl font-bold text-gray-900">
+        <h1 className="mb-4 text-2xl sm:text-3xl lg:text-5xl font-bold text-gray-900">
           Estamos Aquí para Ayudarte
         </h1>
-        <p className="mb-10 font-normal text-lg lg:mb-20 mx-auto max-w-3xl text-gray-500">
+        <p className="mb-10 font-normal text-base sm:text-lg lg:mb-20 mx-auto max-w-3xl text-gray-500">
           Ya sea una pregunta sobre nuestros servicios, una solicitud de
           asistencia técnica o sugerencias para mejorar, nuestro equipo está
           ansioso por escucharte.
@@ -87,7 +87,7 @@ export default function Contact() {
                 <p className="text-left font-semibold text-sm text-gray-600">
                   Selecciona el Tipo de Consulta
                 </p>
-                <div className="flex gap-4">
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                   <button
                     type="button"
                     onClick={() => setFormData(prev => ({ ...prev, inquiryType: "general" }))}
@@ -112,7 +112,7 @@ export default function Contact() {
                   </button>
                 </div>
                 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex flex-col">
                     <label className="block text-sm font-medium text-gray-900 mb-2 text-left">
                       Nombre

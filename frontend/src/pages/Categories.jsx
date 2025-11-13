@@ -97,27 +97,27 @@ export default function Categories() {
   return (
     <div>
       {/* Header */}
-      <div className="text-center my-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-3">
+      <div className="text-center my-8 px-4">
+        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
           Catálogo de Productos
         </h1>
-        <p className="text-lg text-gray-600">
+        <p className="text-base sm:text-lg text-gray-600">
           Encuentra los mejores productos de limpieza profesional
         </p>
       </div>
 
       <div>
-        <div className="w-10/12 m-auto flex gap-3 items-start mt-8">
+        <div className="w-full px-4 sm:w-10/12 m-auto flex flex-col lg:flex-row gap-6 items-start mt-8">
           {/* Panel de Filtros */}
-          <div className="filterproduct w-1/4 bg-white shadow-lg p-4">
+          <div className="filterproduct w-full lg:w-1/4 bg-white shadow-lg p-4 rounded-lg">
             <div>
               <div className="my-4">
-                <h1 className="text-4xl font-semibold">Filter</h1>
+                <h1 className="text-2xl sm:text-3xl font-semibold text-center lg:text-left">Filtro</h1>
               </div>
 
               {/* Filtro por Precio */}
               <div className="my-4">
-                <h1 className="mb-3 text-3xl font-semibold">Por precio</h1>
+                <h1 className="mb-3 text-xl sm:text-2xl font-semibold">Por precio</h1>
                 <div>
                   <input
                     type="range"
@@ -132,7 +132,7 @@ export default function Categories() {
                     }
                     className="w-full"
                   />
-                  <div className="flex justify-between">
+                  <div className="flex justify-between text-sm sm:text-base">
                     <span>Min: ${filters.priceRange[0].toLocaleString()}</span>
                     <span>Max: ${filters.priceRange[1].toLocaleString()}</span>
                   </div>
@@ -142,7 +142,7 @@ export default function Categories() {
               {/* Filtro por Categoría */}
               {categoryList.length > 0 && (
                 <div className="my-4">
-                  <h1 className="mb-3 text-3xl font-semibold">Por categoría</h1>
+                  <h1 className="mb-3 text-xl sm:text-2xl font-semibold">Por categoría</h1>
                   <div>
                     {categoryList.map((category, key) => (
                       <div className="flex items-center" key={key}>
@@ -151,7 +151,7 @@ export default function Categories() {
                           checked={filters.categories.includes(category)}
                           onChange={() => handleCheckboxChange('categories', category)}
                         />
-                        <div className="ml-2">{category}</div>
+                        <div className="ml-2 text-sm sm:text-base">{category}</div>
                       </div>
                     ))}
                   </div>
@@ -161,7 +161,7 @@ export default function Categories() {
               {/* Filtro por Marca */}
               {brandList.length > 0 && (
                 <div className="my-4">
-                  <h1 className="mb-3 text-3xl font-semibold">Por marca</h1>
+                  <h1 className="mb-3 text-xl sm:text-2xl font-semibold">Por marca</h1>
                   <div>
                     {brandList.map((brand, key) => (
                       <div className="flex items-center" key={key}>
@@ -170,7 +170,7 @@ export default function Categories() {
                           checked={filters.brands.includes(brand)}
                           onChange={() => handleCheckboxChange('brands', brand)}
                         />
-                        <div className="ml-2">{brand}</div>
+                        <div className="ml-2 text-sm sm:text-base">{brand}</div>
                       </div>
                     ))}
                   </div>
@@ -180,7 +180,7 @@ export default function Categories() {
           </div>
 
           {/* Grid de Productos */}
-          <div className="w-3/4">
+          <div className="w-full lg:w-3/4">
             {filteredProducts.length === 0 ? (
               <div className="text-center py-12">
                 <p className="text-xl text-gray-500">
@@ -188,7 +188,7 @@ export default function Categories() {
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredProducts.map((product, index) => (
                   <div 
                     key={index} 
@@ -201,7 +201,7 @@ export default function Categories() {
                     <div 
                       className="relative rounded-3xl bg-gray-50 flex-shrink-0"
                       style={{
-                        height: '280px',
+                        height: '260px',
                         width: '100%',
                         overflow: 'hidden',
                         marginBottom: '1rem'
@@ -261,7 +261,7 @@ export default function Categories() {
 
                     {/* Información del producto con altura fija */}
                     <div 
-                      className="flex flex-col"
+                      className="flex flex-col text-center sm:text-left"
                       style={{
                         minHeight: '100px',
                         overflow: 'visible'

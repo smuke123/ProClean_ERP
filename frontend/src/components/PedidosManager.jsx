@@ -66,28 +66,30 @@ export default function PedidosManager({ idSucursal, onStockChanged }) {
         </div>
       </form>
 
-      <table cellPadding="6" className="w-full">
-        <thead>
-          <tr><th>ID</th><th>Fecha</th><th>Cliente</th><th>Total</th><th>Estado</th><th>Acciones</th></tr>
-        </thead>
-        <tbody>
-          {lista.map((p) => (
-            <tr key={p.id_pedido}>
-              <td>{p.id_pedido}</td>
-              <td>{p.fecha}</td>
-              <td>{p.cliente}</td>
-              <td>{p.total}</td>
-              <td>{p.estado}</td>
-              <td style={{ display: "flex", gap: 6 }}>
-                <button onClick={() => cambiarEstado(p.id_pedido, "procesado")}>Procesar</button>
-                <button onClick={() => cambiarEstado(p.id_pedido, "completado")}>Completar</button>
-                <button onClick={() => cambiarEstado(p.id_pedido, "cancelado")}>Cancelar</button>
-              </td>
-            </tr>
-          ))}
-          {!lista.length && <tr><td colSpan="6">Sin pedidos</td></tr>}
-        </tbody>
-      </table>
+      <div className="overflow-x-auto">
+        <table cellPadding="6" className="w-full min-w-max whitespace-nowrap">
+          <thead>
+            <tr><th>ID</th><th>Fecha</th><th>Cliente</th><th>Total</th><th>Estado</th><th>Acciones</th></tr>
+          </thead>
+          <tbody>
+            {lista.map((p) => (
+              <tr key={p.id_pedido}>
+                <td>{p.id_pedido}</td>
+                <td>{p.fecha}</td>
+                <td>{p.cliente}</td>
+                <td>{p.total}</td>
+                <td>{p.estado}</td>
+                <td style={{ display: "flex", gap: 6 }}>
+                  <button onClick={() => cambiarEstado(p.id_pedido, "procesado")}>Procesar</button>
+                  <button onClick={() => cambiarEstado(p.id_pedido, "completado")}>Completar</button>
+                  <button onClick={() => cambiarEstado(p.id_pedido, "cancelado")}>Cancelar</button>
+                </td>
+              </tr>
+            ))}
+            {!lista.length && <tr><td colSpan="6">Sin pedidos</td></tr>}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

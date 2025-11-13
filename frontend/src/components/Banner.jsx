@@ -22,11 +22,11 @@ const Banner = () => {
 
   return (
     <div className="banner py-8">
-      <div className="w-10/12 m-auto">
+      <div className="w-full px-4 sm:w-10/12 m-auto">
         <div className="mb-10">
           <div className="text-center">
             <div className="flex items-center justify-center mb-4">
-              <h1 className="text-4xl font-bold text-gray-900">
+              <h1 className="text-2xl sm:text-4xl font-bold text-gray-900">
                 Productos de limpieza de calidad
               </h1>
             </div>
@@ -39,7 +39,7 @@ const Banner = () => {
                 <img
                   src={data.banner}
                   alt={`Banner ${key + 1}`}
-                  className="rounded-3xl w-full h-[400px] object-cover"
+                  className="rounded-3xl w-full h-56 sm:h-80 object-cover"
                 />
               </div>
             ))}

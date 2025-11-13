@@ -6,32 +6,31 @@ import { FaInstagram } from "react-icons/fa";
 const Arrived = () => {
   return (
     <div className="py-8" style={{ marginBottom: "80px" }}>
-      <div className="w-10/12 m-auto">
+      <div className="w-full px-4 sm:w-10/12 m-auto">
         <Heading heading={"Recién Llegados"} />
-        <div className="flex items-center mt-10 gap-8">
-          <div className="w-2/5">
-            <h1 className="font-semibold text-3xl">Tienda de Instagram</h1>
-            <p className="my-4 text-gray-600">
+        <div className="flex flex-col md:flex-row items-start md:items-center mt-8 gap-6 md:gap-8">
+          <div className="w-full md:w-2/5 text-center md:text-left">
+            <h1 className="font-semibold text-2xl md:text-3xl">Tienda de Instagram</h1>
+            <p className="my-4 text-gray-600 text-sm md:text-base">
               Etiquétanos @proclean_erp en tus fotos de Instagram para salir en esta sección.
             </p>
             <a
               href="https://instagram.com/smuke123"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block border bg-blue-600 hover:bg-blue-700 transition-colors rounded-full text-white px-6 py-3"
+              className="inline-block w-full sm:w-auto border bg-blue-600 hover:bg-blue-700 transition-colors rounded-full text-white px-6 py-3"
             >
               Visita nuestro Instagram
             </a>
           </div>
-          <div className="w-3/5 grid grid-cols-3" style={{ gap: "20px" }}>
+          <div className="w-full md:w-3/5 grid grid-cols-2 sm:grid-cols-3" style={{ gap: "16px" }}>
             {arriveItems.map((item, index) => (
               <div 
                 key={index}
-                className="group cursor-pointer"
+                className="group cursor-pointer rounded-2xl overflow-hidden"
                 style={{ 
                   position: "relative",
                   height: "200px",
-                  borderRadius: "24px",
                   border: "2px solid #e5e7eb",
                   overflow: "hidden"
                 }}

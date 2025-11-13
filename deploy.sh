@@ -5,7 +5,7 @@
 
 set -e  # Salir si hay algún error
 
-echo "🚀 Iniciando despliegue de ProClean ERP..."
+echo "Iniciando despliegue de ProClean ERP..."
 
 # Colores para output
 GREEN='\033[0;32m'

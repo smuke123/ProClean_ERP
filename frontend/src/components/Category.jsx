@@ -3,18 +3,17 @@ import { category } from "../data/Data";
 
 const Category = () => {
   return (
-    <div className="w-1/2 m-auto py-8" style={{ marginBottom: "80px" }}>
-      <h2 className="text-3xl font-bold text-center mb-8">Nuestras Categorías</h2>
+    <div className="w-full px-4 sm:w-10/12 md:w-8/12 mx-auto py-8" style={{ marginBottom: "80px" }}>
+      <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6">Nuestras Categorías</h2>
       
-      <div className="grid grid-cols-2" style={{ gap: "30px" }}>
+      <div className="grid grid-cols-1 sm:grid-cols-2" style={{ gap: "20px" }}>
         {category.map((item, key) => (
           <div 
             key={key} 
-            className="cursor-pointer group"
+            className="cursor-pointer group rounded-2xl overflow-hidden"
             style={{ 
               position: "relative",
-              height: "250px",
-              borderRadius: "24px",
+              height: "220px",
               border: "3px solid #e5e7eb",
               overflow: "hidden"
             }}
@@ -58,7 +57,7 @@ const Category = () => {
               }}
             >
               <h3 
-                className="text-4xl font-bold capitalize"
+                className="text-2xl sm:text-3xl font-bold capitalize"
                 style={{
                   color: '#ffffff',
                   textShadow: '1px 1px 2px rgba(0,0,0,0.5), -1px -1px 2px rgba(0,0,0,0.5), 1px -1px 2px rgba(0,0,0,0.5), -1px 1px 2px rgba(0,0,0,0.5)',

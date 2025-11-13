@@ -70,39 +70,39 @@ const Modal = ({ isModalOpen, handleClose, data }) => {
       onClick={handleClose}
     >
       <div 
-        className="bg-white rounded-lg w-2/3 max-w-4xl relative shadow-2xl"
+        className="bg-white rounded-lg w-full sm:w-11/12 md:w-2/3 max-w-4xl relative shadow-2xl max-h-[90vh] overflow-y-auto"
         style={{ backgroundColor: '#ffffff', opacity: 1 }}
         onClick={(e) => e.stopPropagation()}
       >
         <button
-          className="absolute top-4 right-4 z-10 bg-white rounded-full p-2 hover:bg-gray-100 shadow-md"
+          className="absolute top-3 right-3 sm:top-4 sm:right-4 z-10 bg-white rounded-full p-2 hover:bg-gray-100 shadow-md"
           onClick={handleClose}
         >
-          <FaTimes className="text-xl" />
+          <FaTimes className="text-lg sm:text-xl" />
         </button>
 
-        <div className="flex flex-row p-6">
-          {/* Imagen del producto - Pequeña a la izquierda */}
-          <div className="flex items-center justify-center bg-gray-50 rounded-lg p-4 mr-6" style={{ minWidth: '200px', maxWidth: '200px' }}>
+        <div className="flex flex-col sm:flex-row p-4 sm:p-6">
+          {/* Imagen del producto */}
+          <div className="flex items-center justify-center bg-gray-50 rounded-lg p-4 mb-4 sm:mb-0 sm:mr-6 w-full sm:min-w-[200px] sm:max-w-[200px]">
             <img
               src={data.imagen || '/images/Detergente.webp'}
               alt={data.nombre}
               className="w-full h-auto object-contain"
-              style={{ maxHeight: '180px' }}
+              style={{ maxHeight: '200px' }}
             />
           </div>
 
-          {/* Información del producto - A la derecha */}
-          <div className="flex-1">
+          {/* Información del producto */}
+          <div className="flex-1 min-w-0">
             <div className="mb-2">
               <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">
                 {data.marca}
               </span>
             </div>
-
-            <h2 className="text-xl font-bold mb-2">{data.nombre}</h2>
             
-            <p className="text-2xl font-bold text-red-600 mb-3">
+            <h2 className="text-lg sm:text-xl font-bold mb-2 break-words">{data.nombre}</h2>
+            
+            <p className="text-xl sm:text-2xl font-bold text-red-600 mb-3">
               ${parseFloat(data.precio).toLocaleString()}
             </p>
 
@@ -115,23 +115,24 @@ const Modal = ({ isModalOpen, handleClose, data }) => {
               <p className="text-green-600 text-sm font-medium">En Stock</p>
             </div>
 
-            {/* Selector de cantidad */}
-            <div className="flex items-center gap-3 mt-4">
-              <div className="flex items-center border border-gray-300 rounded">
+            {/* Selector de cantidad y botón */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mt-4">
+              {/* Selector de cantidad */}
+              <div className="flex items-center justify-center border border-gray-300 rounded">
                 <button
-                  className="px-3 py-2 hover:bg-gray-100 transition-colors"
+                  className="px-4 py-3 sm:px-3 sm:py-2 hover:bg-gray-100 transition-colors flex-1 sm:flex-none"
                   onClick={decreaseQuantity}
                 >
-                  <PiMinus />
+                  <PiMinus className="mx-auto" />
                 </button>
-                <span className="px-4 py-2 border-x border-gray-300 min-w-[50px] text-center">
+                <span className="px-6 py-3 sm:px-4 sm:py-2 border-x border-gray-300 min-w-[60px] sm:min-w-[50px] text-center font-medium">
                   {qty}
                 </span>
                 <button
-                  className="px-3 py-2 hover:bg-gray-100 transition-colors"
+                  className="px-4 py-3 sm:px-3 sm:py-2 hover:bg-gray-100 transition-colors flex-1 sm:flex-none"
                   onClick={increaseQuantity}
                 >
-                  <PiPlus />
+                  <PiPlus className="mx-auto" />
                 </button>
               </div>
 
@@ -139,7 +140,7 @@ const Modal = ({ isModalOpen, handleClose, data }) => {
               <div className="flex-1">
                 {addedItemToCart ? (
                   <button
-                    className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-medium transition-colors text-sm"
+                    className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-3 sm:py-2 rounded font-medium transition-colors text-sm"
                     onClick={handleClose}
                   >
                     ✓ Agregado al Carrito
@@ -147,7 +148,7 @@ const Modal = ({ isModalOpen, handleClose, data }) => {
                 ) : (
                   <button
                     onClick={() => addItemToCart(data)}
-                    className="w-full bg-black hover:bg-gray-800 text-white px-4 py-2 rounded font-medium transition-colors text-sm"
+                    className="w-full bg-black hover:bg-gray-800 text-white px-4 py-3 sm:py-2 rounded font-medium transition-colors text-sm"
                   >
                     Agregar al Carrito
                   </button>
@@ -162,4 +163,3 @@ const Modal = ({ isModalOpen, handleClose, data }) => {
 };
 
 export default Modal;
-

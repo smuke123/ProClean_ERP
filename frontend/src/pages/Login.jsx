@@ -75,7 +75,7 @@ const Login = () => {
       minHeight: '100vh',
       display: 'flex',
       fontFamily: 'sans-serif'
-    }}>
+    }} className="flex flex-col md:flex-row">
       {/* Sección Izquierda - Formulario */}
       <div style={{
         flex: 1,
@@ -83,13 +83,13 @@ const Login = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '40px',
+        padding: '24px',
         position: 'relative'
-      }}>
+      }} className="w-full">
         {/* Cuadro blanco del formulario */}
         <div style={{
           backgroundColor: 'white',
-          padding: '40px',
+          padding: '24px',
           borderRadius: '8px',
           boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
           width: '100%',
@@ -397,15 +397,15 @@ const Login = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '40px'
-      }}>
+        padding: '24px'
+      }} className="w-full">
         {/* Logo centrado */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          width: '300px',
-          height: '300px'
+          width: '240px',
+          height: '240px'
         }}>
           <img 
             src="/IconoProClean.svg" 
