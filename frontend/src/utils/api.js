@@ -121,3 +121,9 @@ export const sendContactMessage = (data) =>
     method: "POST",
     body: JSON.stringify(data)
   });
+
+// API Keys y Logs
+export const getApiLogs = (params = {}) => {
+  const qs = new URLSearchParams(params).toString();
+  return req(`/api/api-keys/logs/all${qs ? `?${qs}` : ""}`);
+};

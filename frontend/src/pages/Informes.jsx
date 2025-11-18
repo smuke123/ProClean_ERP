@@ -10,7 +10,7 @@ import { Chart } from 'primereact/chart';
 import { Card } from 'primereact/card';
 import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import SelectSucursal from "../components/SelectSucursal.jsx";
-import { getPedidos, getCompras, getCompra, getPedido } from "../utils/api.js";
+import { getPedidos, getCompras, getCompra, getPedido, getApiLogs } from "../utils/api.js";
 
 export default function Informes() {
   const [tipoTransaccion, setTipoTransaccion] = useState("ventas"); 
@@ -21,6 +21,12 @@ export default function Informes() {
   const [detallesCache, setDetallesCache] = useState({});
   const [globalFilterValue, setGlobalFilterValue] = useState('');
   const dt = useRef(null);
+  
+  // Estados para tablas adicionales
+  const [apiLogs, setApiLogs] = useState([]);
+  const [apiLogsLoading, setApiLogsLoading] = useState(false);
+  const [externalProducts, setExternalProducts] = useState([]);
+  const [externalProductsLoading, setExternalProductsLoading] = useState(false);
 
   // Configuración de filtros
   const [filters, setFilters] = useState({
@@ -75,7 +81,59 @@ export default function Informes() {
 
   useEffect(() => {
     loadData();
+    loadApiLogs();
+    loadExternalProducts();
   }, [loadData]);
+
+  // Cargar logs de API
+  const loadApiLogs = async () => {
+    setApiLogsLoading(true);
+    try {
+      const response = await getApiLogs({ limit: 50 });
+      setApiLogs(response.data || []);
+    } catch (error) {
+      console.error("Error al cargar logs de API:", error);
+      setApiLogs([]);
+    } finally {
+      setApiLogsLoading(false);
+    }
+  };
+
+  // Cargar productos de empresa externa (datos estáticos)
+  const loadExternalProducts = () => {
+    setExternalProductsLoading(true);
+    // Simular carga asíncrona
+    setTimeout(() => {
+      const productosExternos = [
+        {
+          id: 1,
+          nombre: "Ramo Rosas Rojas",
+          precio: "35000.00",
+          descripcion: "Hermoso ramo de rosas rojas frescas"
+        },
+        {
+          id: 2,
+          nombre: "Tulipanes de Primavera",
+          precio: "28000.00",
+          descripcion: "Coloridos tulipanes para alegrar tu día"
+        },
+        {
+          id: 3,
+          nombre: "Orquídea Blanca",
+          precio: "45000.00",
+          descripcion: "Elegante orquídea blanca en maceta"
+        },
+        {
+          id: 4,
+          nombre: "Ramo Mixto Deluxe",
+          precio: "60000.00",
+          descripcion: "Ramo grande con flores variadas y follaje"
+        }
+      ];
+      setExternalProducts(productosExternos);
+      setExternalProductsLoading(false);
+    }, 300);
+  };
 
   // Calcular KPIs y datos para gráficos
   const analytics = useMemo(() => {
@@ -765,6 +823,175 @@ export default function Informes() {
               </div>
             </Card>
           )}
+        </div>
+      </div>
+
+      {/* Tabla de Uso de API */}
+      <div className="mt-8">
+        <h3 className="text-xl font-semibold mb-4">Uso de API Externa</h3>
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="p-4 border-b flex justify-between items-center">
+            <h4 className="m-0 text-lg font-semibold">
+              Logs de Acceso a la API - {apiLogs.length} registros
+            </h4>
+            <Button 
+              label="Recargar" 
+              icon="pi pi-refresh" 
+              onClick={loadApiLogs}
+              loading={apiLogsLoading}
+              size="small"
+            />
+          </div>
+          <div className="overflow-x-auto">
+            <DataTable 
+              value={apiLogs} 
+              paginator 
+              rows={10} 
+              rowsPerPageOptions={[10, 20, 50]}
+              loading={apiLogsLoading}
+              emptyMessage="No hay logs de API disponibles."
+              className="text-sm"
+              stripedRows
+            >
+              <Column 
+                field="timestamp" 
+                header="Fecha/Hora" 
+                sortable
+                body={(row) => {
+                  if (!row.timestamp) return 'N/A';
+                  const date = new Date(row.timestamp);
+                  return date.toLocaleString('es-ES');
+                }}
+                style={{ minWidth: '180px' }}
+              />
+              <Column 
+                field="organizacion" 
+                header="Organización" 
+                sortable
+                body={(row) => row.organizacion || row.api_key_nombre || 'N/A'}
+                style={{ minWidth: '150px' }}
+              />
+              <Column 
+                field="endpoint" 
+                header="Endpoint" 
+                sortable
+                style={{ minWidth: '200px' }}
+              />
+              <Column 
+                field="metodo" 
+                header="Método" 
+                sortable
+                body={(row) => (
+                  <span className={`px-2 py-1 rounded text-xs font-medium ${
+                    row.metodo === 'GET' ? 'bg-blue-100 text-blue-700' :
+                    row.metodo === 'POST' ? 'bg-green-100 text-green-700' :
+                    'bg-gray-100 text-gray-700'
+                  }`}>
+                    {row.metodo}
+                  </span>
+                )}
+                style={{ minWidth: '100px' }}
+              />
+              <Column 
+                field="status_code" 
+                header="Status" 
+                sortable
+                body={(row) => (
+                  <span className={`px-2 py-1 rounded text-xs font-medium ${
+                    row.status_code >= 200 && row.status_code < 300 ? 'bg-green-100 text-green-700' :
+                    row.status_code >= 400 && row.status_code < 500 ? 'bg-yellow-100 text-yellow-700' :
+                    row.status_code >= 500 ? 'bg-red-100 text-red-700' :
+                    'bg-gray-100 text-gray-700'
+                  }`}>
+                    {row.status_code}
+                  </span>
+                )}
+                style={{ minWidth: '100px' }}
+              />
+              <Column 
+                field="registros_devueltos" 
+                header="Registros" 
+                sortable
+                style={{ minWidth: '100px' }}
+              />
+              <Column 
+                field="tiempo_respuesta" 
+                header="Tiempo (ms)" 
+                sortable
+                body={(row) => `${row.tiempo_respuesta || 0} ms`}
+                style={{ minWidth: '120px' }}
+              />
+              <Column 
+                field="ip_origen" 
+                header="IP Origen" 
+                style={{ minWidth: '150px' }}
+              />
+            </DataTable>
+          </div>
+        </div>
+      </div>
+
+      {/* Tabla de Productos de Empresa Externa */}
+      <div className="mt-8">
+        <h3 className="text-xl font-semibold mb-4">Productos de Empresa Externa</h3>
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="p-4 border-b flex justify-between items-center">
+            <h4 className="m-0 text-lg font-semibold">
+              Productos de Empresa Externa - {externalProducts.length} productos
+            </h4>
+            <Button 
+              label="Recargar" 
+              icon="pi pi-refresh" 
+              onClick={loadExternalProducts}
+              loading={externalProductsLoading}
+              size="small"
+            />
+          </div>
+          <div className="overflow-x-auto">
+            <DataTable 
+              value={externalProducts} 
+              paginator 
+              rows={10} 
+              rowsPerPageOptions={[10, 20, 50]}
+              loading={externalProductsLoading}
+              emptyMessage="No hay productos disponibles."
+              className="text-sm"
+              stripedRows
+            >
+              <Column 
+                field="id" 
+                header="ID" 
+                sortable
+                style={{ minWidth: '80px' }}
+              />
+              <Column 
+                field="nombre" 
+                header="Nombre del Producto" 
+                sortable
+                style={{ minWidth: '250px' }}
+              />
+              <Column 
+                field="precio" 
+                header="Precio" 
+                sortable
+                body={(row) => {
+                  const precio = parseFloat(row.precio) || 0;
+                  return `$${precio.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                }}
+                style={{ minWidth: '150px' }}
+              />
+              <Column 
+                field="descripcion" 
+                header="Descripción" 
+                style={{ minWidth: '300px' }}
+                body={(row) => (
+                  <span className="text-gray-600 text-sm">
+                    {row.descripcion || 'Sin descripción'}
+                  </span>
+                )}
+              />
+            </DataTable>
+          </div>
         </div>
       </div>
       </div>
