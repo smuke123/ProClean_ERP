@@ -374,5 +374,63 @@ export class ApiKey {
       throw error;
     }
   }
+
+  /**
+   * Obtener todos los logs de uso de API
+   * @param {Object} filters - Filtros opcionales
+   * @returns {Promise<Array>} Lista de logs
+   */
+  static async getAllLogs(filters = {}) {
+    const { desde, hasta, id_api_key, limit = 100 } = filters;
+
+    try {
+      let query = `
+        SELECT 
+          l.id_log,
+          l.id_api_key,
+          ak.nombre as api_key_nombre,
+          ak.organizacion,
+          l.endpoint,
+          l.metodo,
+          l.ip_origen,
+          l.user_agent,
+          l.status_code,
+          l.tiempo_respuesta,
+          l.registros_devueltos,
+          l.timestamp,
+          l.fecha
+        FROM API_Logs l
+        LEFT JOIN API_Keys ak ON l.id_api_key = ak.id_api_key
+        WHERE 1=1
+      `;
+
+      const params = [];
+
+      if (id_api_key) {
+        query += ' AND l.id_api_key = ?';
+        params.push(id_api_key);
+      }
+
+      if (desde) {
+        query += ' AND l.timestamp >= ?';
+        params.push(desde);
+      }
+
+      if (hasta) {
+        query += ' AND l.timestamp <= ?';
+        params.push(hasta);
+      }
+
+      query += ' ORDER BY l.timestamp DESC LIMIT ?';
+      params.push(limit);
+
+      const [logs] = await pool.query(query, params);
+
+      return logs;
+    } catch (error) {
+      console.error('Error obteniendo logs:', error);
+      throw error;
+    }
+  }
 }
 

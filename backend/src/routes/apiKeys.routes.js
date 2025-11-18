@@ -66,5 +66,13 @@ router.delete('/:id', apiKeyController.deleteApiKey);
  */
 router.get('/:id/stats', apiKeyController.getApiKeyStats);
 
+/**
+ * @route   GET /api/api-keys/logs/all
+ * @desc    Obtener todos los logs de uso de API
+ * @access  Admin only
+ * @query   ?desde=2025-01-01&hasta=2025-12-31&id_api_key=1&limit=100
+ */
+router.get('/logs/all', apiKeyController.getAllApiLogs);
+
 export default router;
 

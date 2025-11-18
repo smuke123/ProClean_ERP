@@ -201,6 +201,34 @@ export const apiKeyController = {
         detail: error.message
       });
     }
+  },
+
+  /**
+   * Obtener todos los logs de uso de API
+   */
+  async getAllApiLogs(req, res) {
+    try {
+      const { desde, hasta, id_api_key, limit } = req.query;
+
+      const filters = {};
+      if (desde) filters.desde = desde;
+      if (hasta) filters.hasta = hasta;
+      if (id_api_key) filters.id_api_key = parseInt(id_api_key);
+      if (limit) filters.limit = parseInt(limit);
+
+      const logs = await ApiKey.getAllLogs(filters);
+
+      res.json({
+        total: logs.length,
+        data: logs
+      });
+    } catch (error) {
+      console.error('Error obteniendo logs:', error);
+      res.status(500).json({
+        error: 'Error al obtener logs',
+        detail: error.message
+      });
+    }
   }
 };
 
