@@ -2,6 +2,10 @@
 
 ProClean S.A.S. es una empresa dedicada a la venta y distribución de productos de aseo y limpieza, tanto para hogares como para organizaciones. Su misión es ofrecer soluciones de limpieza eficientes, seguras y accesibles, garantizando la calidad y disponibilidad de los productos en todas sus sucursales.
 
+     | Home | Catálogo |
+     | ---- | -------- |
+     | ![Home](docs/images/Home.jpeg) | ![Catálogo](docs/images/Categories.jpeg) |
+
 ## 📌 Descripción del Proyecto
 
 Para optimizar sus operaciones, ProClean desarrollará un software especializado en la gestión de compras y ventas. Con esta herramienta se busca:
@@ -22,7 +26,7 @@ El proyecto se desarrolla con el siguiente stack tecnológico:
   - **CSS3** → estilos personalizados.
   - **JavaScript (ES6+)** → interactividad en el cliente.
   - **React.js** → construcción de componentes dinámicos y SPA.
-  - **Bootstrap** → diseño responsivo y componentes visuales.
+  - **Tailwind** → diseño responsivo y componentes visuales.
 
 - **Backend**
 
@@ -31,10 +35,13 @@ El proyecto se desarrolla con el siguiente stack tecnológico:
 
 - **Base de Datos**
 
-  - **MySQL** → gestión y persistencia de datos relacionales.
+  - **MariaDB** → gestión y persistencia de datos relacionales.
 
 - **Infraestructura**
   - **Docker & Docker Compose** → contenedores para la aplicación y base de datos.
+
+- **Despliegue**
+  - **CloudFlare y Nginx** → Herramientas para servidor en linux.
 
 ## 📂 Estructura del Proyecto
 
