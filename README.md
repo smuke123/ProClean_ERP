@@ -2,9 +2,9 @@
 
 ProClean S.A.S. es una empresa dedicada a la venta y distribución de productos de aseo y limpieza, tanto para hogares como para organizaciones. Su misión es ofrecer soluciones de limpieza eficientes, seguras y accesibles, garantizando la calidad y disponibilidad de los productos en todas sus sucursales.
 
-     | Home | Catálogo |
-     | ---- | -------- |
-     | ![Home](docs/images/Home.jpeg) | ![Catálogo](docs/images/Categories.jpeg) |
+| Home | Catálogo |
+| ---- | -------- |
+| ![Home](docs/images/Home.jpeg) | ![Catálogo](docs/images/Categories.jpeg) |
 
 ## 📌 Descripción del Proyecto
 
